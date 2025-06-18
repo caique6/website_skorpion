@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Entrar no grupo do WhatsApp</title>
+  <style>
+    :root {
+      --whatsapp-green: #25D366;
+      --whatsapp-green-hover: #1ebe5d;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #0f0f0f, #222);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 20px;
+      text-align: center;
+    }
+
+    #mensagem {
+      font-size: clamp(1.2rem, 2.5vw, 2rem); /* Responsivo */
+      margin-bottom: 30px;
+    }
+
+    #botao-tentar {
+      padding: 14px 28px;
+      font-size: clamp(1rem, 2vw, 1.2rem); /* Responsivo */
+      background-color: var(--whatsapp-green);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      max-width: 90vw;
+    }
+
+    #botao-tentar:hover {
+      background-color: var(--whatsapp-green-hover);
+    }
+  </style>
+  <script>
+    const grupos = [
+      "https://chat.whatsapp.com/KQfMhhZr3t1Gy5zW8M9VF2",   /* Oficial */
+      "https://chat.whatsapp.com/BYvrWw0UrOP2IPz4JWr3HE",   /* 1 */
+      "https://chat.whatsapp.com/KQzkPqQpDwOCWhXzdZTsDw",   /* 2 */
+      "https://chat.whatsapp.com/BT4E0PDnpaT1wmByXadb49",   /* 3 */
+      "https://chat.whatsapp.com/FXzT1NptyuK7WJFMMZeWhs",   /* 4 */
+      "https://chat.whatsapp.com/G0aKcyF3zAJJLCxtKaXfqf",   /* 5 */
+      "https://chat.whatsapp.com/LuscYIFpTDiEiBDnmHrg7A",   /* 6 */
+      "https://chat.whatsapp.com/JtFlxoh4guFDz2helFoMKx",   /* 7 */
+      "https://chat.whatsapp.com/KJPk0ll14RELb3SF7BDpkO",   /* 8 */
+      "https://chat.whatsapp.com/J3RWQjesHVF8PUQlseiDHl",   /* 9 */      
+    ];
+
+    function getTentativa() {
+      const params = new URLSearchParams(window.location.search);
+      return parseInt(params.get("tentativa")) || 0;
+    }
+
+    function tentarLink() {
+      const tentativa = getTentativa();
+      if (tentativa < grupos.length) {
+        window.location.href = grupos[tentativa];
+      } else {
+        document.getElementById("mensagem").innerText =
+          "Todos os grupos estão lotados ou indisponíveis no momento.";
+        document.getElementById("botao-tentar").style.display = "none";
+      }
+    }
+
+    window.onload = function () {
+      setTimeout(tentarLink, 2000);
+    };
+  </script>
+</head>
+<body>
+  <div id="mensagem">Redirecionando para o grupo do WhatsApp...</div>
+  <button id="botao-tentar" onclick="window.location.href = '?tentativa=' + (getTentativa() + 1)">
+    Grupo indisponível? Clique aqui para tentar outro!
+  </button>
+</body>
+</html>
