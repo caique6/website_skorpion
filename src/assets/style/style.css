@@ -46,16 +46,15 @@ body {
 
 .form_box {
   background-color: #1e1e1e;
-  padding: 40px;
+  padding: 25px;
   border-radius: 25px;
-  box-shadow: 0 0 30px rgba(255, 224, 27, 0.15);
-  width: 350px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
   text-align: center;
   transition: all 0.3s ease-in-out;
 }
 
 .form_box:hover {
-  box-shadow: 0 0 50px rgba(255, 224, 27, 0.25);
+  box-shadow: 0 0 50px rgba(255, 0, 0, 0.25);
 }
 
 .list_button {
@@ -68,7 +67,7 @@ body {
 }
 
 .button_zap,
-.button_yt {
+.button_comunidade {
   display: inline-block;
   text-decoration: none;
   font-size: 18px;
@@ -85,23 +84,63 @@ body {
 }
 
 .button_zap:hover {
-  background-color: #fff248;
+  background-color: #25D366;
   transform: scale(1.05);
-  box-shadow: 0 0 15px #ffe01b;
+  box-shadow: 0 0 15px #000000;
 }
 
-.button_yt {
-  background-color: #ff1e1e;
-  color: #ffffff;
+.button_comunidade {
+  background-color: #ffe01b;
+  color: #000000;
 }
 
-.button_yt:hover {
-  background-color: #ff4c4c;
+.button_comunidade:hover {
+  background-color: #1ebe5d;
   transform: scale(1.05);
-  box-shadow: 0 0 15px #ff1e1e;
+  box-shadow: 0 0 15px #000000;
 }
 
 .button_zap i,
-.button_yt i {
+.button_comunidade i {
   margin-right: 8px;
 }
+
+.yt-float {
+  position: fixed;
+  margin-top: 100px;
+  bottom: 10px;
+  width: 60px;
+  height: 60px;
+  background-color: #ff1e1e;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 15px #ff1e1e88;
+  font-size: 28px;
+  z-index: 999;
+  transition: 0.3s ease;
+  box-shadow: 0 0 #ff1e1e
+}
+
+.yt-float:hover {
+  background-color: #ff4c4c;
+  transform: scale(1.1);
+  box-shadow: 0 0 0 #ff1e1e;
+}
+
+.bar_skorpion {
+  margin-top: 30px;
+  background-color: #ff1e1e;
+  color: white;
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 50px;
+  text-align: center;
+  width: fit-content;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 16px;
+  box-shadow: 0 0 12px #ff1e1e;
+}
+
