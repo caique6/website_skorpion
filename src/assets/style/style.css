@@ -113,7 +113,7 @@ body {
   background-color: #ff1e1e;
   color: white;
   border-radius: 50%;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   box-shadow: 0 0 15px #ff1e1e88;
@@ -123,11 +123,11 @@ body {
   box-shadow: 0 0 #ff1e1e
 }
 
-.yt-float:hover {
+/* .yt-float:hover {
   background-color: #ff4c4c;
   transform: scale(1.1);
   box-shadow: 0 0 0 #ff1e1e;
-}
+} */
 
 .bar_skorpion {
   margin-top: 30px;
