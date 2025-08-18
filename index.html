@@ -8,32 +8,119 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Roboto&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <a href="https://www.youtube.com/@SkorpionOFICIAL" class="yt-float" target="_blank">
-  <i class="fab fa-youtube"></i></a>
+    <i class="fab fa-youtube"></i>
+  </a>
   <link rel="stylesheet" href="src/assets/style/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>  
-  <div class="box_one fade-in">
-    <img src="./src/assets/logo.png" alt="Logo Skorpion Gamer" class="logo">
-    <h1 class="title_one">Skorpion Gamer</h1>
-  </div>
-  <div class="box_two fade-in">
-    <div class="form_box">
-      <ul class="list_button">
-        <li>
-          <a href="/zap.html" class="button_zap">
-            <i class="fab fa-whatsapp"></i> Comunidade Skorpion Gamer 
-          </a>
-        </li>
-        <li>
-          <a href="https://www.whatsapp.com/channel/0029Vb6cQA1EVccKeOpDq82Q" class="button_comunidade" target="_blank">
-            <i class="fas fa-users"></i> Canal Oficial no WhatsApp
-          </a>
-        </li>
-      </ul>
+
+  <!-- SEÇÃO: Cabeçalho / Logo -->
+  <section class="header-section fade-in">
+    <div class="box_one">
+      <img src="./src/assets/logo.png" alt="Logo Skorpion Gamer" class="logo">
+      <h1 class="title_one">Skorpion Gamer</h1>
     </div>
+  </section>
+
+  <!-- SEÇÃO: Botão de WhatsApp -->
+  <section class="whatsapp-section fade-in">
+    <div class="box_two">
+      <div class="form_box">
+        <ul class="list_button">
+          <li>
+              <p class="msg">Entre em nossa comunidade no WhatsApp!</p>
+            <a href="/zap.html" class="button_zap">
+              <i class="fab fa-whatsapp"></i> Amigos do Skorpion Gamer 
+            </a>
+          </li>
+          <!--
+          <li>
+            <a href="https://www.whatsapp.com/channel/0029Vb6cQA1EVccKeOpDq82Q" 
+               class="button_comunidade" target="_blank">
+              <i class="fas fa-users"></i> Canal Oficial no WhatsApp
+            </a>
+          </li>
+          -->
+        </ul>
+      </div>
+    </div>
+  </section>
+
+<section class="cadeira-section fade-in">
+  <h2 class="title_two">Minha Cadeira Gamer</h2>
+  <div class="cadeira-box">
+    <img src="./src/assets/cadeira 1.jpg" alt="Cadeira Gamer - Frente" class="cadeira-img">
+    <img src="./src/assets/cadeira 2.jpg" alt="Cadeira Gamer - Lado" class="cadeira-img">
+    <img src="./src/assets/cadeira 3.jpg" alt="Cadeira Gamer - Detalhes" class="cadeira-img">
+    <img src="./src/assets/cadeira 4.jpg" alt="Cadeira Gamer - Detalhes" class="cadeira-img">
   </div>
-    <div>
-      <h2 class="mensagem2">Receba novidades e fique por dentro do que acontece no canal!</h2>
+
+  <!-- Botão separado -->
+  <div class="cadeira-button">
+    <a href="https://www.pichau.com.br/cadeira-gamer-pichau-omega-s-skorpion-espuma-moldada-preto-e-vermelho-pg-omgs-skrp" 
+       class="button_cadeira" target="_blank">
+      <i class="fas fa-shopping-cart"></i> Comprar agora
+    </a>
   </div>
+</section>
+
+  <!-- SEÇÃO: Últimos Vídeos -->
+  <section class="videos-section fade-in">
+    <h2 class="title_two">Últimos Vídeos</h2>
+    <div class="videos-grid">
+      
+      <div class="video-card">
+        <iframe width="100%" height="200"
+          src="https://www.youtube.com/embed/f-lNH1csPAA"
+          title="Último vídeo 1"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+      
+      <div class="video-card">
+        <iframe width="100%" height="200"
+          src="https://www.youtube.com/embed/CUEzbqm_faE"
+          title="Último vídeo 2"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+      
+      <div class="video-card">
+        <iframe width="100%" height="200"
+          src="https://www.youtube.com/embed/NL4kvYKogfE"
+          title="Último vídeo 3"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+      
+      <div class="video-card">
+        <iframe width="100%" height="200"
+          src="https://www.youtube.com/embed/V8bvp94P5KI"
+          title="Último vídeo 4"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+  </section>
+<div class="contador-box">
+  <h2>Inscritos no Canal</h2>
+  <div class="iframe-wrapper">
+    <iframe 
+      src="https://livecounts.io/embed/youtube-live-subscriber-counter/UCHDV3JN5aqxAy9hwTTVHJow" 
+      frameborder="0"
+      scrolling="no">
+    </iframe>
+  </div>
+  <p>Rumo a 7 milhões!</p>
+</div>
 </body>
 </html>

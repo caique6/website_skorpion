@@ -56,6 +56,29 @@ body {
   box-shadow: 0 0 50px rgba(255, 0, 0, 0.25);
 }
 
+@keyframes neonPisca {
+  0%, 100% {
+    text-shadow: 0 0 5px #000000, 0 0 10px #fafafa, 0 0 20px #000000;
+    color: #fff;
+  }
+  50% {
+    text-shadow: none;
+    color: #ffffff;
+  }
+}
+
+.form_box p {
+  margin-top: 20px;
+  font-size: 20px;
+  text-align: center;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #fff;
+  animation: neonPisca 2s infinite;
+}
+
+
 .list_button {
   list-style: none;
   padding: 0;
@@ -158,4 +181,139 @@ body {
 @keyframes piscar {
   20%, 100% { opacity: 1; }
   90% { opacity: 0; }
+}
+
+.videos-section {
+  text-align: center;
+}
+
+.title_two {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 28px;
+  color: #ff0000;
+  text-shadow: 0 0 10px rgba(255,0,0,0.8);
+  margin-bottom: 20px;
+}
+
+.videos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 0 20px;
+}
+
+.video-card {
+  background: #111;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0,0,0,0.6);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.video-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(255,255,0,0.7);
+}
+
+.videos-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* sempre 2 vídeos por linha no desktop */
+  gap: 20px;
+  padding: 0 20px;
+}
+
+@media (max-width: 768px) {
+  .videos-grid {
+    grid-template-columns: 1fr; /* no celular, 1 vídeo por linha */
+  }
+}
+
+.cadeira-section {
+  text-align: center;
+  margin: 50px 0;
+}
+
+.cadeira-box {
+  display: flex;
+  gap: 25px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 40px; /* Aumentei o espaço abaixo das imagens */
+}
+
+.cadeira-img {
+  max-width: 250px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(255,0,0,0.6);
+  transition: transform 0.3s ease;
+}
+
+.cadeira-img:hover {
+  transform: scale(1.05);
+}
+
+.cadeira-button {
+  text-align: center;
+  margin-top: 20px; /* Dá respiro acima do botão */
+}
+
+.button_cadeira {
+  display: inline-block;
+  background: red;
+  color: white;
+  padding: 20px 20px;
+  font-size: 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.button_cadeira:hover {
+  background: #810505;
+}
+
+.contador-box {
+  background: #1b1b1f;
+  border: 2px solid #000000;
+  border-radius: 15px;
+  width: 350px;
+  padding: 20px;
+  text-align: center;
+  color: white;
+  font-family: 'Roboto', sans-serif;
+  box-shadow: 0 0 20px #ff1a1a50;
+  margin: 20px auto;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.contador-box:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px #00000080;
+}
+
+.contador-box h2 {
+  font-size: 1.5em;
+  margin-bottom: 15px;
+  text-shadow: 0 0 10px #000000;
+}
+
+.iframe-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.iframe-wrapper iframe {
+  width: 300px;
+  height: 80px;
+  border: none;
+  border-radius: 10px;
+}
+
+.contador-box p {
+  color: #ffffff;
+  font-weight: bold;
+  text-shadow: 0 0 8px #000000;
+  margin: 0;
 }
