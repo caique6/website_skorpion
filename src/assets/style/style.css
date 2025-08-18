@@ -190,7 +190,7 @@ body {
 .title_two {
   font-family: 'Orbitron', sans-serif;
   font-size: 28px;
-  color: #ff0000;
+  color: #ffffff;
   text-shadow: 0 0 10px rgba(255,0,0,0.8);
   margin-bottom: 20px;
 }
@@ -230,7 +230,7 @@ body {
 
 .cadeira-section {
   text-align: center;
-  margin: 50px 0;
+  margin: 20px 0;
 }
 
 .cadeira-box {
@@ -257,11 +257,59 @@ body {
   margin-top: 20px; /* Dá respiro acima do botão */
 }
 
+.cadeira-box {
+  display: flex;
+  gap: 25px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 40px; /* Aumentei o espaço abaixo das imagens */
+}
+
+.cadeira-box2 {
+  display: flex;
+  flex-direction: row;
+  gap: 25px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 40px; /* Aumentei o espaço abaixo das imagens */
+}
+
+.cadeira-img {
+  max-width: 250px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(255,0,0,0.6);
+  transition: transform 0.3s ease;
+}
+
+.cadeira-img2:hover {
+  transform: scale(1.05);
+}
+
+.cadeira-button2 {
+  text-align: center;
+  margin-top: 20px; /* Dá respiro acima do botão */
+}
+
+.button_cadeira2 {
+  display: inline-block;
+  background: red;
+  color: white;
+  padding: 10px 50px;
+  font-size: 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.button_cadeira2:hover {
+  background: #810505;
+}
+
 .button_cadeira {
   display: inline-block;
   background: red;
   color: white;
-  padding: 20px 20px;
+  padding: 10px 50px;
   font-size: 16px;
   border-radius: 8px;
   text-decoration: none;
