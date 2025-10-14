@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
@@ -69,31 +69,31 @@
       // "https://chat.whatsapp.com/C2UyKj29me5DSZPJ7P65UK?mode=ac_t",   //* 10 *//  links    
     ];
 
-    function getTentativa() {
-      const params = new URLSearchParams(window.location.search);
-      return parseInt(params.get("tentativa")) || 0;
-    }
+//     function getTentativa() {
+//       const params = new URLSearchParams(window.location.search);
+//       return parseInt(params.get("tentativa")) || 0;
+//     }
 
-    function tentarLink() {
-      const tentativa = getTentativa();
-      if (tentativa < grupos.length) {
-        window.location.href = grupos[tentativa];
-      } else {
-        document.getElementById("mensagem").innerText =
-          "Todos os grupos estão indisponíveis no momento.";
-        document.getElementById("botao-tentar").style.display = "none";
-      }
-    }
+//     function tentarLink() {
+//       const tentativa = getTentativa();
+//       if (tentativa < grupos.length) {
+//         window.location.href = grupos[tentativa];
+//       } else {
+//         document.getElementById("mensagem").innerText =
+//           "Todos os grupos estão indisponíveis no momento.";
+//         document.getElementById("botao-tentar").style.display = "none";
+//       }
+//     }
 
-    window.onload = function () {
-      setTimeout(tentarLink, 2000);
-    };
-  </script>
-</head>
-<body>
-  <div id="mensagem">Redirecionando para o grupo do WhatsApp...</div>
-  <button id="botao-tentar" onclick="window.location.href = '?tentativa=' + (getTentativa() + 1)">
-    Grupo indisponível? Clique aqui para tentar outro!
-  </button>
-</body>
-</html>
+//     window.onload = function () {
+//       setTimeout(tentarLink, 2000);
+//     };
+//   </script>
+// </head>
+// <body>
+//   <div id="mensagem">Redirecionando para o grupo do WhatsApp...</div>
+//   <button id="botao-tentar" onclick="window.location.href = '?tentativa=' + (getTentativa() + 1)">
+//     Grupo indisponível? Clique aqui para tentar outro!
+//   </button>
+// </body>
+// </html> -->
