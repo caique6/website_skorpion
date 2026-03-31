@@ -1,0 +1,35 @@
+.card {
+  background-color: var(--highlight-white);
+  border-radius: var(--radius-ios);
+  box-shadow: var(--shadow-card);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+  padding: 3rem;
+  height: auto;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUpFade 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: 1.5rem;
+    border-radius: 32px;
+  }
+}

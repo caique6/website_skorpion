@@ -1,8 +1,15 @@
 import './globals.css';
+import { DM_Sans } from 'next/font/google';
+
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '700', '900'], 
+  variable: '--font-dm-sans',
+});
 
 export const metadata = {
-  title: 'Resgate VIP',
-  description: 'Sistema de resgate para membros'
+  title: 'Resgate VIP - Skorpion Gamer',
+  description: 'Clube de Membros do Skorpion Gamer',
 };
 
 export default function RootLayout({
@@ -12,7 +19,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
-      <body>{children}</body>
+      <body className={dmSans.className}>{children}</body>
     </html>
   );
 }
