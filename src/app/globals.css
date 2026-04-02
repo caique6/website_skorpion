@@ -24,6 +24,7 @@
   margin: 0;
   -ms-overflow-style: none;
   scrollbar-width: none;
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif !important;
 }
 
 body {

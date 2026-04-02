@@ -1,25 +1,26 @@
-import './globals.css';
-import { DM_Sans } from 'next/font/google';
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
 
-const dmSans = DM_Sans({
-  subsets: ['latin'],
-  weight: ['400', '500', '700', '900'], 
-  variable: '--font-dm-sans',
+const inter = Inter({ 
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
 });
 
-export const metadata = {
-  title: 'Resgate VIP - Skorpion Gamer',
-  description: 'Clube de Membros do Skorpion Gamer',
+export const metadata: Metadata = {
+  title: "Skorpion Gamer VIP",
+  description: "Clube de Membros Oficial do Skorpion Gamer",
 };
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
-    <html lang="pt-BR">
-      <body className={dmSans.className}>{children}</body>
+    <html lang="pt-BR" className={inter.variable}>
+      <body>{children}</body>
     </html>
   );
 }
