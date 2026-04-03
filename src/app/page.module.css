@@ -64,19 +64,19 @@
   animation: bentoEntry 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
-.heroCell {
+.guideCell {
   grid-column: span 8;
   grid-row: span 1;
   animation-delay: 0.1s;
 }
 
-.podiumCell {
+.statsCell {
   grid-column: span 4;
   grid-row: span 1;
   animation-delay: 0.2s;
 }
 
-.statsCell {
+.rankingCell {
   grid-column: span 7;
   grid-row: span 1;
   animation-delay: 0.3s;
@@ -101,15 +101,15 @@
 }
 
 @media (max-width: 1200px) {
-  .heroCell { grid-column: span 12; }
-  .podiumCell { grid-column: span 12; }
-  .statsCell { grid-column: span 6; }
+  .guideCell { grid-column: span 12; }
+  .statsCell { grid-column: span 12; }
+  .rankingCell { grid-column: span 6; }
   .muralCell { grid-column: span 6; grid-row: span 1; }
   .storeCell { grid-column: span 12; }
 }
 
 @media (max-width: 992px) {
-  .statsCell { grid-column: span 12; }
+  .rankingCell { grid-column: span 12; }
   .muralCell { grid-column: span 12; }
 }
 

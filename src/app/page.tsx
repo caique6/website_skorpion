@@ -13,16 +13,16 @@ export default function Dashboard() {
       <div className={styles.bgDecoration2} />
 
       <div className={styles.bentoGrid}>
-        <div className={styles.heroCell}>
+        <div className={styles.guideCell}>
           <MembershipGuide />
-        </div>
-
-        <div className={styles.podiumCell}>
-          <Leaderboard />
         </div>
 
         <div className={styles.statsCell}>
           <LiveStats />
+        </div>
+
+        <div className={styles.rankingCell}>
+          <Leaderboard />
         </div>
 
         <div className={styles.muralCell}>

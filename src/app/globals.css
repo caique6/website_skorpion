@@ -40,3 +40,37 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+@keyframes fadeSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fireFlicker {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: drop-shadow(0 0 2px var(--secondary-orange));
+  }
+  25% {
+    opacity: 0.9;
+    transform: scale(1.05) rotate(-2deg);
+    filter: drop-shadow(0 0 6px var(--primary-red));
+  }
+  50% {
+    opacity: 1;
+    transform: scale(0.95) rotate(2deg);
+    filter: drop-shadow(0 0 10px var(--secondary-yellow));
+  }
+  75% {
+    opacity: 0.85;
+    transform: scale(1.02) rotate(-1deg);
+    filter: drop-shadow(0 0 4px var(--secondary-orange));
+  }
+}

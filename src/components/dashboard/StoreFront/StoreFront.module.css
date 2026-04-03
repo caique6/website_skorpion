@@ -1,11 +1,12 @@
 .storeSection {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  background-color: var(--highlight-white);
-  padding: 2rem;
+  gap: 2rem;
+  background-color: transparent;
+  padding: 2.5rem;
   border-radius: 32px;
-  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.05);
+  height: 100%;
+  animation: fadeSlideUp 0.6s ease-out forwards;
 }
 
 .header {
@@ -31,24 +32,26 @@
 .divider {
   width: 60px;
   height: 4px;
-  background-color: var(--primary-red);
+  background: linear-gradient(90deg, var(--primary-red), var(--secondary-orange));
   border-radius: 2px;
+  animation: fireFlicker 3s infinite alternate;
 }
 
 .allButton {
   background: none;
   border: none;
   color: var(--text-gray);
-  font-weight: 700;
+  font-weight: 800;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
-  transition: color 0.2s;
+  transition: color 0.2s, transform 0.2s;
 }
 
 .allButton:hover {
   color: var(--primary-red);
+  transform: translateX(4px);
 }
 
 .grid {
@@ -58,11 +61,12 @@
 }
 
 .card {
-  background-color: #FAFAFA;
-  border-radius: 20px;
+  background-color: var(--highlight-white);
+  border-radius: 24px;
   overflow: hidden;
   border: 1px solid #EEEEEE;
   transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.02);
 }
 
 .card:hover {
@@ -93,13 +97,13 @@
 .overlay {
   position: absolute;
   inset: 0;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.85);
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
   transition: opacity 0.3s ease;
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(4px);
 }
 
 .card:hover .overlay {
@@ -108,22 +112,23 @@
 
 .cartButton {
   background: linear-gradient(135deg, var(--primary-red), var(--secondary-orange));
-  color: white;
+  color: var(--highlight-white);
   border: none;
-  padding: 0.75rem 1.25rem;
-  border-radius: 12px;
+  padding: 0.85rem 1.5rem;
+  border-radius: 14px;
   font-weight: 800;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
-  transform: translateY(10px);
-  transition: transform 0.3s ease, box-shadow 0.2s ease;
+  transform: translateY(15px);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
   box-shadow: 0 4px 15px rgba(204, 0, 0, 0.3);
 }
 
 .cartButton:hover {
-  box-shadow: 0 6px 20px rgba(204, 0, 0, 0.4);
+  box-shadow: 0 8px 25px rgba(204, 0, 0, 0.5);
+  animation: fireFlicker 1.5s infinite alternate;
 }
 
 .card:hover .cartButton {
@@ -131,20 +136,20 @@
 }
 
 .info {
-  padding: 1.25rem;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
 .productName {
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 800;
   color: var(--text-dark);
 }
 
 .price {
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   font-weight: 900;
   color: var(--primary-red);
 }
