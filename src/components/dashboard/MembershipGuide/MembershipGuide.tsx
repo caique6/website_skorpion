@@ -7,10 +7,10 @@ export function MembershipGuide() {
     <section className={styles.guideContainer}>
       <div className={styles.headerArea}>
         <div className={styles.badge}>
-          <Crown size={16} fill="currentColor" /> Clube Skorpion Elite
+          <Crown size={16} fill="currentColor" /> Clube de Membros do Skorpion
         </div>
         <h1 className={styles.title}>
-          Desbloqueie o <span className={styles.highlight}>Acesso VIP</span>
+          Desbloqueie o <span className={styles.highlight}>Acesso ao Clube de Membros!</span>
         </h1>
         <p className={styles.description}>
           Torne-se membro oficial do canal e tenha acesso a benefícios exclusivos, sorteios épicos e prioridade em todas as nossas jogatinas.
@@ -21,22 +21,22 @@ export function MembershipGuide() {
         <div className={styles.benefitItem}>
           <CheckCircle2 size={24} className={styles.checkIcon} />
           <div>
-            <h3>Cargo Exclusivo no Discord</h3>
+            <h3>Acesso ao grupo exclusivo de Membros do Whatsapp</h3>
             <p>Destaque-se na multidão com cor e tag únicas.</p>
           </div>
         </div>
         <div className={styles.benefitItem}>
           <CheckCircle2 size={24} className={styles.checkIcon} />
           <div>
-            <h3>Sorteios Mensais de Skins e Pix</h3>
+            <h3>Sorteios mensais exclusivos para Membros!</h3>
             <p>Apenas para membros ativos do canal.</p>
           </div>
         </div>
         <div className={styles.benefitItem}>
           <CheckCircle2 size={24} className={styles.checkIcon} />
           <div>
-            <h3>Jogar com o Skorpion</h3>
-            <p>Salas privadas e prioridade nas lives.</p>
+            <h3>Gravar com o Skorpion</h3>
+            <p>Você ganha acesso ao servidor de gravações!</p>
           </div>
         </div>
       </div>
@@ -62,8 +62,8 @@ export function MembershipGuide() {
       </div>
 
       <div className={styles.actions}>
-        <Button href="/passo-2" icon={<Youtube size={24} />}>
-          Já sou membro, resgatar VIP!
+        <Button href="/passo-1" icon={<Youtube size={24} />}>
+          Já sou membro, resgatar Acesso!
         </Button>
         <a 
           href="https://youtube.com/skorpiongamer/join" 
