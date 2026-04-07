@@ -5,13 +5,18 @@
   --secondary-yellow: #FFC700;
   --highlight-white: #FFFFFF;
   
-  --bg-color: #CC0000;
+  --bg-color: #FFFFFF;
   --text-dark: #1A1A1A;
   --text-gray: #666666;
 
   --radius-ios: 40px;
   --radius-btn: 20px;
   --shadow-card: 0px 30px 60px rgba(0, 0, 0, 0.3);
+}
+
+html {
+  font-size: 90%;
+  scroll-behavior: smooth;
 }
 
 ::-webkit-scrollbar {

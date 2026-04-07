@@ -9,8 +9,11 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Skorpion Gamer VIP",
+  title: "Skorpion Gamer",
   description: "Clube de Membros Oficial do Skorpion Gamer",
+  icons: {
+    icon: "/skorp.png",
+  },
 };
 
 export default function RootLayout({
