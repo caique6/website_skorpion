@@ -1,22 +1,17 @@
 import type { Metadata } from "next";
-import { DM_Sans, Montserrat } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import "./globals.css";
+import { cn } from "@/lib/utils";
 
-const dmsans = DM_Sans({ 
-  subsets: ["latin"], 
-  variable: "--font-sora",
-  weight: ["400", "500", "600", "700"]
-});
-
-const montserrat = Montserrat({ 
-  subsets: ["latin"], 
+const montserrat = Montserrat({
+  subsets: ["latin"],
   variable: "--font-montserrat",
-  weight: ["400", "500", "600"]
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Skorpion Community",
-  description: "Plataforma exclusiva para resgate de benefícios dos membros do canal Skorpion Gamer.",
+  title: "Skorpion Gamer | O Epicentro da Gameplay",
+  description: "Estratégias avançadas, comunidade engajada e os melhores benefícios do clube de membros.",
 };
 
 export default function RootLayout({
@@ -25,8 +20,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={`${dmsans.variable} ${montserrat.variable}`}>
-      <body>
+    <html lang="pt-BR" className="scroll-smooth">
+      <body className={cn(montserrat.className, "antialiased min-h-screen")}>
         {children}
       </body>
     </html>
