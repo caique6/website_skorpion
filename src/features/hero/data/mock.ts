@@ -1,3 +1,4 @@
+import { Zap } from "lucide-react";
 import { HeroData } from "../types";
 
 export const HERO_MOCK: HeroData = {
@@ -14,7 +15,7 @@ export const HERO_MOCK: HeroData = {
     {
       id: "action-members",
       label: "Resgatar Benefícios",
-      url: "#",
+      url: "/resgatar",
       variant: "secondary",
     },
   ],
