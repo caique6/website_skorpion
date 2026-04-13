@@ -31,13 +31,21 @@ const shimmerVariants = {
   initial: { x: "-120%", opacity: 0 },
   animate: {
     x: "220%",
-    opacity: [0, 0.5, 0],
+    opacity: [0, 0.4, 0],
     transition: {
-      duration: 2.6,
+      duration: 3,
       repeat: Infinity,
-      repeatDelay: 4,
+      repeatDelay: 5,
       ease: "easeInOut",
     },
+  },
+};
+
+const borderVariants = {
+  initial: { opacity: 0.5 },
+  animate: {
+    opacity: [0.5, 1, 0.5],
+    transition: { duration: 2.5, repeat: Infinity, ease: "easeInOut" },
   },
 };
 
@@ -46,20 +54,34 @@ function HighlightedCard({ plan }: { plan: Plan }) {
     <motion.div
       variants={cardVariants}
       whileHover={{
-        y: -6,
-        transition: { type: "spring", stiffness: 280, damping: 28 },
+        y: -8,
+        transition: { type: "spring", stiffness: 280, damping: 26 },
       }}
-      className="group relative flex flex-col shrink-0 lg:shrink w-[82vw] sm:w-[340px] lg:w-full snap-center rounded-[28px] lg:rounded-[32px] overflow-hidden cursor-pointer"
+      className="group relative flex flex-col shrink-0 lg:shrink w-[82vw] sm:w-[340px] lg:w-full snap-center rounded-[28px] lg:rounded-[32px] overflow-hidden cursor-pointer lg:scale-105"
       style={{
-        background: "linear-gradient(145deg, #F2CE16 0%, #F2BD1D 40%, #D4960A 70%, #BF2604 100%)",
-        boxShadow: "0 8px 40px rgba(242, 206, 22, 0.25), 0 2px 8px rgba(0,0,0,0.3)",
+        background: "#111111",
+        boxShadow: "0 12px 48px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.4)",
       }}
     >
-      <div
-        className="absolute inset-0 opacity-20 pointer-events-none"
+      <motion.div
+        variants={borderVariants}
+        initial="initial"
+        animate="animate"
+        className="absolute inset-0 rounded-[28px] lg:rounded-[32px] pointer-events-none"
         style={{
-          backgroundImage:
-            "radial-gradient(ellipse at 20% 15%, rgba(255,255,255,0.7) 0%, transparent 55%)",
+          padding: "1.5px",
+          background: "linear-gradient(135deg, #F2CE16 0%, #D4960A 40%, rgba(242,206,22,0.2) 70%, #F2CE16 100%)",
+          WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+          WebkitMaskComposite: "xor",
+          maskComposite: "exclude",
+        }}
+      />
+
+      <div
+        className="absolute inset-0 pointer-events-none opacity-30"
+        style={{
+          background:
+            "radial-gradient(ellipse at 50% 0%, rgba(242,206,22,0.2) 0%, transparent 60%)",
         }}
       />
 
@@ -69,43 +91,49 @@ function HighlightedCard({ plan }: { plan: Plan }) {
         animate="animate"
         className="absolute top-0 bottom-0 w-1/3 pointer-events-none"
         style={{
-          background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent)",
+          background:
+            "linear-gradient(90deg, transparent, rgba(242,206,22,0.08), transparent)",
           transform: "skewX(-15deg)",
         }}
       />
 
       <div className="relative flex flex-col p-6 lg:p-8 w-full h-full">
         <div className="mb-5 lg:mb-6 text-center">
-          <span className="inline-block text-[10px] font-black uppercase tracking-[0.2em] text-[#1A1A1A]/55 mb-2.5 bg-[#1A1A1A]/10 px-3 py-1 rounded-full">
+          <span className="inline-block text-[10px] font-black uppercase tracking-[0.2em] text-[#F2CE16]/60 mb-2.5 bg-[#F2CE16]/10 border border-[#F2CE16]/20 px-3 py-1 rounded-full">
             Mais Popular
           </span>
-          <h3 className="text-lg lg:text-xl font-black mb-3 uppercase tracking-tight text-[#1A1A1A]">
+          <h3 className="text-lg lg:text-xl font-black mb-3 uppercase tracking-tight text-white">
             {plan.name}
           </h3>
-          <div className="flex items-baseline justify-center gap-1 text-[#1A1A1A]">
-            <span className="text-base lg:text-lg font-bold opacity-70">R$</span>
+          <div className="flex items-baseline justify-center gap-1 text-white">
+            <span className="text-base lg:text-lg font-bold opacity-50">R$</span>
             <span className="text-4xl lg:text-5xl font-black leading-none">
               {plan.price.replace("R$", "").trim()}
             </span>
-            <span className="text-xs lg:text-sm font-bold ml-1 opacity-55">
+            <span className="text-xs lg:text-sm font-bold ml-1 opacity-40">
               {plan.billingCycle}
             </span>
           </div>
         </div>
 
-        <div className="w-full h-px bg-[#1A1A1A]/15 mb-5 lg:mb-6" />
+        <div className="w-full h-px mb-5 lg:mb-6"
+          style={{ background: "rgba(242,206,22,0.15)" }}
+        />
 
         <div className="flex-1 flex flex-col gap-3 mb-6 lg:mb-8">
           {plan.benefits.map((benefit) => (
             <div key={benefit.id} className="flex gap-3 items-start">
-              <div className="mt-0.5 w-5 h-5 rounded-full bg-[#1A1A1A]/15 flex items-center justify-center shrink-0">
-                <Check className="w-3 h-3 text-[#1A1A1A]" strokeWidth={3.5} />
+              <div
+                className="mt-0.5 w-5 h-5 rounded-full flex items-center justify-center shrink-0"
+                style={{ background: "rgba(242,206,22,0.12)", border: "1px solid rgba(242,206,22,0.25)" }}
+              >
+                <Check className="w-3 h-3" strokeWidth={3.5} style={{ color: "#F2CE16" }} />
               </div>
               <div>
-                <h4 className="font-black text-sm leading-tight mb-0.5 text-[#1A1A1A]">
+                <h4 className="font-black text-sm leading-tight mb-0.5 text-white">
                   {benefit.title}
                 </h4>
-                <p className="text-xs font-medium leading-relaxed text-[#1A1A1A]/65">
+                <p className="text-xs font-medium leading-relaxed text-white/50">
                   {benefit.description}
                 </p>
               </div>
@@ -114,12 +142,16 @@ function HighlightedCard({ plan }: { plan: Plan }) {
         </div>
 
         <motion.button
-          whileHover={{ backgroundColor: "#000000" }}
+          whileHover={{ backgroundColor: "#F2CE16", color: "#111111" }}
           whileTap={{ scale: 0.97 }}
           transition={{ duration: 0.2 }}
-          className="w-full py-3.5 lg:py-4 rounded-2xl font-black text-sm tracking-wider uppercase bg-[#1A1A1A] text-[#F2CE16] shadow-[0_4px_20px_rgba(0,0,0,0.3)]"
+          className="w-full py-3.5 lg:py-4 rounded-2xl font-black text-sm tracking-wider uppercase mt-auto border text-[#F2CE16] transition-colors duration-200"
+          style={{
+            backgroundColor: "rgba(242,206,22,0.08)",
+            borderColor: "rgba(242,206,22,0.25)",
+          }}
         >
-          Ser um Skorpinário
+          Ser um Skorpionário
         </motion.button>
       </div>
     </motion.div>
@@ -146,7 +178,8 @@ function RegularCard({ plan }: { plan: Plan }) {
       <div
         className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
         style={{
-          background: "radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.06) 0%, transparent 60%)",
+          background:
+            "radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.05) 0%, transparent 60%)",
         }}
       />
 
@@ -156,11 +189,11 @@ function RegularCard({ plan }: { plan: Plan }) {
             {plan.name}
           </h3>
           <div className="flex items-baseline justify-center gap-1 text-skorpion-white">
-            <span className="text-base lg:text-lg font-bold opacity-60">R$</span>
+            <span className="text-base lg:text-lg font-bold opacity-50">R$</span>
             <span className="text-4xl lg:text-5xl font-black leading-none">
               {plan.price.replace("R$", "").trim()}
             </span>
-            <span className="text-xs lg:text-sm font-bold ml-1 opacity-40">
+            <span className="text-xs lg:text-sm font-bold ml-1 opacity-35">
               {plan.billingCycle}
             </span>
           </div>
@@ -171,14 +204,14 @@ function RegularCard({ plan }: { plan: Plan }) {
         <div className="flex-1 flex flex-col gap-3 mb-6 lg:mb-8">
           {plan.benefits.map((benefit) => (
             <div key={benefit.id} className="flex gap-3 items-start">
-              <div className="mt-0.5 w-5 h-5 rounded-full bg-white/10 flex items-center justify-center shrink-0 group-hover:bg-white/15 transition-colors duration-300">
+              <div className="mt-0.5 w-5 h-5 rounded-full bg-white/10 flex items-center justify-center shrink-0">
                 <Check className="w-3 h-3 text-skorpion-white" strokeWidth={3} />
               </div>
               <div>
                 <h4 className="font-bold text-sm leading-tight mb-0.5 text-skorpion-white">
                   {benefit.title}
                 </h4>
-                <p className="text-xs font-medium leading-relaxed text-skorpion-white/55">
+                <p className="text-xs font-medium leading-relaxed text-skorpion-white/50">
                   {benefit.description}
                 </p>
               </div>
@@ -190,7 +223,7 @@ function RegularCard({ plan }: { plan: Plan }) {
           whileHover={{ backgroundColor: "rgba(255,255,255,0.14)" }}
           whileTap={{ scale: 0.97 }}
           transition={{ duration: 0.2 }}
-          className="w-full py-3.5 lg:py-4 rounded-2xl font-black text-sm tracking-wider uppercase bg-white/[0.08] text-skorpion-white border border-white/10"
+          className="w-full py-3.5 lg:py-4 rounded-2xl font-black text-sm tracking-wider uppercase mt-auto bg-white/[0.08] text-skorpion-white border border-white/10"
         >
           {`Escolher ${plan.name}`}
         </motion.button>
@@ -200,7 +233,10 @@ function RegularCard({ plan }: { plan: Plan }) {
 }
 
 export const MembersPlansView = ({ plans, onBack }: Props) => {
-  const sortedPlans = [...plans].sort((a, b) => a.tier - b.tier);
+  const orderedPlans = [...plans].sort((a, b) => {
+    const order: Record<number, number> = { 1: 0, 3: 1, 2: 2 };
+    return order[a.tier] - order[b.tier];
+  });
 
   return (
     <motion.div
@@ -237,8 +273,8 @@ export const MembersPlansView = ({ plans, onBack }: Props) => {
           initial="hidden"
           animate="visible"
           className={cn(
-            "flex lg:grid lg:grid-cols-3 lg:items-stretch",
-            "gap-4 lg:gap-5 xl:gap-8",
+            "flex lg:grid lg:grid-cols-3 lg:items-center",
+            "gap-4 lg:gap-5 xl:gap-6",
             "w-full max-w-5xl mx-auto",
             "overflow-x-auto lg:overflow-visible",
             "snap-x snap-mandatory",
@@ -246,7 +282,7 @@ export const MembersPlansView = ({ plans, onBack }: Props) => {
             "[&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
           )}
         >
-          {sortedPlans.map((plan) =>
+          {orderedPlans.map((plan) =>
             plan.highlighted ? (
               <HighlightedCard key={plan.id} plan={plan} />
             ) : (

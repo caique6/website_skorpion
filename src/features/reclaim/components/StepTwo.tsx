@@ -21,7 +21,7 @@ const plans = [
     description: "Tudo do tier anterior mais vídeos exclusivos, shorts e grupos VIP.",
   },
   {
-    name: "Skorpinário",
+    name: "Skorpionário",
     color: "#F2CE16",
     description: "Acesso total — jogue e grave com o Skorpion, resenha direta e painel no GTA.",
   },

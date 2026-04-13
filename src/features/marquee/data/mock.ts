@@ -1,7 +1,7 @@
 import { MarqueeData } from "../types";
 
 export const MARQUEE_MOCK: MarqueeData = {
-  skorpinarios: [
+  skorpionarios: [
     { id: "sn-01", name: "XxDarkWolfxX", avatar: "🐺" },
     { id: "sn-02", name: "Rafinha_GTA", avatar: "🎮" },
     { id: "sn-03", name: "CaioSniper", avatar: "🎯" },

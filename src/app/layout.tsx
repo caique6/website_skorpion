@@ -10,8 +10,11 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "Skorpion Gamer | O Epicentro da Gameplay",
+  title: "Site Oficial do Skorpion Gamer",
   description: "Estratégias avançadas, comunidade engajada e os melhores benefícios do clube de membros.",
+  icons: {
+    icon: "/logo.png",
+  },
 };
 
 export default function RootLayout({

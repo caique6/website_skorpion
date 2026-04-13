@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { motion, useInView, useMotionValue, useAnimationFrame } from "framer-motion";
+import { useRef, useState } from "react";
 import { MarqueeMember } from "../types";
 import { cn } from "@/lib/utils";
 
@@ -28,14 +28,17 @@ interface ChipProps {
   accentBorder: string;
 }
 
+const SPEED = 0.4;
+const CHUNK = 1 / 3;
+
 function MemberChip({ member, accentColor, accentBg, accentBorder }: ChipProps) {
   return (
     <motion.div
       whileHover={{
-        scale: 1.06,
-        transition: { type: "spring", stiffness: 400, damping: 20 },
+        scale: 1.08,
+        transition: { type: "spring", stiffness: 400, damping: 22 },
       }}
-      className="flex items-center gap-2.5 px-5 py-2.5 rounded-full shrink-0 border cursor-default"
+      className="flex items-center gap-2.5 px-5 py-2.5 rounded-full shrink-0 border cursor-default mx-1"
       style={{
         backgroundColor: accentBg,
         borderColor: accentBorder,
@@ -60,15 +63,46 @@ function MemberChip({ member, accentColor, accentBg, accentBorder }: ChipProps) 
 }
 
 function MarqueeTrack({ members, direction = "left", accentColor, accentBg, accentBorder }: TrackProps) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  const isPaused = useRef(false);
   const duplicated = [...members, ...members, ...members];
-  const animateX = direction === "left" ? ["0%", "-33.33%"] : ["-33.33%", "0%"];
+
+  useAnimationFrame((_, delta) => {
+    if (isPaused.current) return;
+
+    const trackWidth = trackRef.current?.scrollWidth ?? 0;
+    const chunkWidth = trackWidth * CHUNK;
+    if (chunkWidth === 0) return;
+
+    const velocity = direction === "left" ? -SPEED : SPEED;
+    const next = x.get() + velocity * (delta / 16.67);
+
+    if (direction === "left" && next <= -chunkWidth) {
+      x.set(next + chunkWidth);
+    } else if (direction === "right" && next >= 0) {
+      x.set(next - chunkWidth);
+    } else {
+      x.set(next);
+    }
+  });
+
+  const handleMouseEnter = () => {
+    isPaused.current = true;
+  };
+
+  const handleMouseLeave = () => {
+    isPaused.current = false;
+  };
 
   return (
-    <div className="flex overflow-hidden w-full">
+    <div className="flex overflow-hidden w-full py-2">
       <motion.div
-        animate={{ x: animateX }}
-        transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
-        className="flex gap-3 shrink-0"
+        ref={trackRef}
+        style={{ x }}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        className="flex shrink-0"
       >
         {duplicated.map((member, index) => (
           <MemberChip
@@ -133,7 +167,7 @@ export const MembersMarquee = ({ members, label, accentColor, accentBg, accentBo
         animate={isInView ? { opacity: 1 } : { opacity: 0 }}
         transition={{ duration: 0.5, delay: 0.35 }}
         className={cn(
-          "flex flex-col gap-3",
+          "flex flex-col gap-1",
           "[mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]"
         )}
       >

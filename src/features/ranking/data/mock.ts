@@ -1,0 +1,31 @@
+import { RankingData } from "../types";
+
+export const RANKING_MOCK: RankingData = {
+  members: [
+    { id: "r-01", name: "XxDarkWolfxX", avatar: "🐺", tier: "skorpionario", months: 18, days: 12, hours: 8 },
+    { id: "r-02", name: "Ana_Skorpion", avatar: "🦂", tier: "skorpionario", months: 16, days: 3, hours: 22 },
+    { id: "r-03", name: "FelipeDoMorro", avatar: "🔥", tier: "skorpionario", months: 14, days: 27, hours: 5 },
+    { id: "r-04", name: "GabrielaPVP", avatar: "⚔️", tier: "skorpiao", months: 13, days: 8, hours: 14 },
+    { id: "r-05", name: "LucasRaiz", avatar: "🏆", tier: "skorpionario", months: 12, days: 19, hours: 3 },
+    { id: "r-06", name: "Thalita_MVP", avatar: "🎖️", tier: "skorpiao", months: 11, days: 5, hours: 17 },
+    { id: "r-07", name: "CaioSniper", avatar: "🎯", tier: "skorpionario", months: 10, days: 22, hours: 9 },
+    { id: "r-08", name: "BrunoCaveira", avatar: "💣", tier: "skorpiao", months: 9, days: 14, hours: 21 },
+    { id: "r-09", name: "NandoStealth", avatar: "🌙", tier: "skorpionario", months: 8, days: 30, hours: 6 },
+    { id: "r-10", name: "IsaDrift", avatar: "🏎️", tier: "skorpiao", months: 8, days: 2, hours: 11 },
+    { id: "r-11", name: "Leticia_Plays", avatar: "⚡", tier: "skorpionzinho", months: 7, days: 18, hours: 4 },
+    { id: "r-12", name: "VitorNoob", avatar: "👾", tier: "skorpionzinho", months: 6, days: 9, hours: 19 },
+    { id: "r-13", name: "KaiqueRush", avatar: "🚀", tier: "skorpiao", months: 5, days: 25, hours: 13 },
+    { id: "r-14", name: "MrBugado", avatar: "💀", tier: "skorpionzinho", months: 4, days: 11, hours: 7 },
+    { id: "r-15", name: "RodrigoOps", avatar: "🎧", tier: "skorpiao", months: 3, days: 28, hours: 16 },
+    { id: "r-16", name: "FernandaGG", avatar: "🌟", tier: "skorpionzinho", months: 3, days: 4, hours: 2 },
+    { id: "r-17", name: "DiegoBoss", avatar: "👑", tier: "skorpionario", months: 2, days: 17, hours: 20 },
+    { id: "r-18", name: "CamilaSnipe", avatar: "🎯", tier: "skorpionzinho", months: 1, days: 22, hours: 15 },
+    { id: "r-19", name: "ThiagoBlitz", avatar: "⚡", tier: "skorpionzinho", months: 1, days: 8, hours: 10 },
+    { id: "r-20", name: "ZeNoscope", avatar: "🔭", tier: "skorpiao", months: 0, days: 29, hours: 18 },
+    { id: "r-21", name: "PedroClan", avatar: "🛡️", tier: "skorpionzinho", months: 0, days: 21, hours: 5 },
+    { id: "r-22", name: "MarcelaFrag", avatar: "💥", tier: "skorpionzinho", months: 0, days: 14, hours: 12 },
+    { id: "r-23", name: "TioDoPato", avatar: "🎲", tier: "skorpionzinho", months: 0, days: 7, hours: 3 },
+    { id: "r-24", name: "Rafinha_GTA", avatar: "🎮", tier: "skorpionzinho", months: 0, days: 3, hours: 21 },
+    { id: "r-25", name: "PatrickSlow", avatar: "🐢", tier: "skorpionzinho", months: 0, days: 1, hours: 6 },
+  ],
+};

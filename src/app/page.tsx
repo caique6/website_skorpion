@@ -10,6 +10,8 @@ import { getStoreData } from "@/features/store/services/store.service";
 import { StoreSection } from "@/features/store/components/StoreSection";
 import { getFooterData } from "@/features/footer/services/footer.service";
 import { Footer } from "@/features/footer/components/Footer";
+import { getHeaderData } from "@/features/header/services/header.service";
+import { Header } from "@/features/header/components/Header";
 
 export default async function Home() {
   const heroData = await getHeroData();
@@ -18,19 +20,27 @@ export default async function Home() {
   const channelData = await getChannelData();
   const storeData = await getStoreData();
   const footerData = await getFooterData();
+  const headerData = await getHeaderData();
 
   return (
     <main className="flex min-h-screen flex-col items-center w-full">
-      <Hero data={heroData} />
-      <MembersSection data={membersData} />
+      <div id="top" className="relative w-full">
+        <Header data={headerData} />
+        <Hero data={heroData} />
+      </div>
+      <div id="members">
+        <MembersSection data={membersData} />
+      </div>
       <MembersMarquee
-        members={marqueeData.skorpinarios}
+        members={marqueeData.skorpionarios}
         label="Skorpinários"
         accentColor="#F2CE16"
         accentBg="rgba(242,206,22,0.05)"
         accentBorder="rgba(242,206,22,0.20)"
       />
-      <ChannelSection data={channelData} />
+      <div id="channel" className="w-full">
+        <ChannelSection data={channelData} />
+      </div>
       <MembersMarquee
         members={marqueeData.skorpiaos}
         label="Skorpiões"

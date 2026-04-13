@@ -5,6 +5,6 @@ export interface MarqueeMember {
 }
 
 export interface MarqueeData {
-  skorpinarios: MarqueeMember[];
+  skorpionarios: MarqueeMember[];
   skorpiaos: MarqueeMember[];
 }
