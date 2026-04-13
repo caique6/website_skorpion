@@ -15,10 +15,7 @@ async function uploadAvatar(imageUrl: string, memberId: string): Promise<string 
 
   const { error } = await supabaseServer.storage
     .from("avatars")
-    .upload(fileName, buffer, {
-      contentType,
-      upsert: true,
-    });
+    .upload(fileName, buffer, { contentType, upsert: true });
 
   if (error) return null;
 
@@ -29,19 +26,19 @@ async function uploadAvatar(imageUrl: string, memberId: string): Promise<string 
   return data.publicUrl;
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   const session = await getServerSession(authOptions);
 
-  if (!session?.user?.email) {
+  if (!session?.user?.channelId) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 
-  const { email, name, image } = session.user;
+  const { channelId, name, email, image } = session.user;
 
   const { data: member, error: fetchError } = await supabaseServer
     .from("members")
     .select("id, tier, redemption_code")
-    .eq("email", email)
+    .eq("channel_id", channelId)
     .single();
 
   if (fetchError || !member) {
@@ -49,16 +46,10 @@ export async function POST(request: NextRequest) {
   }
 
   if (member.redemption_code) {
-    return NextResponse.json({
-      code: member.redemption_code,
-      tier: member.tier,
-    });
+    return NextResponse.json({ code: member.redemption_code, tier: member.tier });
   }
 
-  const avatarUrl = image
-    ? await uploadAvatar(image, member.id)
-    : null;
-
+  const avatarUrl = image ? await uploadAvatar(image, member.id) : null;
   const code = generateCode();
 
   const { error: updateError } = await supabaseServer
@@ -67,6 +58,7 @@ export async function POST(request: NextRequest) {
       name: name ?? undefined,
       avatar_url: avatarUrl ?? undefined,
       redemption_code: code,
+      email: email ?? undefined,
     })
     .eq("id", member.id);
 
