@@ -3,6 +3,8 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft, X } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { useSession } from "next-auth/react";
 import { useReclaim } from "../hooks/useReclaim";
 import { StepIndicator } from "./StepIndicator";
 import { StepOne } from "./StepOne";
@@ -12,7 +14,21 @@ import { StepFour } from "./StepFour";
 
 export const ReclaimFlow = () => {
   const router = useRouter();
-  const { state, goToStep, setIsMember, generateAndAdvance } = useReclaim();
+  const { data: session } = useSession();
+  const {
+    state,
+    goToStep,
+    setIsMember,
+    handleGoogleSignIn,
+    redeemCode,
+    handleSignOut,
+  } = useReclaim();
+
+  useEffect(() => {
+    if (session?.user?.email && state.step === 3 && !state.code) {
+      redeemCode();
+    }
+  }, [session, state.step, state.code, redeemCode]);
 
   const handleBack = () => {
     if (state.step === 1) {
@@ -79,10 +95,17 @@ export const ReclaimFlow = () => {
             />
           )}
           {state.step === 3 && (
-            <StepThree key="step-3" onGenerate={generateAndAdvance} />
+            <StepThree
+              key="step-3"
+              onGoogleSignIn={handleGoogleSignIn}
+              onRedeem={redeemCode}
+              onSignOut={handleSignOut}
+              isLoading={state.isLoading}
+              error={state.error}
+            />
           )}
           {state.step === 4 && (
-            <StepFour key="step-4" code={state.code} />
+            <StepFour key="step-4" code={state.code} tier={state.tier} />
           )}
         </AnimatePresence>
       </main>

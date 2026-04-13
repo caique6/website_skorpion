@@ -10,7 +10,8 @@ interface Props {
 }
 
 export const StoreSection = ({ data }: Props) => {
-  const [featured, ...rest] = data.products;
+  const featured = data.products.find((p) => p.featured) ?? null;
+  const rest = data.products.filter((p) => !p.featured);
 
   return (
     <section className="relative w-full flex items-center justify-center py-10 lg:py-20 px-4 md:px-8 overflow-hidden">
@@ -31,7 +32,6 @@ export const StoreSection = ({ data }: Props) => {
         />
 
         <div className="relative z-10 flex flex-col w-full p-6 sm:p-8 md:p-12 lg:p-16 gap-8 lg:gap-10">
-
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -52,15 +52,26 @@ export const StoreSection = ({ data }: Props) => {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-5">
-            {featured && (
-              <StoreProductCard product={featured} index={0} featured />
-            )}
-            {rest.map((product, index) => (
-              <StoreProductCard key={product.id} product={product} index={index + 1} />
-            ))}
-          </div>
-
+          {data.products.length === 0 ? (
+            <div className="flex items-center justify-center py-20">
+              <span className="text-skorpion-white/20 text-sm font-black uppercase tracking-widest">
+                Nenhum produto disponível
+              </span>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-5">
+              {featured && (
+                <StoreProductCard product={featured} index={0} featured />
+              )}
+              {rest.map((product, index) => (
+                <StoreProductCard
+                  key={product.id}
+                  product={product}
+                  index={featured ? index + 1 : index}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </motion.div>
     </section>

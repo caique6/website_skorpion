@@ -1,6 +1,14 @@
+import { supabaseClient } from "@/lib/supabase";
 import { StoreData } from "../types";
-import { STORE_MOCK } from "../data/mock";
 
 export const getStoreData = async (): Promise<StoreData> => {
-  return Promise.resolve(STORE_MOCK);
+  const { data, error } = await supabaseClient
+    .from("store_products")
+    .select("id, name, description, price, category, image_url, url, featured, active, position")
+    .eq("active", true)
+    .order("position", { ascending: true });
+
+  if (error || !data) return { products: [] };
+
+  return { products: data };
 };

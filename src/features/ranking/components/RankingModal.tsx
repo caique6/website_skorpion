@@ -27,7 +27,7 @@ const modalVariants = {
 
 const TAB_LABEL: Record<PlanTier | "all", string> = {
   all: "Ranking Geral",
-  skorpinario: TIER_CONFIG.skorpinario.label,
+  skorpionario: TIER_CONFIG.skorpionario.label,
   skorpiao: TIER_CONFIG.skorpiao.label,
   skorpionzinho: TIER_CONFIG.skorpionzinho.label,
 };

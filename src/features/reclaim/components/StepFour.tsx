@@ -4,17 +4,20 @@ import { motion } from "framer-motion";
 import { CheckCircle, Copy, MessageCircle, Zap } from "lucide-react";
 import { useState } from "react";
 import { StepWrapper } from "./StepWrapper";
+import { TIER_CONFIG } from "@/features/ranking/utils/ranking.utils";
+import { PlanTier } from "@/features/ranking/types";
 
 interface Props {
   code: string;
+  tier: string;
 }
 
-const WHATSAPP_NUMBER = "5511999999999";
-const AUTOMATION_TEXT = "O processo é 100% automatizado — assim que o código for enviado, o sistema validará e liberará seu acesso automaticamente.";
-const SUPPORT_TEXT = "Teve algum problema? Fale direto com o suporte pelo WhatsApp.";
+const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER!;
 
-export const StepFour = ({ code }: Props) => {
+export const StepFour = ({ code, tier }: Props) => {
   const [copied, setCopied] = useState(false);
+
+  const tierConfig = TIER_CONFIG[tier as PlanTier] ?? null;
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(code);
@@ -40,14 +43,32 @@ export const StepFour = ({ code }: Props) => {
         </motion.div>
 
         <h2 className="text-4xl lg:text-5xl font-black text-[#1A1A1A] uppercase tracking-tight leading-[1.05]">
-          CÓDIGO
-          <br />
-          GERADO!
+          CÓDIGO<br />GERADO!
         </h2>
         <p className="text-[#1A1A1A]/55 text-sm lg:text-base font-medium leading-relaxed max-w-lg">
           Seu código único foi gerado. Envie pelo WhatsApp para concluir o resgate.
         </p>
       </div>
+
+      {tierConfig && (
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15, type: "spring", stiffness: 240, damping: 28 }}
+          className="flex items-center gap-2"
+        >
+          <span
+            className="text-xs font-black uppercase tracking-widest px-3 py-1.5 rounded-full border"
+            style={{
+              color: tierConfig.color,
+              backgroundColor: tierConfig.bg,
+              borderColor: tierConfig.border,
+            }}
+          >
+            {tierConfig.label}
+          </span>
+        </motion.div>
+      )}
 
       <div className="flex flex-col gap-2">
         <span className="text-[#1A1A1A]/40 text-xs font-black uppercase tracking-widest">
@@ -97,17 +118,11 @@ export const StepFour = ({ code }: Props) => {
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, type: "spring", stiffness: 240, damping: 28 }}
-        className="flex flex-col gap-3 pt-2"
+        className="flex items-start gap-3 p-4 rounded-[16px] bg-[#1A1A1A]/[0.03] border border-[#1A1A1A]/08"
       >
-        <div className="flex items-start gap-3 p-4 rounded-[16px] bg-[#1A1A1A]/[0.03] border border-[#1A1A1A]/08">
-          <Zap className="w-4 h-4 text-skorpion-red shrink-0 mt-0.5" />
-          <p className="text-[#1A1A1A]/55 text-xs lg:text-sm font-medium leading-relaxed">
-            {AUTOMATION_TEXT}
-          </p>
-        </div>
-
-        <p className="text-[#1A1A1A]/35 text-xs font-medium leading-relaxed">
-          {SUPPORT_TEXT}
+        <Zap className="w-4 h-4 text-skorpion-red shrink-0 mt-0.5" />
+        <p className="text-[#1A1A1A]/55 text-xs lg:text-sm font-medium leading-relaxed">
+          O processo é 100% automatizado — assim que o código for enviado, o sistema validará e liberará seu acesso automaticamente.
         </p>
       </motion.div>
     </StepWrapper>

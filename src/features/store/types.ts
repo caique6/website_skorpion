@@ -4,8 +4,11 @@ export interface StoreProduct {
   description: string;
   price: string;
   category: "gamer" | "escolar";
-  image: string;
+  image_url: string | null;
   url: string;
+  featured: boolean;
+  active: boolean;
+  position: number;
 }
 
 export interface StoreData {
