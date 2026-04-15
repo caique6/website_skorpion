@@ -14,18 +14,27 @@ export const MembersSection = ({ data }: Props) => {
   const { showPlans, togglePlans } = useMembers();
 
   return (
-    <section className="relative w-full min-h-screen flex items-center justify-center py-10 lg:py-20 px-4 md:px-8 overflow-hidden">
+    <section className="relative w-full flex items-center justify-center py-16 lg:py-24 px-4 md:px-8">
       <motion.div
-        initial={{ opacity: 0, y: 120, scale: 0.95 }}
-        whileInView={{ opacity: 1, y: 0, scale: 1 }}
-        viewport={{ once: false, amount: 0.1 }}
-        exit={{ opacity: 0, y: -120, scale: 0.95 }}
-        transition={{ duration: 0.8, type: "spring", bounce: 0.4 }}
-        className="w-full max-w-7xl h-[85vh] lg:h-auto lg:aspect-[16/9] relative z-10 flex flex-col rounded-[32px] lg:rounded-[40px] shadow-2xl"
+        layout
+        transition={{ type: "spring", stiffness: 180, damping: 32, mass: 1.1 }}
+        className="w-full max-w-6xl relative z-10 rounded-[40px] overflow-hidden"
+        style={{
+          background: "rgba(255,255,255,0.04)",
+          backdropFilter: "blur(48px)",
+          WebkitBackdropFilter: "blur(48px)",
+          border: "1px solid rgba(255,255,255,0.07)",
+          boxShadow: "0 32px 80px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06)",
+        }}
       >
-        <div className="absolute inset-0 bg-skorpion-black/30 backdrop-blur-3xl saturate-[0.80] rounded-[32px] lg:rounded-[40px]" />
-        
-        <div className="relative z-20 w-full h-full p-6 sm:p-8 md:p-12 lg:p-16 flex flex-col overflow-hidden">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: "radial-gradient(ellipse at 20% 0%, rgba(230,25,59,0.10) 0%, transparent 55%)",
+          }}
+        />
+
+        <motion.div layout className="relative z-10 p-8 sm:p-10 lg:p-14">
           <AnimatePresence mode="wait">
             {!showPlans ? (
               <MembersIntroView
@@ -41,7 +50,7 @@ export const MembersSection = ({ data }: Props) => {
               />
             )}
           </AnimatePresence>
-        </div>
+        </motion.div>
       </motion.div>
     </section>
   );

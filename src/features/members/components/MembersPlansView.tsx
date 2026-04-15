@@ -1,9 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Check, ArrowLeft, ChevronsRight } from "lucide-react";
+import { Check, ArrowLeft, Crown, Zap, Star } from "lucide-react";
 import { Plan } from "../types";
-import { cn } from "@/lib/utils";
 
 interface Props {
   plans: Plan[];
@@ -14,218 +13,191 @@ const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.1, delayChildren: 0.05 },
+    transition: { staggerChildren: 0.07, delayChildren: 0.05 },
   },
 };
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 32 },
+  hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { type: "spring", stiffness: 240, damping: 28 },
+    transition: { type: "spring", stiffness: 260, damping: 28 },
   },
 };
 
-const shimmerVariants = {
-  initial: { x: "-120%", opacity: 0 },
-  animate: {
-    x: "220%",
-    opacity: [0, 0.4, 0],
-    transition: {
-      duration: 3,
-      repeat: Infinity,
-      repeatDelay: 5,
-      ease: "easeInOut",
-    },
-  },
+const TIER_ICON: Record<number, React.ElementType> = {
+  1: Star,
+  2: Zap,
+  3: Crown,
 };
 
-const borderVariants = {
-  initial: { opacity: 0.5 },
-  animate: {
-    opacity: [0.5, 1, 0.5],
-    transition: { duration: 2.5, repeat: Infinity, ease: "easeInOut" },
-  },
-};
+function PlanCard({ plan }: { plan: Plan }) {
+  const Icon = TIER_ICON[plan.tier] ?? Star;
+  const isHighlighted = plan.highlighted;
 
-function HighlightedCard({ plan }: { plan: Plan }) {
   return (
     <motion.div
       variants={cardVariants}
       whileHover={{
-        y: -8,
-        transition: { type: "spring", stiffness: 280, damping: 26 },
+        y: -4,
+        transition: { type: "spring", stiffness: 320, damping: 26 },
       }}
-      className="group relative flex flex-col shrink-0 lg:shrink w-[82vw] sm:w-[340px] lg:w-full snap-center rounded-[28px] lg:rounded-[32px] overflow-hidden cursor-pointer lg:scale-105"
-      style={{
-        background: "#111111",
-        boxShadow: "0 12px 48px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.4)",
-      }}
+      className="relative flex flex-col rounded-[24px] overflow-hidden cursor-pointer"
+      style={
+        isHighlighted
+          ? {
+              background: "rgba(8,8,8,0.90)",
+              backdropFilter: "blur(48px)",
+              WebkitBackdropFilter: "blur(48px)",
+              border: "1px solid rgba(242,206,22,0.25)",
+              boxShadow: "0 0 0 1px rgba(242,206,22,0.08), 0 24px 48px rgba(0,0,0,0.5)",
+            }
+          : {
+              background: "rgba(255,255,255,0.03)",
+              backdropFilter: "blur(32px)",
+              WebkitBackdropFilter: "blur(32px)",
+              border: "1px solid rgba(255,255,255,0.06)",
+            }
+      }
     >
-      <motion.div
-        variants={borderVariants}
-        initial="initial"
-        animate="animate"
-        className="absolute inset-0 rounded-[28px] lg:rounded-[32px] pointer-events-none"
-        style={{
-          padding: "1.5px",
-          background: "linear-gradient(135deg, #F2CE16 0%, #D4960A 40%, rgba(242,206,22,0.2) 70%, #F2CE16 100%)",
-          WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-          WebkitMaskComposite: "xor",
-          maskComposite: "exclude",
-        }}
-      />
+      {isHighlighted && (
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: "radial-gradient(ellipse at 50% -20%, rgba(242,206,22,0.14) 0%, transparent 60%)",
+          }}
+        />
+      )}
 
-      <div
-        className="absolute inset-0 pointer-events-none opacity-30"
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 0%, rgba(242,206,22,0.2) 0%, transparent 60%)",
-        }}
-      />
+      <div className="relative flex flex-col p-6 gap-5 h-full">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex flex-col gap-1">
+            {isHighlighted && (
+              <span
+                className="text-[9px] font-black uppercase tracking-[0.3em] mb-0.5"
+                style={{ color: "rgba(242,206,22,0.60)" }}
+              >
+                Recomendado
+              </span>
+            )}
+            <h3
+              className="text-lg font-black uppercase tracking-tight leading-none"
+              style={{ color: isHighlighted ? "#FFFFFF" : "rgba(255,255,255,0.60)" }}
+            >
+              {plan.name}
+            </h3>
+          </div>
 
-      <motion.div
-        variants={shimmerVariants}
-        initial="initial"
-        animate="animate"
-        className="absolute top-0 bottom-0 w-1/3 pointer-events-none"
-        style={{
-          background:
-            "linear-gradient(90deg, transparent, rgba(242,206,22,0.08), transparent)",
-          transform: "skewX(-15deg)",
-        }}
-      />
-
-      <div className="relative flex flex-col p-6 lg:p-8 w-full h-full">
-        <div className="mb-5 lg:mb-6 text-center">
-          <span className="inline-block text-[10px] font-black uppercase tracking-[0.2em] text-[#F2CE16]/60 mb-2.5 bg-[#F2CE16]/10 border border-[#F2CE16]/20 px-3 py-1 rounded-full">
-            Mais Popular
-          </span>
-          <h3 className="text-lg lg:text-xl font-black mb-3 uppercase tracking-tight text-white">
-            {plan.name}
-          </h3>
-          <div className="flex items-baseline justify-center gap-1 text-white">
-            <span className="text-base lg:text-lg font-bold opacity-50">R$</span>
-            <span className="text-4xl lg:text-5xl font-black leading-none">
-              {plan.price.replace("R$", "").trim()}
-            </span>
-            <span className="text-xs lg:text-sm font-bold ml-1 opacity-40">
-              {plan.billingCycle}
-            </span>
+          <div
+            className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+            style={
+              isHighlighted
+                ? {
+                    background: "rgba(242,206,22,0.10)",
+                    border: "1px solid rgba(242,206,22,0.20)",
+                  }
+                : {
+                    background: "rgba(255,255,255,0.04)",
+                    border: "1px solid rgba(255,255,255,0.06)",
+                  }
+            }
+          >
+            <Icon
+              className="w-4 h-4"
+              strokeWidth={2}
+              style={{ color: isHighlighted ? "#F2CE16" : "rgba(255,255,255,0.25)" }}
+            />
           </div>
         </div>
 
-        <div className="w-full h-px mb-5 lg:mb-6"
-          style={{ background: "rgba(242,206,22,0.15)" }}
+        <div className="flex flex-col gap-0.5">
+          <div className="flex items-baseline gap-1">
+            <span
+              className="text-sm font-bold"
+              style={{ color: isHighlighted ? "rgba(255,255,255,0.30)" : "rgba(255,255,255,0.18)" }}
+            >
+              R$
+            </span>
+            <span
+              className="text-5xl font-black leading-none tracking-tight"
+              style={{ color: isHighlighted ? "#FFFFFF" : "rgba(255,255,255,0.55)" }}
+            >
+              {plan.price.replace("R$", "").trim()}
+            </span>
+          </div>
+          <span
+            className="text-[11px] font-medium"
+            style={{ color: isHighlighted ? "rgba(255,255,255,0.22)" : "rgba(255,255,255,0.15)" }}
+          >
+            {plan.billingCycle}
+          </span>
+        </div>
+
+        <div
+          className="w-full h-px"
+          style={{
+            background: isHighlighted
+              ? "linear-gradient(to right, rgba(242,206,22,0.25), transparent)"
+              : "rgba(255,255,255,0.05)",
+          }}
         />
 
-        <div className="flex-1 flex flex-col gap-3 mb-6 lg:mb-8">
+        <div className="flex flex-col gap-2.5 flex-1">
           {plan.benefits.map((benefit) => (
-            <div key={benefit.id} className="flex gap-3 items-start">
+            <div key={benefit.id} className="flex gap-2.5 items-start">
               <div
-                className="mt-0.5 w-5 h-5 rounded-full flex items-center justify-center shrink-0"
-                style={{ background: "rgba(242,206,22,0.12)", border: "1px solid rgba(242,206,22,0.25)" }}
+                className="mt-0.5 w-4 h-4 rounded-full flex items-center justify-center shrink-0"
+                style={
+                  isHighlighted
+                    ? {
+                        background: "rgba(242,206,22,0.12)",
+                        border: "1px solid rgba(242,206,22,0.22)",
+                      }
+                    : {
+                        border: "1px solid rgba(255,255,255,0.08)",
+                      }
+                }
               >
-                <Check className="w-3 h-3" strokeWidth={3.5} style={{ color: "#F2CE16" }} />
+                <Check
+                  className="w-2.5 h-2.5"
+                  strokeWidth={3}
+                  style={{ color: isHighlighted ? "#F2CE16" : "rgba(255,255,255,0.25)" }}
+                />
               </div>
-              <div>
-                <h4 className="font-black text-sm leading-tight mb-0.5 text-white">
+              <div className="flex flex-col gap-0.5">
+                <span
+                  className="font-bold text-xs leading-tight"
+                  style={{ color: isHighlighted ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.45)" }}
+                >
                   {benefit.title}
-                </h4>
-                <p className="text-xs font-medium leading-relaxed text-white/50">
+                </span>
+                <span
+                  className="text-[11px] font-medium leading-relaxed"
+                  style={{ color: isHighlighted ? "rgba(255,255,255,0.35)" : "rgba(255,255,255,0.22)" }}
+                >
                   {benefit.description}
-                </p>
+                </span>
               </div>
             </div>
           ))}
         </div>
 
         <motion.button
-          whileHover={{ backgroundColor: "#F2CE16", color: "#111111" }}
+          whileHover={{ opacity: 0.9 }}
           whileTap={{ scale: 0.97 }}
-          transition={{ duration: 0.2 }}
-          className="w-full py-3.5 lg:py-4 rounded-2xl font-black text-sm tracking-wider uppercase mt-auto border text-[#F2CE16] transition-colors duration-200"
-          style={{
-            backgroundColor: "rgba(242,206,22,0.08)",
-            borderColor: "rgba(242,206,22,0.25)",
-          }}
+          className="w-full py-3.5 rounded-xl font-black text-xs tracking-wider uppercase mt-auto transition-opacity duration-200"
+          style={
+            isHighlighted
+              ? { backgroundColor: "#F2CE16", color: "#0A0A0A" }
+              : {
+                  background: "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(255,255,255,0.07)",
+                  color: "rgba(255,255,255,0.30)",
+                }
+          }
         >
-          Ser um Skorpionário
-        </motion.button>
-      </div>
-    </motion.div>
-  );
-}
-
-function RegularCard({ plan }: { plan: Plan }) {
-  return (
-    <motion.div
-      variants={cardVariants}
-      whileHover={{
-        y: -6,
-        transition: { type: "spring", stiffness: 280, damping: 28 },
-      }}
-      className="group relative flex flex-col shrink-0 lg:shrink w-[82vw] sm:w-[340px] lg:w-full snap-center rounded-[28px] lg:rounded-[32px] overflow-hidden cursor-pointer"
-      style={{
-        background: "rgba(255,255,255,0.06)",
-        backdropFilter: "blur(20px)",
-        WebkitBackdropFilter: "blur(20px)",
-        border: "1px solid rgba(255,255,255,0.10)",
-        boxShadow: "0 4px 24px rgba(0,0,0,0.2)",
-      }}
-    >
-      <div
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.05) 0%, transparent 60%)",
-        }}
-      />
-
-      <div className="relative flex flex-col p-6 lg:p-8 w-full h-full">
-        <div className="mb-5 lg:mb-6 text-center">
-          <h3 className="text-lg lg:text-xl font-black mb-3 uppercase tracking-tight text-skorpion-white">
-            {plan.name}
-          </h3>
-          <div className="flex items-baseline justify-center gap-1 text-skorpion-white">
-            <span className="text-base lg:text-lg font-bold opacity-50">R$</span>
-            <span className="text-4xl lg:text-5xl font-black leading-none">
-              {plan.price.replace("R$", "").trim()}
-            </span>
-            <span className="text-xs lg:text-sm font-bold ml-1 opacity-35">
-              {plan.billingCycle}
-            </span>
-          </div>
-        </div>
-
-        <div className="w-full h-px bg-white/10 mb-5 lg:mb-6" />
-
-        <div className="flex-1 flex flex-col gap-3 mb-6 lg:mb-8">
-          {plan.benefits.map((benefit) => (
-            <div key={benefit.id} className="flex gap-3 items-start">
-              <div className="mt-0.5 w-5 h-5 rounded-full bg-white/10 flex items-center justify-center shrink-0">
-                <Check className="w-3 h-3 text-skorpion-white" strokeWidth={3} />
-              </div>
-              <div>
-                <h4 className="font-bold text-sm leading-tight mb-0.5 text-skorpion-white">
-                  {benefit.title}
-                </h4>
-                <p className="text-xs font-medium leading-relaxed text-skorpion-white/50">
-                  {benefit.description}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <motion.button
-          whileHover={{ backgroundColor: "rgba(255,255,255,0.14)" }}
-          whileTap={{ scale: 0.97 }}
-          transition={{ duration: 0.2 }}
-          className="w-full py-3.5 lg:py-4 rounded-2xl font-black text-sm tracking-wider uppercase mt-auto bg-white/[0.08] text-skorpion-white border border-white/10"
-        >
-          {`Escolher ${plan.name}`}
+          {isHighlighted ? "Ser um Skorpionário" : `Escolher ${plan.name}`}
         </motion.button>
       </div>
     </motion.div>
@@ -240,57 +212,44 @@ export const MembersPlansView = ({ plans, onBack }: Props) => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, x: 60 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 60 }}
-      transition={{ type: "spring", stiffness: 260, damping: 32 }}
-      className="relative w-full h-full flex flex-col justify-center"
+      key="plans-view"
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -12 }}
+      transition={{ type: "spring", stiffness: 280, damping: 30 }}
+      className="w-full flex flex-col gap-8"
     >
-      <motion.button
-        onClick={onBack}
-        whileHover={{ scale: 1.08, backgroundColor: "rgba(255,255,255,0.18)" }}
-        whileTap={{ scale: 0.92 }}
-        transition={{ type: "spring", stiffness: 400, damping: 22 }}
-        className="absolute top-0 left-0 lg:-top-4 lg:-left-4 z-50 w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-white/10 flex items-center justify-center text-skorpion-white border border-white/10 backdrop-blur-md"
+      <div className="flex items-center justify-between">
+        <motion.button
+          onClick={onBack}
+          whileHover={{ x: -2, transition: { type: "spring", stiffness: 400, damping: 22 } }}
+          whileTap={{ scale: 0.95 }}
+          className="flex items-center gap-2 text-white/35 hover:text-white/70 transition-colors duration-200"
+        >
+          <ArrowLeft className="w-4 h-4" strokeWidth={2.5} />
+          <span className="text-xs font-black uppercase tracking-widest">Voltar</span>
+        </motion.button>
+
+        <div className="flex flex-col items-end gap-0.5">
+          <span className="text-white/20 text-[9px] font-black uppercase tracking-[0.35em]">
+            Clube de Membros
+          </span>
+          <span className="text-white/70 font-black text-sm uppercase tracking-tight">
+            Escolha seu plano
+          </span>
+        </div>
+      </div>
+
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="grid grid-cols-1 sm:grid-cols-3 gap-3 lg:gap-4"
       >
-        <ArrowLeft className="w-4 h-4 lg:w-5 lg:h-5" strokeWidth={2.5} />
-      </motion.button>
-
-      <div className="absolute top-0 right-0 z-50 flex lg:hidden items-center gap-1.5 text-skorpion-white/40 bg-white/5 px-3 py-1.5 rounded-full">
-        <motion.span
-          animate={{ opacity: [0.4, 1, 0.4] }}
-          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-          className="text-[10px] font-black uppercase tracking-[0.2em]"
-        >
-          Deslize
-        </motion.span>
-        <ChevronsRight className="w-3.5 h-3.5" />
-      </div>
-
-      <div className="w-full pt-10 lg:pt-0">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className={cn(
-            "flex lg:grid lg:grid-cols-3 lg:items-center",
-            "gap-4 lg:gap-5 xl:gap-6",
-            "w-full max-w-5xl mx-auto",
-            "overflow-x-auto lg:overflow-visible",
-            "snap-x snap-mandatory",
-            "px-4 lg:px-6 pb-8 lg:pb-0",
-            "[&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-          )}
-        >
-          {orderedPlans.map((plan) =>
-            plan.highlighted ? (
-              <HighlightedCard key={plan.id} plan={plan} />
-            ) : (
-              <RegularCard key={plan.id} plan={plan} />
-            )
-          )}
-        </motion.div>
-      </div>
+        {orderedPlans.map((plan) => (
+          <PlanCard key={plan.id} plan={plan} />
+        ))}
+      </motion.div>
     </motion.div>
   );
 };
