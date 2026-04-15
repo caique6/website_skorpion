@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ChevronRight, Users } from "lucide-react";
+import Link from "next/link";
 import { StepWrapper } from "./StepWrapper";
 
 interface Props {
@@ -65,16 +66,29 @@ export const StepOne = ({ onNext }: Props) => {
         ))}
       </motion.ul>
 
-      <motion.button
-        onClick={onNext}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.97 }}
-        className="group relative self-start flex items-center gap-3 px-8 py-4 rounded-full font-black text-sm tracking-wide uppercase overflow-hidden bg-[#1A1A1A] text-white shadow-[0_8px_24px_rgba(0,0,0,0.15)]"
-      >
-        <div className="absolute inset-0 bg-skorpion-red translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out rounded-full" />
-        <span className="relative z-10">Vamos lá</span>
-        <ChevronRight className="relative z-10 w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" strokeWidth={2.5} />
-      </motion.button>
+      <div className="flex flex-col gap-4">
+        <motion.button
+          onClick={onNext}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.97 }}
+          className="group relative self-start flex items-center gap-3 px-8 py-4 rounded-full font-black text-sm tracking-wide uppercase overflow-hidden bg-[#1A1A1A] text-white shadow-[0_8px_24px_rgba(0,0,0,0.15)]"
+        >
+          <div className="absolute inset-0 bg-skorpion-red translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out rounded-full" />
+          <span className="relative z-10">Vamos lá</span>
+          <ChevronRight className="relative z-10 w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" strokeWidth={2.5} />
+        </motion.button>
+
+        <p className="text-[#1A1A1A]/35 text-xs font-medium leading-relaxed max-w-sm">
+          Ao continuar, você concorda com nossa{" "}
+          <Link
+            href="/privacidade"
+            className="text-skorpion-red underline underline-offset-2 hover:text-skorpion-red/70 transition-colors duration-200"
+          >
+            Política de Privacidade
+          </Link>
+          {" "}e confirma ter lido como tratamos seus dados.
+        </p>
+      </div>
     </StepWrapper>
   );
 };
