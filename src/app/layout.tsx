@@ -11,7 +11,21 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   title: "Skorpion Gamer",
-  description: "Estratégias avançadas, comunidade engajada e os melhores benefícios do clube de membros.",
+  description: "Skorpion Gamer — Estratégias avançadas, comunidade engajada e os melhores benefícios do clube de membros.",
+  applicationName: "Skorpion Gamer",
+  keywords: ["Skorpion Gamer", "GTA RP", "YouTube", "clube de membros"],
+  authors: [{ name: "Skorpion Gamer" }],
+  creator: "Skorpion Gamer",
+  publisher: "Skorpion Gamer",
+  metadataBase: new URL("https://skorpiongamer.com.br"),
+  openGraph: {
+    title: "Skorpion Gamer",
+    description: "Estratégias avançadas, comunidade engajada e os melhores benefícios do clube de membros.",
+    url: "https://skorpiongamer.com.br",
+    siteName: "Skorpion Gamer",
+    locale: "pt_BR",
+    type: "website",
+  },
   icons: {
     icon: "/logo.png",
   },
