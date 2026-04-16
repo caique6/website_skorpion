@@ -47,17 +47,17 @@ function PlanCard({ plan }: { plan: Plan }) {
       style={
         isHighlighted
           ? {
-              background: "rgba(8,8,8,0.90)",
-              backdropFilter: "blur(48px)",
-              WebkitBackdropFilter: "blur(48px)",
-              border: "1px solid rgba(242,206,22,0.25)",
-              boxShadow: "0 0 0 1px rgba(242,206,22,0.08), 0 24px 48px rgba(0,0,0,0.5)",
-            }
-          : {
-              background: "rgba(255,255,255,0.03)",
+              background: "rgba(242,206,22,0.07)",
               backdropFilter: "blur(32px)",
               WebkitBackdropFilter: "blur(32px)",
-              border: "1px solid rgba(255,255,255,0.06)",
+              border: "1px solid rgba(242,206,22,0.25)",
+              boxShadow: "0 0 0 1px rgba(242,206,22,0.06), 0 24px 48px rgba(0,0,0,0.3)",
+            }
+          : {
+              background: "rgba(255,255,255,0.05)",
+              backdropFilter: "blur(32px)",
+              WebkitBackdropFilter: "blur(32px)",
+              border: "1px solid rgba(255,255,255,0.08)",
             }
       }
     >
@@ -65,7 +65,8 @@ function PlanCard({ plan }: { plan: Plan }) {
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: "radial-gradient(ellipse at 50% -20%, rgba(242,206,22,0.14) 0%, transparent 60%)",
+            background:
+              "radial-gradient(ellipse at 50% -10%, rgba(242,206,22,0.12) 0%, transparent 65%)",
           }}
         />
       )}
@@ -98,8 +99,8 @@ function PlanCard({ plan }: { plan: Plan }) {
                     border: "1px solid rgba(242,206,22,0.20)",
                   }
                 : {
-                    background: "rgba(255,255,255,0.04)",
-                    border: "1px solid rgba(255,255,255,0.06)",
+                    background: "rgba(255,255,255,0.05)",
+                    border: "1px solid rgba(255,255,255,0.08)",
                   }
             }
           >
@@ -139,7 +140,7 @@ function PlanCard({ plan }: { plan: Plan }) {
           style={{
             background: isHighlighted
               ? "linear-gradient(to right, rgba(242,206,22,0.25), transparent)"
-              : "rgba(255,255,255,0.05)",
+              : "rgba(255,255,255,0.06)",
           }}
         />
 
@@ -191,8 +192,8 @@ function PlanCard({ plan }: { plan: Plan }) {
             isHighlighted
               ? { backgroundColor: "#F2CE16", color: "#0A0A0A" }
               : {
-                  background: "rgba(255,255,255,0.05)",
-                  border: "1px solid rgba(255,255,255,0.07)",
+                  background: "rgba(255,255,255,0.06)",
+                  border: "1px solid rgba(255,255,255,0.08)",
                   color: "rgba(255,255,255,0.30)",
                 }
           }
