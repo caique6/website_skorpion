@@ -31,6 +31,9 @@ async function uploadAvatar(imageUrl: string, memberId: string): Promise<string 
 export async function POST(_request: NextRequest) {
   const session = await getServerSession(authOptions);
 
+  console.log("channelId da sessão:", session?.user?.channelId);
+  console.log("email da sessão:", session?.user?.email);
+
   if (!session?.user?.channelId) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
@@ -42,6 +45,9 @@ export async function POST(_request: NextRequest) {
     .select("id, tier, redemption_code")
     .eq("channel_id", channelId)
     .single();
+
+  console.log("membro encontrado:", member);
+  console.log("erro ao buscar:", fetchError);
 
   if (fetchError || !member) {
     return NextResponse.json({ error: "member_not_found" }, { status: 404 });
