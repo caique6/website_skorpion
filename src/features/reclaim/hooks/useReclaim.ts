@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { ReclaimState, ReclaimStep, ReclaimError } from "../types";
 
@@ -11,10 +11,11 @@ const INITIAL_STATE: ReclaimState = {
   isLoading: false,
 };
 
+const REDEEM_KEY = "reclaim_in_progress";
+
 export const useReclaim = () => {
   const [state, setState] = useState<ReclaimState>(INITIAL_STATE);
   const { data: session } = useSession();
-  const hasRedeemed = useRef(false);
 
   const goToStep = useCallback((step: ReclaimStep) => {
     setState((prev) => ({ ...prev, step, error: null }));
@@ -38,9 +39,9 @@ export const useReclaim = () => {
 
   const redeemCode = useCallback(async () => {
     if (!session?.user?.email) return;
-    if (hasRedeemed.current) return;
+    if (sessionStorage.getItem(REDEEM_KEY) === "true") return;
 
-    hasRedeemed.current = true;
+    sessionStorage.setItem(REDEEM_KEY, "true");
     setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
     try {
@@ -49,7 +50,7 @@ export const useReclaim = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        hasRedeemed.current = false;
+        sessionStorage.removeItem(REDEEM_KEY);
         setState((prev) => ({
           ...prev,
           isLoading: false,
@@ -58,6 +59,7 @@ export const useReclaim = () => {
         return;
       }
 
+      sessionStorage.removeItem(REDEEM_KEY);
       setState((prev) => ({
         ...prev,
         isLoading: false,
@@ -66,14 +68,14 @@ export const useReclaim = () => {
         step: 4,
       }));
     } catch {
-      hasRedeemed.current = false;
+      sessionStorage.removeItem(REDEEM_KEY);
       setState((prev) => ({ ...prev, isLoading: false, error: "unknown" }));
     }
   }, [session]);
 
   const handleSignOut = useCallback(async () => {
     await signOut({ redirect: false });
-    hasRedeemed.current = false;
+    sessionStorage.removeItem(REDEEM_KEY);
     setState(INITIAL_STATE);
   }, []);
 
