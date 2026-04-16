@@ -44,7 +44,8 @@ export const useReclaim = () => {
     setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
     try {
-      const response = await fetch("/api/members/redeem", { method: "POST" });
+      const baseUrl = window.location.origin;
+      const response = await fetch(`${baseUrl}/api/members/redeem`, { method: "POST" });
       const data = await response.json();
 
       if (!response.ok) {
