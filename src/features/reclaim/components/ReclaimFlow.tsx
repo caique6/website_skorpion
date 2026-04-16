@@ -14,7 +14,7 @@ import { StepFour } from "./StepFour";
 
 export const ReclaimFlow = () => {
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const {
     state,
     goToStep,
@@ -25,10 +25,18 @@ export const ReclaimFlow = () => {
   } = useReclaim();
 
   useEffect(() => {
-    if (session?.user?.email && state.step === 3 && !state.code) {
+    if (status === "loading") return;
+    if (session?.user?.channelId && state.step < 3 && !state.code) {
+      setIsMember(true);
+      goToStep(3);
+    }
+  }, [status, session, state.step, state.code, setIsMember, goToStep]);
+
+  useEffect(() => {
+    if (session?.user?.channelId && state.step === 3 && !state.code && !state.isLoading) {
       redeemCode();
     }
-  }, [session, state.step, state.code, redeemCode]);
+  }, [session, state.step, state.code, state.isLoading, redeemCode]);
 
   const handleBack = () => {
     if (state.step === 1) {
