@@ -4,6 +4,8 @@ import { authOptions } from "@/lib/auth";
 import { supabaseServer } from "@/lib/supabase";
 import { generateCode } from "@/features/reclaim/utils/generateCode";
 
+export const dynamic = "force-dynamic";
+
 async function uploadAvatar(imageUrl: string, memberId: string): Promise<string | null> {
   const response = await fetch(imageUrl);
   if (!response.ok) return null;
