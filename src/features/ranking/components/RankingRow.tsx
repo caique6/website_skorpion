@@ -12,7 +12,7 @@ interface Props {
 
 export const RankingRow = ({ member, position, index }: Props) => {
   const tier = TIER_CONFIG[member.tier];
-  const isSkorpinario = member.tier === "skorpinario";
+  const isSkorpinario = member.tier === "skorpionario";
 
   return (
     <motion.div
