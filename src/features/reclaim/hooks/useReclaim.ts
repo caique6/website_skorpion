@@ -1,5 +1,4 @@
 import { useState, useCallback } from "react";
-import { signIn, signOut, useSession } from "next-auth/react";
 import { ReclaimState, ReclaimStep, ReclaimError } from "../types";
 
 const INITIAL_STATE: ReclaimState = {
@@ -15,7 +14,6 @@ const REDEEM_KEY = "reclaim_in_progress";
 
 export const useReclaim = () => {
   const [state, setState] = useState<ReclaimState>(INITIAL_STATE);
-  const { data: session } = useSession();
 
   const goToStep = useCallback((step: ReclaimStep) => {
     setState((prev) => ({ ...prev, step, error: null }));
@@ -25,20 +23,7 @@ export const useReclaim = () => {
     setState((prev) => ({ ...prev, isMember: value }));
   }, []);
 
-  const handleGoogleSignIn = useCallback(async () => {
-    setState((prev) => ({ ...prev, isLoading: true, error: null }));
-    try {
-      const result = await signIn("google", { redirect: false });
-      if (result?.error) {
-        setState((prev) => ({ ...prev, isLoading: false, error: "unauthorized" }));
-      }
-    } catch {
-      setState((prev) => ({ ...prev, isLoading: false, error: "unknown" }));
-    }
-  }, []);
-
-  const redeemCode = useCallback(async () => {
-    if (!session?.user?.email) return;
+  const redeemCode = useCallback(async (channelId: string) => {
     if (sessionStorage.getItem(REDEEM_KEY) === "true") return;
 
     sessionStorage.setItem(REDEEM_KEY, "true");
@@ -46,7 +31,12 @@ export const useReclaim = () => {
 
     try {
       const baseUrl = window.location.origin;
-      const response = await fetch(`${baseUrl}/api/members/redeem`, { method: "POST" });
+      const response = await fetch(`${baseUrl}/api/members/redeem`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ channelId }),
+      });
+
       const data = await response.json();
 
       if (!response.ok) {
@@ -55,6 +45,7 @@ export const useReclaim = () => {
           ...prev,
           isLoading: false,
           error: (data.error as ReclaimError) ?? "unknown",
+          errorMessage: data.message ?? null,
         }));
         return;
       }
@@ -69,23 +60,24 @@ export const useReclaim = () => {
       }));
     } catch {
       sessionStorage.removeItem(REDEEM_KEY);
-      setState((prev) => ({ ...prev, isLoading: false, error: "unknown" }));
+      setState((prev) => ({
+        ...prev,
+        isLoading: false,
+        error: "unknown",
+      }));
     }
-  }, [session]);
+  }, []);
 
-  const handleSignOut = useCallback(async () => {
-    await signOut({ redirect: false });
+  const reset = useCallback(() => {
     sessionStorage.removeItem(REDEEM_KEY);
     setState(INITIAL_STATE);
   }, []);
 
   return {
     state,
-    session,
     goToStep,
     setIsMember,
-    handleGoogleSignIn,
     redeemCode,
-    handleSignOut,
+    reset,
   };
 };

@@ -3,8 +3,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft, X } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { useSession } from "next-auth/react";
 import { useReclaim } from "../hooks/useReclaim";
 import { StepIndicator } from "./StepIndicator";
 import { StepOne } from "./StepOne";
@@ -14,29 +12,13 @@ import { StepFour } from "./StepFour";
 
 export const ReclaimFlow = () => {
   const router = useRouter();
-  const { data: session, status } = useSession();
   const {
     state,
     goToStep,
     setIsMember,
-    handleGoogleSignIn,
     redeemCode,
-    handleSignOut,
+    reset,
   } = useReclaim();
-
-  useEffect(() => {
-    if (status === "loading") return;
-    if (session?.user?.channelId && state.step < 3 && !state.code) {
-      setIsMember(true);
-      goToStep(3);
-    }
-  }, [status, session, state.step, state.code, setIsMember, goToStep]);
-
-  useEffect(() => {
-    if (session?.user?.channelId && state.step === 3 && !state.code && !state.isLoading) {
-      redeemCode();
-    }
-  }, [session, state.step, state.code, state.isLoading, redeemCode]);
 
   const handleBack = () => {
     if (state.step === 1) {
@@ -49,6 +31,10 @@ export const ReclaimFlow = () => {
   const handleConfirmMember = () => {
     setIsMember(true);
     goToStep(3);
+  };
+
+  const handleStartOver = () => {
+    reset();
   };
 
   return (
@@ -105,15 +91,19 @@ export const ReclaimFlow = () => {
           {state.step === 3 && (
             <StepThree
               key="step-3"
-              onGoogleSignIn={handleGoogleSignIn}
               onRedeem={redeemCode}
-              onSignOut={handleSignOut}
               isLoading={state.isLoading}
               error={state.error}
+              errorMessage={(state as { errorMessage?: string }).errorMessage}
             />
           )}
           {state.step === 4 && (
-            <StepFour key="step-4" code={state.code} tier={state.tier} />
+            <StepFour
+              key="step-4"
+              code={state.code}
+              tier={state.tier}
+              onStartOver={handleStartOver}
+            />
           )}
         </AnimatePresence>
       </main>

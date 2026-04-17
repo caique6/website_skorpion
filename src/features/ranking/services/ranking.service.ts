@@ -16,8 +16,9 @@ function computeMembership(createdAt: string): Pick<RankingMember, "months" | "d
 
 export const getRankingData = async (): Promise<RankingData> => {
   const { data, error } = await supabaseClient
-    .from("members_public")
-    .select("id, name, avatar_url, tier, created_at");
+    .from("members")
+    .select("id, name, avatar_url, tier, created_at")
+    .eq("is_active", true);
 
   if (error || !data) return { members: [] };
 

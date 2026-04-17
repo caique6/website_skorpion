@@ -3,8 +3,9 @@ import { MarqueeData, MarqueeMember } from "../types";
 
 export const getMarqueeData = async (): Promise<MarqueeData> => {
   const { data, error } = await supabaseClient
-    .from("members_public")
-    .select("id, name, avatar_url, tier");
+    .from("members")
+    .select("id, name, avatar_url, tier")
+    .eq("is_active", true);
 
   if (error || !data) return { skorpionarios: [], skorpiaos: [] };
 

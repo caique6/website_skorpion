@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { CheckCircle, Copy, MessageCircle, Zap } from "lucide-react";
+import { CheckCircle, Copy, MessageCircle, Zap, RotateCcw } from "lucide-react";
 import { useState } from "react";
 import { StepWrapper } from "./StepWrapper";
 import { TIER_CONFIG } from "@/features/ranking/utils/ranking.utils";
@@ -10,11 +10,12 @@ import { PlanTier } from "@/features/ranking/types";
 interface Props {
   code: string;
   tier: string;
+  onStartOver: () => void;
 }
 
 const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER!;
 
-export const StepFour = ({ code, tier }: Props) => {
+export const StepFour = ({ code, tier, onStartOver }: Props) => {
   const [copied, setCopied] = useState(false);
 
   const tierConfig = TIER_CONFIG[tier as PlanTier] ?? null;
@@ -118,12 +119,24 @@ export const StepFour = ({ code, tier }: Props) => {
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, type: "spring", stiffness: 240, damping: 28 }}
-        className="flex items-start gap-3 p-4 rounded-[16px] bg-[#1A1A1A]/[0.03] border border-[#1A1A1A]/08"
+        className="flex flex-col gap-3"
       >
-        <Zap className="w-4 h-4 text-skorpion-red shrink-0 mt-0.5" />
-        <p className="text-[#1A1A1A]/55 text-xs lg:text-sm font-medium leading-relaxed">
-          O processo é 100% automatizado — assim que o código for enviado, o sistema validará e liberará seu acesso automaticamente.
-        </p>
+        <div className="flex items-start gap-3 p-4 rounded-[16px] bg-[#1A1A1A]/[0.03] border border-[#1A1A1A]/08">
+          <Zap className="w-4 h-4 text-skorpion-red shrink-0 mt-0.5" />
+          <p className="text-[#1A1A1A]/55 text-xs lg:text-sm font-medium leading-relaxed">
+            O processo é 100% automatizado — assim que o código for enviado, o sistema validará e liberará seu acesso automaticamente.
+          </p>
+        </div>
+
+        <motion.button
+          onClick={onStartOver}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.97 }}
+          className="flex items-center gap-2 text-[#1A1A1A]/30 hover:text-[#1A1A1A]/60 transition-colors duration-200 text-xs font-black uppercase tracking-widest w-fit"
+        >
+          <RotateCcw className="w-3.5 h-3.5" />
+          Recomeçar
+        </motion.button>
       </motion.div>
     </StepWrapper>
   );

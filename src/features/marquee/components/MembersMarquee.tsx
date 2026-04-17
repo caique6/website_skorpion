@@ -1,7 +1,8 @@
 "use client";
 
 import { motion, useInView, useMotionValue, useAnimationFrame } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef } from "react";
+import Image from "next/image";
 import { MarqueeMember } from "../types";
 import { cn } from "@/lib/utils";
 
@@ -29,9 +30,11 @@ interface ChipProps {
 }
 
 const SPEED = 0.4;
-const CHUNK = 1 / 3;
+const MIN_ITEMS = 20;
 
 function MemberChip({ member, accentColor, accentBg, accentBorder }: ChipProps) {
+  const isUrl = member.avatar.startsWith("http");
+
   return (
     <motion.div
       whileHover={{
@@ -45,7 +48,17 @@ function MemberChip({ member, accentColor, accentBg, accentBorder }: ChipProps) 
         boxShadow: `0 0 12px ${accentBorder}`,
       }}
     >
-      <span className="text-sm leading-none">{member.avatar}</span>
+      {isUrl ? (
+        <Image
+          src={member.avatar}
+          alt={member.name}
+          width={20}
+          height={20}
+          className="rounded-full object-cover"
+        />
+      ) : (
+        <span className="text-sm leading-none">{member.avatar}</span>
+      )}
       <span
         className="font-black text-[11px] tracking-widest uppercase whitespace-nowrap"
         style={{ color: accentColor }}
@@ -66,13 +79,16 @@ function MarqueeTrack({ members, direction = "left", accentColor, accentBg, acce
   const trackRef = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
   const isPaused = useRef(false);
-  const duplicated = [...members, ...members, ...members];
+
+  const repeatCount = Math.ceil(MIN_ITEMS / members.length);
+  const duplicated = Array.from({ length: repeatCount }, () => members).flat();
+  const chunkFraction = 1 / repeatCount;
 
   useAnimationFrame((_, delta) => {
     if (isPaused.current) return;
 
     const trackWidth = trackRef.current?.scrollWidth ?? 0;
-    const chunkWidth = trackWidth * CHUNK;
+    const chunkWidth = trackWidth * chunkFraction;
     if (chunkWidth === 0) return;
 
     const velocity = direction === "left" ? -SPEED : SPEED;
@@ -87,21 +103,13 @@ function MarqueeTrack({ members, direction = "left", accentColor, accentBg, acce
     }
   });
 
-  const handleMouseEnter = () => {
-    isPaused.current = true;
-  };
-
-  const handleMouseLeave = () => {
-    isPaused.current = false;
-  };
-
   return (
     <div className="flex overflow-hidden w-full py-2">
       <motion.div
         ref={trackRef}
         style={{ x }}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
+        onMouseEnter={() => { isPaused.current = true; }}
+        onMouseLeave={() => { isPaused.current = false; }}
         className="flex shrink-0"
       >
         {duplicated.map((member, index) => (
@@ -121,6 +129,8 @@ function MarqueeTrack({ members, direction = "left", accentColor, accentBg, acce
 export const MembersMarquee = ({ members, label, accentColor, accentBg, accentBorder }: Props) => {
   const ref = useRef<HTMLElement>(null);
   const isInView = useInView(ref, { once: true, amount: 0.3 });
+
+  if (!members.length) return null;
 
   return (
     <motion.section
