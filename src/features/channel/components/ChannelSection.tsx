@@ -6,7 +6,7 @@ import { ChannelData, ChannelStats } from "../types";
 import { ChannelStatCard } from "./ChannelStatCard";
 import { ChannelVideoCard } from "./ChannelVideoCard";
 
-interface Props {
+interface ChannelSectionProps {
   data: ChannelData;
 }
 
@@ -14,7 +14,6 @@ const STAT_LABELS: Record<keyof ChannelStats, string> = {
   subscribers: "Inscritos",
   totalViews: "Visualizações",
   totalVideos: "Vídeos",
-  monthlyViews: "Views este mês",
 };
 
 type StatEntry = [keyof ChannelStats, string];
@@ -23,7 +22,7 @@ function getStatEntries(stats: ChannelStats): StatEntry[] {
   return Object.entries(stats) as StatEntry[];
 }
 
-export const ChannelSection = ({ data }: Props) => {
+export const ChannelSection = ({ data }: ChannelSectionProps) => {
   const statEntries = getStatEntries(data.stats);
 
   return (
@@ -35,7 +34,8 @@ export const ChannelSection = ({ data }: Props) => {
         transition={{ duration: 0.8, type: "spring", bounce: 0.4 }}
         className="w-full max-w-7xl relative z-10 rounded-[32px] lg:rounded-[40px] shadow-2xl overflow-hidden"
       >
-        <div className="absolute inset-0 rounded-[32px] lg:rounded-[40px]"
+        <div
+          className="absolute inset-0 rounded-[32px] lg:rounded-[40px]"
           style={{
             background: "rgba(0,0,0,0.30)",
             backdropFilter: "blur(40px)",
@@ -44,7 +44,6 @@ export const ChannelSection = ({ data }: Props) => {
         />
 
         <div className="relative z-10 flex flex-col w-full h-full p-6 sm:p-8 md:p-12 lg:p-16 gap-8 lg:gap-10">
-
           <div className="flex items-start justify-between gap-4">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -81,7 +80,7 @@ export const ChannelSection = ({ data }: Props) => {
             </motion.a>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4">
             {statEntries.map(([key, value], index) => (
               <ChannelStatCard
                 key={key}
@@ -100,15 +99,12 @@ export const ChannelSection = ({ data }: Props) => {
               <div className="h-px flex-1 bg-white/10" />
             </div>
 
-            <div
-              className="grid grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4 max-h-[420px] lg:max-h-[380px] overflow-y-auto pr-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-            >
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4 max-h-[420px] lg:max-h-[380px] overflow-y-auto pr-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
               {data.videos.map((video, index) => (
                 <ChannelVideoCard key={video.id} video={video} index={index} />
               ))}
             </div>
           </div>
-
         </div>
       </motion.div>
     </section>

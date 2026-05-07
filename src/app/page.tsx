@@ -13,6 +13,8 @@ import { Footer } from "@/features/footer/components/Footer";
 import { getHeaderData } from "@/features/header/services/header.service";
 import { Header } from "@/features/header/components/Header";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const heroData = await getHeroData();
   const membersData = await getMembersData();

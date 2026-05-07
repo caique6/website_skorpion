@@ -2,7 +2,6 @@ export interface ChannelStats {
   subscribers: string;
   totalViews: string;
   totalVideos: string;
-  monthlyViews: string;
 }
 
 export interface ChannelVideo {
@@ -12,6 +11,7 @@ export interface ChannelVideo {
   publishedAt: string;
   duration: string;
   url: string;
+  thumbnailUrl: string;
 }
 
 export interface ChannelData {

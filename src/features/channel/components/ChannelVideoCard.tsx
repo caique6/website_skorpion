@@ -39,6 +39,14 @@ export const ChannelVideoCard = ({ video, index }: Props) => {
           background: "linear-gradient(135deg, rgba(230,25,59,0.25) 0%, rgba(10,10,10,0.9) 100%)",
         }}
       >
+        {video.thumbnailUrl && (
+          <img
+            src={video.thumbnailUrl}
+            alt={video.title}
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        )}
+
         <div
           className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
           style={{
@@ -56,7 +64,7 @@ export const ChannelVideoCard = ({ video, index }: Props) => {
           </motion.div>
         </div>
 
-        <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-sm">
+        <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-sm z-10">
           <span className="text-[10px] font-black text-skorpion-white tracking-wide">
             {video.duration}
           </span>
