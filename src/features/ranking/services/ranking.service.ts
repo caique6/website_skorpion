@@ -1,11 +1,28 @@
-import { supabaseClient } from "@/lib/supabase";
-import { RankingData, RankingMember } from "../types";
+import { supabaseServer } from "@/lib/supabase";
+import { RankingData, RankingMember, PlanTier } from "../types";
 
-function computeMembership(createdAt: string): Pick<RankingMember, "months" | "days" | "hours"> {
-  const created = new Date(createdAt);
+const TIER_NORMALIZE: Record<string, PlanTier> = {
+  skorpionario: "skorpionario",
+  skorpionário: "skorpionario",
+  Skorpionario: "skorpionario",
+  Skorpionário: "skorpionario",
+  skorpiao: "skorpiao",
+  skorpião: "skorpiao",
+  Skorpiao: "skorpiao",
+  Skorpião: "skorpiao",
+  skorpionzinho: "skorpionzinho",
+  Skorpionzinho: "skorpionzinho",
+};
+
+function normalizeTier(raw: string): PlanTier | null {
+  return TIER_NORMALIZE[raw] ?? null;
+}
+
+function computeMembership(membershipStartedAt: string): Pick<RankingMember, "months" | "days" | "hours"> {
+  const started = new Date(membershipStartedAt);
   const now = new Date();
 
-  const totalHours = Math.floor((now.getTime() - created.getTime()) / 1000 / 60 / 60);
+  const totalHours = Math.floor((now.getTime() - started.getTime()) / 1000 / 60 / 60);
   const months = Math.floor(totalHours / (30 * 24));
   const remainingAfterMonths = totalHours - months * 30 * 24;
   const days = Math.floor(remainingAfterMonths / 24);
@@ -15,20 +32,27 @@ function computeMembership(createdAt: string): Pick<RankingMember, "months" | "d
 }
 
 export const getRankingData = async (): Promise<RankingData> => {
-  const { data, error } = await supabaseClient
+  const { data, error } = await supabaseServer
     .from("members")
-    .select("id, name, avatar_url, tier, created_at")
+    .select("id, name, avatar_url, tier, membership_started_at")
     .eq("is_active", true);
 
   if (error || !data) return { members: [] };
 
-  const members: RankingMember[] = data.map((m) => ({
-    id: m.id,
-    name: m.name,
-    avatar: m.avatar_url ?? "🦂",
-    tier: m.tier,
-    ...computeMembership(m.created_at),
-  }));
+  const members: RankingMember[] = data
+    .map((m) => {
+      const tier = normalizeTier(m.tier);
+      if (!tier) return null;
+
+      return {
+        id: m.id,
+        name: m.name,
+        avatar: m.avatar_url ?? "🦂",
+        tier,
+        ...computeMembership(m.membership_started_at),
+      };
+    })
+    .filter((m): m is RankingMember => m !== null);
 
   return { members };
 };

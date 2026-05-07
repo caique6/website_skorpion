@@ -28,27 +28,38 @@ export default async function Home() {
         <Header data={headerData} />
         <Hero data={heroData} />
       </div>
-      <div id="members">
-        <MembersSection data={membersData} />
-      </div>
-      <MembersMarquee
-        members={marqueeData.skorpionarios}
-        label="Skorpinários"
-        accentColor="#F2CE16"
-        accentBg="rgba(242,206,22,0.05)"
-        accentBorder="rgba(242,206,22,0.20)"
-      />
+      {marqueeData.skorpionarios.length > 0 && (
+        <MembersMarquee
+          members={marqueeData.skorpionarios}
+          label="Skorpionários"
+          accentColor="#F2CE16"
+          accentBg="rgba(242,206,22,0.05)"
+          accentBorder="rgba(242,206,22,0.20)"
+        />
+      )}
+      <MembersSection data={membersData} />
+      {marqueeData.skorpiaos.length > 0 && (
+        <MembersMarquee
+          members={marqueeData.skorpiaos}
+          label="Skorpiões"
+          accentColor="#FFFFFF"
+          accentBg="rgba(255,255,255,0.04)"
+          accentBorder="rgba(255,255,255,0.12)"
+        />
+      )}
+      <StoreSection data={storeData} />
+      {marqueeData.skorpionzinhos.length > 0 && (
+        <MembersMarquee
+          members={marqueeData.skorpionzinhos}
+          label="Skorpionzinhos"
+          accentColor="#9CA3AF"
+          accentBg="rgba(156,163,175,0.05)"
+          accentBorder="rgba(156,163,175,0.18)"
+        />
+      )}
       <div id="channel" className="w-full">
         <ChannelSection data={channelData} />
       </div>
-      <MembersMarquee
-        members={marqueeData.skorpiaos}
-        label="Skorpiões"
-        accentColor="#FFFFFF"
-        accentBg="rgba(255,255,255,0.04)"
-        accentBorder="rgba(255,255,255,0.12)"
-      />
-      <StoreSection data={storeData} />
       <Footer data={footerData} />
     </main>
   );

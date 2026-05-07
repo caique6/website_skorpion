@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { RankingMember } from "../types";
 import { TIER_CONFIG, MEDAL_CONFIG, formatTime } from "../utils/ranking.utils";
@@ -21,6 +22,24 @@ const ORDER_MAP: Record<number, number> = {
   2: 1,
   3: 3,
 };
+
+function AvatarDisplay({ avatar, name, size }: { avatar: string; name: string; size: number }) {
+  const isUrl = avatar.startsWith("http");
+
+  if (isUrl) {
+    return (
+      <Image
+        src={avatar}
+        alt={name}
+        width={size}
+        height={size}
+        className="rounded-full object-cover w-full h-full"
+      />
+    );
+  }
+
+  return <span className="text-3xl lg:text-4xl">{avatar}</span>;
+}
 
 export const PodiumCard = ({ member, position, index }: Props) => {
   const tier = TIER_CONFIG[member.tier];
@@ -49,16 +68,16 @@ export const PodiumCard = ({ member, position, index }: Props) => {
         )}
 
         <div
-          className="relative w-16 h-16 lg:w-20 lg:h-20 rounded-full flex items-center justify-center text-3xl lg:text-4xl border-2"
+          className="relative w-16 h-16 lg:w-20 lg:h-20 rounded-full flex items-center justify-center border-2 overflow-hidden"
           style={{
             borderColor: medal.color,
             boxShadow: `0 0 24px ${medal.glow}, 0 0 48px ${medal.glow}`,
             background: "rgba(0,0,0,0.4)",
           }}
         >
-          {member.avatar}
+          <AvatarDisplay avatar={member.avatar} name={member.name} size={80} />
           <div
-            className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center text-xs border border-black/50"
+            className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center text-xs border border-black/50 z-10"
             style={{ backgroundColor: "#0A0A0A" }}
           >
             {medal.emoji}

@@ -1,15 +1,15 @@
-import { supabaseClient } from "@/lib/supabase";
+import { supabaseServer } from "@/lib/supabase";
 import { ChannelData } from "../types";
 
 export const getChannelData = async (): Promise<ChannelData> => {
   const [statsResult, videosResult] = await Promise.all([
-    supabaseClient
+    supabaseServer
       .from("channel_stats")
       .select("subscribers, total_views, total_videos, monthly_views")
       .order("updated_at", { ascending: false })
       .limit(1)
       .single(),
-    supabaseClient
+    supabaseServer
       .from("channel_videos")
       .select("id, title, views, published_at, duration, url")
       .eq("active", true)

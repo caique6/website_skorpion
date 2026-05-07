@@ -36,8 +36,8 @@ export const RankingView = ({ data }: Props) => {
     ? sorted
     : sorted.filter((m) => m.tier === activeTab);
 
-  const podium = filtered.slice(0, 3);
-  const listMembers = filtered.slice(3, VISIBLE_COUNT + 3);
+  const podium = filtered.slice(0, Math.min(3, filtered.length));
+  const listMembers = filtered.slice(podium.length, podium.length + VISIBLE_COUNT);
   const modalMembers = filtered.slice(0, 25);
 
   const accentColor = activeTab !== "all"
@@ -141,7 +141,15 @@ export const RankingView = ({ data }: Props) => {
             transition={{ type: "spring", stiffness: 260, damping: 28 }}
             className="flex flex-col gap-10"
           >
-            {podium.length >= 3 && (
+            {filtered.length === 0 && (
+              <div className="flex items-center justify-center py-20">
+                <span className="text-white/20 text-sm font-black uppercase tracking-widest">
+                  Nenhum membro nesta categoria
+                </span>
+              </div>
+            )}
+
+            {podium.length > 0 && (
               <div className="flex flex-col gap-2">
                 <span className="text-white/25 text-[10px] font-black uppercase tracking-[0.3em] text-center">
                   Pódio
@@ -169,7 +177,7 @@ export const RankingView = ({ data }: Props) => {
                     <RankingRow
                       key={member.id}
                       member={member}
-                      position={index + 4}
+                      position={podium.length + index + 1}
                       index={index}
                     />
                   ))}
@@ -177,7 +185,7 @@ export const RankingView = ({ data }: Props) => {
               </div>
             )}
 
-            {filtered.length > VISIBLE_COUNT + 3 && (
+            {filtered.length > VISIBLE_COUNT + podium.length && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}

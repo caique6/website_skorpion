@@ -1,37 +1,29 @@
-export type IntroIconType = "gamepad" | "video" | "message";
-
-export interface IntroFeature {
-  id: string;
-  icon: IntroIconType;
-  title: string;
-  description: string;
-}
+export type PlanTier = "skorpionzinho" | "skorpiao" | "skorpionario";
 
 export interface Benefit {
   id: string;
   title: string;
-  description: string;
+  icon: string;
 }
 
 export interface Plan {
   id: string;
-  tier: number;
+  tier: PlanTier;
   name: string;
   price: string;
   billingCycle: string;
   benefits: Benefit[];
   highlighted: boolean;
+  youtubeUrl: string;
 }
 
-export interface MembersIntro {
-  title: string;
-  subtitle: string;
-  description: string;
-  features: IntroFeature[];
-  buttonLabel: string;
+export interface SkorpionarioMember {
+  id: string;
+  name: string;
+  avatar: string;
 }
 
 export interface MembersData {
-  intro: MembersIntro;
   plans: Plan[];
+  skorpionarios: SkorpionarioMember[];
 }

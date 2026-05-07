@@ -7,4 +7,5 @@ export interface MarqueeMember {
 export interface MarqueeData {
   skorpionarios: MarqueeMember[];
   skorpiaos: MarqueeMember[];
+  skorpionzinhos: MarqueeMember[];
 }
