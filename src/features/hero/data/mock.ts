@@ -8,8 +8,22 @@ export const HERO_MOCK: HeroData = {
     {
       id: "action-youtube",
       label: "Acessar o YouTube",
-      url: "https://www.youtube.com/@SkorpionOFICIAL",
+      url: "#",
       variant: "primary",
+      channels: [
+        {
+          id: "channel-gamer",
+          label: "Skorpion Gamer",
+          url: "https://www.youtube.com/@SkorpionOFICIAL",
+          color: "#E6193B",
+        },
+        {
+          id: "channel-blox",
+          label: "Skorpion Blox",
+          url: "https://www.youtube.com/@SkorpionRoblox",
+          color: "#F2CE16",
+        },
+      ],
     },
     {
       id: "action-members",

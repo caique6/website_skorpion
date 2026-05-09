@@ -19,7 +19,7 @@ export const PlanCardSkorpionario = ({ plan }: Props) => {
   return (
     <div
       data-plan-card
-      className="relative rounded-[32px] overflow-hidden p-8 lg:p-10 flex flex-col gap-6"
+      className="relative rounded-[32px] overflow-hidden p-6 sm:p-8 lg:p-10 flex flex-col gap-4 sm:gap-6"
       style={{
         background: "linear-gradient(135deg, rgba(242,206,22,0.10) 0%, rgba(0,0,0,0.60) 60%)",
         backdropFilter: "blur(48px)",
@@ -64,7 +64,7 @@ export const PlanCardSkorpionario = ({ plan }: Props) => {
                 Nível máximo
               </span>
             </div>
-            <h3 className="text-4xl lg:text-5xl font-black text-white uppercase tracking-tight leading-none">
+            <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white uppercase tracking-tight leading-none">
               {plan.name}
             </h3>
           </div>
@@ -82,7 +82,7 @@ export const PlanCardSkorpionario = ({ plan }: Props) => {
 
         <div className="flex items-baseline gap-1.5">
           <span className="text-[#F2CE16]/50 text-base font-bold">R$</span>
-          <span className="text-6xl lg:text-7xl font-black text-white leading-none tracking-tight">
+          <span className="text-5xl sm:text-6xl lg:text-7xl font-black text-white leading-none tracking-tight">
             {plan.price.replace("R$", "").trim()}
           </span>
           <span className="text-white/30 text-sm font-medium self-end pb-1">{plan.billingCycle}</span>

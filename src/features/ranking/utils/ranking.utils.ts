@@ -31,11 +31,24 @@ export const MEDAL_CONFIG: Record<number, { emoji: string; color: string; glow: 
 };
 
 export const formatTime = (months: number, days: number, hours: number): string => {
-  const parts: string[] = [];
-  if (months > 0) parts.push(`${months}m`);
-  if (days > 0) parts.push(`${days}d`);
-  parts.push(`${hours}h`);
-  return parts.join(" ");
+  const years = Math.floor(months / 12);
+  const remainingMonths = months % 12;
+
+  if (years > 0) {
+    const parts = [`${years}a`];
+    if (remainingMonths > 0) parts.push(`${remainingMonths}m`);
+    return parts.join(" ");
+  }
+
+  if (months > 0) {
+    const parts = [`${months}m`];
+    if (days > 0) parts.push(`${days}d`);
+    return parts.join(" ");
+  }
+
+  if (days > 0) return `${days}d`;
+
+  return `${hours}h`;
 };
 
 export const toTotalHours = (member: RankingMember): number =>

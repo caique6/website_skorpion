@@ -1,8 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { AnimatePresence, motion, useInView } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { animate, motion, useInView, useMotionValue, useTransform } from "framer-motion";
 import { MembersData } from "../types";
 import { useMembers } from "../hooks/useMembers";
 import { PlanCardSkorpionario } from "./PlanCardSkorpionario";
@@ -32,10 +31,18 @@ const TAB_COLOR: Record<string, { active: string; activeBg: string; activeBorder
   },
 };
 
+const SPRING = { type: "spring", stiffness: 340, damping: 32, mass: 0.85 } as const;
+
 function resolveCard(tier: string, plan: Parameters<typeof PlanCardSkorpionario>[0]["plan"]) {
   if (tier === "skorpionario") return <PlanCardSkorpionario plan={plan} />;
   if (tier === "skorpiao") return <PlanCardSkorpiao plan={plan} />;
   return <PlanCardSkorpionzinho plan={plan} />;
+}
+
+function slideOffset(rawOffset: number, total: number): number {
+  if (rawOffset > Math.floor(total / 2)) return rawOffset - total;
+  if (rawOffset < -Math.floor(total / 2)) return rawOffset + total;
+  return rawOffset;
 }
 
 export const MembersSection = ({ data }: Props) => {
@@ -43,7 +50,20 @@ export const MembersSection = ({ data }: Props) => {
   const { activeIndex, goTo, goNext, goPrev, containerRef, cardHeight } = useMembers(plans.length);
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.15 });
-  const activePlan = plans[activeIndex];
+
+  const dragX = useMotionValue(0);
+  const dragOpacity = useTransform(dragX, [-180, 0, 180], [0, 1, 0]);
+
+  const handleDragEnd = (_: unknown, info: { offset: { x: number }; velocity: { x: number } }) => {
+    const swipe = Math.abs(info.offset.x) > 50 || Math.abs(info.velocity.x) > 400;
+
+    if (swipe) {
+      if (info.offset.x < 0 || info.velocity.x < -400) goNext();
+      else goPrev();
+    }
+
+    animate(dragX, 0, SPRING);
+  };
 
   return (
     <section
@@ -87,45 +107,48 @@ export const MembersSection = ({ data }: Props) => {
           })}
         </div>
 
-        <div className="relative">
-          <div
-            ref={containerRef}
-            style={{ minHeight: cardHeight ? `${cardHeight}px` : undefined }}
-            className="transition-[min-height] duration-300 ease-in-out"
-          >
-            <AnimatePresence mode="wait">
+        <div
+          ref={containerRef}
+          className="relative transition-[min-height] duration-300 ease-in-out"
+          style={{ minHeight: cardHeight ? `${cardHeight}px` : undefined }}
+        >
+          {plans.map((plan, index) => {
+            const raw = index - activeIndex;
+            const offset = slideOffset(raw, plans.length);
+            const isActive = offset === 0;
+            const xPercent = offset * 130;
+
+            return (
               <motion.div
-                key={activePlan.id}
-                initial={{ opacity: 0, x: 40, filter: "blur(6px)" }}
-                animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                exit={{ opacity: 0, x: -40, filter: "blur(6px)" }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                drag="x"
+                key={plan.id}
+                initial={false}
+                animate={{
+                  x: isActive ? "0%" : `${xPercent}%`,
+                  opacity: isActive ? 1 : 0,
+                }}
+                transition={SPRING}
+                drag={isActive ? "x" : false}
                 dragConstraints={{ left: 0, right: 0 }}
-                dragElastic={0.1}
-                onDragEnd={(_, info) => {
-                  if (info.offset.x < -60) goNext();
-                  if (info.offset.x > 60) goPrev();
+                dragElastic={0.12}
+                onDrag={isActive ? (_, info) => dragX.set(info.offset.x) : undefined}
+                onDragEnd={isActive ? handleDragEnd : undefined}
+                style={{
+                  position: isActive ? "relative" : "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  visibility: isActive ? "visible" : "hidden",
+                  cursor: isActive ? "grab" : "default",
+                  userSelect: "none",
+                  pointerEvents: isActive ? "auto" : "none",
                 }}
               >
-                {resolveCard(activePlan.tier, activePlan)}
+                <motion.div style={{ opacity: isActive ? dragOpacity : 1 }}>
+                  {resolveCard(plan.tier, plan)}
+                </motion.div>
               </motion.div>
-            </AnimatePresence>
-          </div>
-
-          <button
-            onClick={() => goPrev()}
-            className="hidden lg:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-5 w-10 h-10 rounded-full items-center justify-center border border-white/10 bg-white/5 hover:bg-white/10 transition-colors duration-200 text-white/50 hover:text-white z-20"
-          >
-            <ChevronLeft className="w-5 h-5" strokeWidth={2.5} />
-          </button>
-
-          <button
-            onClick={() => goNext()}
-            className="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-5 w-10 h-10 rounded-full items-center justify-center border border-white/10 bg-white/5 hover:bg-white/10 transition-colors duration-200 text-white/50 hover:text-white z-20"
-          >
-            <ChevronRight className="w-5 h-5" strokeWidth={2.5} />
-          </button>
+            );
+          })}
         </div>
 
         <div className="flex items-center justify-center gap-2">
@@ -139,9 +162,8 @@ export const MembersSection = ({ data }: Props) => {
                 style={{
                   width: activeIndex === index ? 28 : 8,
                   height: 8,
-                  backgroundColor: activeIndex === index
-                    ? tabStyle.active
-                    : "rgba(255,255,255,0.15)",
+                  backgroundColor:
+                    activeIndex === index ? tabStyle.active : "rgba(255,255,255,0.15)",
                 }}
               />
             );

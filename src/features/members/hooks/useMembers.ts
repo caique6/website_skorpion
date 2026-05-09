@@ -7,8 +7,9 @@ export const useMembers = (total: number) => {
 
   const updateHeight = useCallback(() => {
     if (!containerRef.current) return;
-    const active = containerRef.current.querySelector<HTMLDivElement>("[data-plan-card]");
-    if (active) setCardHeight(active.scrollHeight);
+    const cards = containerRef.current.querySelectorAll<HTMLDivElement>("[data-plan-card]");
+    const heights = Array.from(cards).map((c) => c.scrollHeight);
+    if (heights.length > 0) setCardHeight(Math.max(...heights));
   }, []);
 
   useLayoutEffect(() => {
