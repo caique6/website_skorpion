@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useInView, useMotionValue, useAnimationFrame } from "framer-motion";
-import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import { useRef, useState, useEffect, useMemo, CSSProperties } from "react";
 import Image from "next/image";
 import { MarqueeMember } from "../types";
 import { cn } from "@/lib/utils";
@@ -17,6 +17,7 @@ interface Props {
 interface TrackProps {
   members: MarqueeMember[];
   direction?: "left" | "right";
+  isVisible: boolean;
   accentColor: string;
   accentBg: string;
   accentBorder: string;
@@ -29,24 +30,16 @@ interface ChipProps {
   accentBorder: string;
 }
 
-const SPEED = 0.4;
-const MIN_ITEMS = 20;
+/** Velocidade-alvo em px/s */
+const SPEED_PX_PER_SEC = 55;
 
 function MemberChip({ member, accentColor, accentBg, accentBorder }: ChipProps) {
   const isUrl = member.avatar.startsWith("http");
-
   return (
     <motion.div
-      whileHover={{
-        scale: 1.08,
-        transition: { type: "spring", stiffness: 400, damping: 22 },
-      }}
+      whileHover={{ scale: 1.08, transition: { type: "spring", stiffness: 400, damping: 22 } }}
       className="flex items-center gap-2.5 px-5 py-2.5 rounded-full shrink-0 border cursor-default mx-1"
-      style={{
-        backgroundColor: accentBg,
-        borderColor: accentBorder,
-        boxShadow: `0 0 12px ${accentBorder}`,
-      }}
+      style={{ backgroundColor: accentBg, borderColor: accentBorder, boxShadow: `0 0 12px ${accentBorder}` }}
     >
       {isUrl ? (
         <Image
@@ -54,147 +47,134 @@ function MemberChip({ member, accentColor, accentBg, accentBorder }: ChipProps) 
           alt={member.name}
           width={20}
           height={20}
-          className="rounded-full object-cover"
+          className="rounded-full object-cover w-5 h-5 flex-shrink-0"
         />
       ) : (
-        <span className="text-sm leading-none">{member.avatar}</span>
+        <span className="text-sm leading-none flex-shrink-0">{member.avatar}</span>
       )}
-      <span
-        className="font-black text-[11px] tracking-widest uppercase whitespace-nowrap"
-        style={{ color: accentColor }}
-      >
+      <span className="font-black text-[11px] tracking-widest uppercase whitespace-nowrap" style={{ color: accentColor }}>
         {member.name}
       </span>
-      <span
-        className="font-black text-[10px] opacity-40"
-        style={{ color: accentColor }}
-      >
-        ✦
-      </span>
+      <span className="font-black text-[10px] opacity-40" style={{ color: accentColor }}>✦</span>
     </motion.div>
   );
 }
 
-function MarqueeTrack({ members, direction = "left", accentColor, accentBg, accentBorder }: TrackProps) {
-  const trackRef = useRef<HTMLDivElement>(null);
-  const x = useMotionValue(0);
-  const isPaused = useRef(false);
+function MarqueeTrack({ members, direction = "left", isVisible, accentColor, accentBg, accentBorder }: TrackProps) {
+  const wrapperRef = useRef<HTMLDivElement>(null); // largura visível
+  const singleRef  = useRef<HTMLDivElement>(null); // largura de 1 cópia
 
-  const repeatCount = Math.ceil(MIN_ITEMS / members.length);
-  const duplicated = Array.from({ length: repeatCount }, () => members).flat();
-  const chunkFraction = 1 / repeatCount;
+  const [copies,   setCopies]   = useState(6);   // quantas cópias renderizar
+  const [duration, setDuration] = useState(30);  // duração da animação (s)
+  const [paused,   setPaused]   = useState(false);
+  const [ready,    setReady]    = useState(false); // evita flash antes da medição
 
-  useAnimationFrame((_, delta) => {
-    if (isPaused.current) return;
+  // Recalcula quando os membros ou a janela mudam
+  useEffect(() => {
+    const calculate = () => {
+      const singleW    = singleRef.current?.offsetWidth  ?? 0;
+      const containerW = wrapperRef.current?.offsetWidth ?? 0;
+      if (!singleW || !containerW) return;
 
-    const trackWidth = trackRef.current?.scrollWidth ?? 0;
-    const chunkWidth = trackWidth * chunkFraction;
-    if (chunkWidth === 0) return;
+      // Cópias necessárias para cobrir ≥ 3× o container (margem de segurança)
+      const needed = Math.max(2, Math.ceil((containerW * 3) / singleW) + 1);
+      setCopies(needed);
+      setDuration(singleW / SPEED_PX_PER_SEC);
+      setReady(true);
+    };
 
-    const velocity = direction === "left" ? -SPEED : SPEED;
-    const next = x.get() + velocity * (delta / 16.67);
+    calculate();
+    window.addEventListener("resize", calculate);
+    return () => window.removeEventListener("resize", calculate);
+  }, [members]);
 
-    if (direction === "left" && next <= -chunkWidth) {
-      x.set(next + chunkWidth);
-    } else if (direction === "right" && next >= 0) {
-      x.set(next - chunkWidth);
-    } else {
-      x.set(next);
-    }
-  });
+  // CSS custom property: -(100 / copies)% = exatamente 1 cópia de distância
+  const offset      = `${-(100 / copies).toFixed(4)}%`;
+  const animName    = direction === "left" ? "marquee-left" : "marquee-right";
+  const playState   = !isVisible || paused ? "paused" : "running";
+
+  // Gera as cópias adicionais (cópia 0 é a "régua" de medição)
+  const extraCopies = useMemo(
+    () => Array.from({ length: copies - 1 }, (_, i) => i),
+    [copies]
+  );
 
   return (
-    <div className="flex overflow-hidden w-full py-2">
-      <motion.div
-        ref={trackRef}
-        style={{ x }}
-        onMouseEnter={() => { isPaused.current = true; }}
-        onMouseLeave={() => { isPaused.current = false; }}
+    <div
+      ref={wrapperRef}
+      className="flex overflow-hidden w-full py-2"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      <div
         className="flex shrink-0"
+        style={{
+          opacity: ready ? 1 : 0,
+          "--marquee-offset": offset,
+          animation: `${animName} ${duration}s linear infinite`,
+          animationPlayState: playState,
+        } as CSSProperties}
       >
-        {duplicated.map((member, index) => (
-          <MemberChip
-            key={`${member.id}-${index}`}
-            member={member}
-            accentColor={accentColor}
-            accentBg={accentBg}
-            accentBorder={accentBorder}
-          />
-        ))}
-      </motion.div>
+        {/* Cópia 0 — usada para medir a largura de uma cópia */}
+        <div ref={singleRef} className="flex shrink-0">
+          {members.map((m, i) => (
+            <MemberChip key={`s-${m.id}-${i}`} member={m} accentColor={accentColor} accentBg={accentBg} accentBorder={accentBorder} />
+          ))}
+        </div>
+
+        {/* Cópias adicionais calculadas dinamicamente */}
+        {extraCopies.map((ci) =>
+          members.map((m, i) => (
+            <MemberChip key={`${ci}-${m.id}-${i}`} member={m} accentColor={accentColor} accentBg={accentBg} accentBorder={accentBorder} />
+          ))
+        )}
+      </div>
     </div>
   );
 }
 
 export const MembersMarquee = ({ members, label, accentColor, accentBg, accentBorder }: Props) => {
-  const ref = useRef<HTMLElement>(null);
-  const isInView = useInView(ref, { once: true, amount: 0.3 });
+  const ref       = useRef<HTMLElement>(null);
+  const isInView  = useInView(ref, { once: false, amount: 0.1 });
+  const hasEntered = useInView(ref, { once: true,  amount: 0.3 });
 
   if (!members.length) return null;
 
   return (
     <motion.section
       ref={ref}
-      initial={{ opacity: 0, y: 40 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-      transition={{ type: "spring", stiffness: 200, damping: 30 }}
+      initial={{ opacity: 0, y: 32 }}
+      animate={hasEntered ? { opacity: 1, y: 0 } : {}}
+      transition={{ type: "spring", stiffness: 220, damping: 30 }}
       className="w-full py-10 overflow-hidden"
       style={{ backgroundColor: "#0A0A0A" }}
     >
-      <motion.div
-        initial={{ opacity: 0, scaleX: 0.8 }}
-        animate={isInView ? { opacity: 1, scaleX: 1 } : { opacity: 0, scaleX: 0.8 }}
-        transition={{ type: "spring", stiffness: 200, damping: 30, delay: 0.1 }}
-        className="flex items-center gap-4 mb-6 px-6"
-      >
-        <motion.div
-          initial={{ scaleX: 0 }}
-          animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
-          className="h-px flex-1 origin-left"
-          style={{ backgroundColor: accentBorder }}
-        />
-        <motion.span
-          initial={{ opacity: 0, letterSpacing: "0.1em" }}
-          animate={isInView ? { opacity: 0.6, letterSpacing: "0.35em" } : { opacity: 0 }}
-          transition={{ duration: 0.7, ease: "easeOut", delay: 0.25 }}
-          className="font-black text-[10px] uppercase shrink-0"
-          style={{ color: accentColor }}
-        >
-          {label}
-        </motion.span>
-        <motion.div
-          initial={{ scaleX: 0 }}
-          animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
-          className="h-px flex-1 origin-right"
-          style={{ backgroundColor: accentBorder }}
-        />
-      </motion.div>
-
+      {/* Cabeçalho */}
       <motion.div
         initial={{ opacity: 0 }}
-        animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-        transition={{ duration: 0.5, delay: 0.35 }}
+        animate={hasEntered ? { opacity: 1 } : {}}
+        transition={{ duration: 0.5, delay: 0.15 }}
+        className="flex items-center gap-4 mb-6 px-6"
+      >
+        <div className="h-px flex-1" style={{ backgroundColor: accentBorder }} />
+        <span className="font-black text-[10px] uppercase tracking-[0.35em] shrink-0 opacity-60" style={{ color: accentColor }}>
+          {label}
+        </span>
+        <div className="h-px flex-1" style={{ backgroundColor: accentBorder }} />
+      </motion.div>
+
+      {/* Faixas */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={hasEntered ? { opacity: 1 } : {}}
+        transition={{ duration: 0.4, delay: 0.25 }}
         className={cn(
           "flex flex-col gap-1",
           "[mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]"
         )}
       >
-        <MarqueeTrack
-          members={members}
-          direction="left"
-          accentColor={accentColor}
-          accentBg={accentBg}
-          accentBorder={accentBorder}
-        />
-        <MarqueeTrack
-          members={members}
-          direction="right"
-          accentColor={accentColor}
-          accentBg={accentBg}
-          accentBorder={accentBorder}
-        />
+        <MarqueeTrack members={members} direction="left"  isVisible={isInView} accentColor={accentColor} accentBg={accentBg} accentBorder={accentBorder} />
+        <MarqueeTrack members={members} direction="right" isVisible={isInView} accentColor={accentColor} accentBg={accentBg} accentBorder={accentBorder} />
       </motion.div>
     </motion.section>
   );

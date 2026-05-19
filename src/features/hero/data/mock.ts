@@ -7,7 +7,7 @@ export const HERO_MOCK: HeroData = {
   actions: [
     {
       id: "action-youtube",
-      label: "Acessar o YouTube",
+      label: "Não, mas quero ser!",
       url: "#",
       variant: "primary",
       channels: [
@@ -27,7 +27,7 @@ export const HERO_MOCK: HeroData = {
     },
     {
       id: "action-members",
-      label: "Resgatar Benefícios",
+      label: "Sim, já sou.",
       url: "/resgatar",
       variant: "secondary",
     },

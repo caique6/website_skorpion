@@ -1,22 +1,6 @@
-import { supabaseServer } from "@/lib/supabase";
-import { RankingData, RankingMember, PlanTier } from "../types";
-
-const TIER_NORMALIZE: Record<string, PlanTier> = {
-  skorpionario: "skorpionario",
-  skorpionário: "skorpionario",
-  Skorpionario: "skorpionario",
-  Skorpionário: "skorpionario",
-  skorpiao: "skorpiao",
-  skorpião: "skorpiao",
-  Skorpiao: "skorpiao",
-  Skorpião: "skorpiao",
-  skorpionzinho: "skorpionzinho",
-  Skorpionzinho: "skorpionzinho",
-};
-
-function normalizeTier(raw: string): PlanTier | null {
-  return TIER_NORMALIZE[raw] ?? null;
-}
+import { supabaseServer, getAvatarPublicUrl } from "@/lib/supabase";
+import { normalizeTier } from "@/lib/tier-utils";
+import { RankingData, RankingMember } from "../types";
 
 function computeMembership(membershipStartedAt: string): Pick<RankingMember, "months" | "days" | "hours"> {
   const started = new Date(membershipStartedAt);
@@ -47,7 +31,7 @@ export const getRankingData = async (): Promise<RankingData> => {
       return {
         id: m.id,
         name: m.name,
-        avatar: m.avatar_url ?? "🦂",
+        avatar: getAvatarPublicUrl(m.avatar_url),
         tier,
         ...computeMembership(m.membership_started_at),
       };

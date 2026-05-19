@@ -2,6 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+  Marquee infinito com offset variável via CSS custom property.
+  --marquee-offset é calculado dinamicamente em JS como -(100 / N_cópias)%
+  e aplicado no elemento animado, garantindo que o loop percorra exatamente
+  uma cópia de itens sem gaps independente do número de membros.
+*/
+@keyframes marquee-left {
+  from { transform: translateX(0%); }
+  to   { transform: translateX(var(--marquee-offset)); }
+}
+
+@keyframes marquee-right {
+  from { transform: translateX(var(--marquee-offset)); }
+  to   { transform: translateX(0%); }
+}
+
 @layer base {
   body {
     background-color: #E6193B !important;
