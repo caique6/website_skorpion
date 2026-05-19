@@ -1,4 +1,4 @@
-export type ReclaimStep = 1 | 2 | 3 | 4;
+export type ReclaimStep = 1 | 2 | 3 | 4 | 5 | 6;
 
 export type ReclaimError =
   | "member_not_found"

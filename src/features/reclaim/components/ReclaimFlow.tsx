@@ -9,23 +9,19 @@ import { StepOne } from "./StepOne";
 import { StepTwo } from "./StepTwo";
 import { StepThree } from "./StepThree";
 import { StepFour } from "./StepFour";
+import { StepFive } from "./StepFive";
+import { StepSix } from "./StepSix";
 
 export const ReclaimFlow = () => {
   const router = useRouter();
-  const {
-    state,
-    goToStep,
-    setIsMember,
-    redeemCode,
-    reset,
-  } = useReclaim();
+  const { state, goToStep, setIsMember, redeemCode, reset } = useReclaim();
 
   const handleBack = () => {
     if (state.step === 1) {
       router.push("/");
       return;
     }
-    goToStep((state.step - 1) as 1 | 2 | 3 | 4);
+    goToStep((state.step - 1) as 1 | 2 | 3 | 4 | 5 | 6);
   };
 
   const handleConfirmMember = () => {
@@ -37,6 +33,16 @@ export const ReclaimFlow = () => {
     reset();
   };
 
+  const handleDiscordClick = () => {
+    goToStep(5);
+  };
+
+  const handleDiscordSuccess = () => {
+    goToStep(6);
+  };
+
+  const showBackButton = state.step > 1 && state.step !== 4 && state.step !== 6;
+
   return (
     <div className="min-h-screen w-full bg-white flex flex-col">
       <motion.header
@@ -46,7 +52,7 @@ export const ReclaimFlow = () => {
         className="w-full flex items-center justify-between px-6 md:px-12 lg:px-16 py-6 border-b border-[#1A1A1A]/06"
       >
         <div className="flex items-center gap-4">
-          {state.step > 1 && state.step < 4 && (
+          {showBackButton && (
             <motion.button
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -64,7 +70,7 @@ export const ReclaimFlow = () => {
         </div>
 
         <div className="flex items-center gap-6">
-          <StepIndicator current={state.step} total={4} />
+          <StepIndicator current={state.step} total={6} />
           <motion.button
             onClick={() => router.push("/")}
             whileHover={{ scale: 1.08 }}
@@ -103,8 +109,17 @@ export const ReclaimFlow = () => {
               code={state.code}
               tier={state.tier}
               onStartOver={handleStartOver}
+              onDiscordClick={handleDiscordClick}
             />
           )}
+          {state.step === 5 && (
+            <StepFive
+              key="step-5"
+              onNext={handleDiscordSuccess}
+              onStartOver={handleStartOver}
+            />
+          )}
+          {state.step === 6 && <StepSix key="step-6" />}
         </AnimatePresence>
       </main>
     </div>

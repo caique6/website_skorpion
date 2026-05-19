@@ -11,11 +11,17 @@ interface Props {
   code: string;
   tier: string;
   onStartOver: () => void;
+  onDiscordClick: () => void;
 }
 
 const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER!;
 
-export const StepFour = ({ code, tier, onStartOver }: Props) => {
+export const StepFour = ({
+  code,
+  tier,
+  onStartOver,
+  onDiscordClick,
+}: Props) => {
   const [copied, setCopied] = useState(false);
 
   const tierConfig = TIER_CONFIG[tier as PlanTier] ?? null;
@@ -27,7 +33,7 @@ export const StepFour = ({ code, tier, onStartOver }: Props) => {
   };
 
   const whatsappMessage = encodeURIComponent(
-    `Olá! Sou membro do canal do Skorpion e quero resgatar meu benefício.\n\nMeu código: ${code}`
+    `Olá! Sou membro do canal do Skorpion e quero resgatar meu benefício.\n\nMeu código: ${code}`,
   );
   const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}`;
 
@@ -37,17 +43,25 @@ export const StepFour = ({ code, tier, onStartOver }: Props) => {
         <motion.div
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ type: "spring", stiffness: 300, damping: 22, delay: 0.1 }}
+          transition={{
+            type: "spring",
+            stiffness: 300,
+            damping: 22,
+            delay: 0.1,
+          }}
           className="w-14 h-14 rounded-full bg-green-500/10 flex items-center justify-center"
         >
           <CheckCircle className="w-7 h-7 text-green-500" strokeWidth={2} />
         </motion.div>
 
         <h2 className="text-4xl lg:text-5xl font-black text-[#1A1A1A] uppercase tracking-tight leading-[1.05]">
-          CÓDIGO<br />GERADO!
+          CÓDIGO
+          <br />
+          GERADO!
         </h2>
         <p className="text-[#1A1A1A]/55 text-sm lg:text-base font-medium leading-relaxed max-w-lg">
-          Seu código único foi gerado. Envie pelo WhatsApp para concluir o resgate.
+          Seu código único foi gerado. Escolha por onde deseja concluir o seu
+          resgate abaixo.
         </p>
       </div>
 
@@ -55,7 +69,12 @@ export const StepFour = ({ code, tier, onStartOver }: Props) => {
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15, type: "spring", stiffness: 240, damping: 28 }}
+          transition={{
+            delay: 0.15,
+            type: "spring",
+            stiffness: 240,
+            damping: 28,
+          }}
           className="flex items-center gap-2"
         >
           <span
@@ -78,7 +97,12 @@ export const StepFour = ({ code, tier, onStartOver }: Props) => {
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ type: "spring", stiffness: 260, damping: 26, delay: 0.2 }}
+          transition={{
+            type: "spring",
+            stiffness: 260,
+            damping: 26,
+            delay: 0.2,
+          }}
           className="flex items-center justify-between gap-4 px-6 py-5 rounded-[20px] border-2 border-[#1A1A1A]/10 bg-[#1A1A1A]/[0.03]"
         >
           <span className="font-black text-xl lg:text-3xl text-[#1A1A1A] tracking-widest">
@@ -98,33 +122,61 @@ export const StepFour = ({ code, tier, onStartOver }: Props) => {
         </motion.div>
       </div>
 
-      <motion.a
-        href={whatsappUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.35, type: "spring", stiffness: 240, damping: 28 }}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.97 }}
-        className="group relative self-start flex items-center gap-3 px-8 py-4 rounded-full font-black text-sm tracking-wide uppercase overflow-hidden text-white shadow-[0_8px_24px_rgba(37,211,102,0.25)]"
-        style={{ backgroundColor: "#25D366" }}
-      >
-        <div className="absolute inset-0 bg-[#128C7E] translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out rounded-full" />
-        <MessageCircle className="relative z-10 w-4 h-4" />
-        <span className="relative z-10">Enviar pelo WhatsApp</span>
-      </motion.a>
+      <div className="flex flex-col sm:flex-row gap-3 w-full">
+        <motion.a
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            delay: 0.35,
+            type: "spring",
+            stiffness: 240,
+            damping: 28,
+          }}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.97 }}
+          className="group relative flex-1 flex items-center justify-center gap-3 px-6 py-4 rounded-full font-black text-sm tracking-wide uppercase overflow-hidden text-white shadow-[0_8px_24px_rgba(37,211,102,0.25)]"
+          style={{ backgroundColor: "#25D366" }}
+        >
+          <div className="absolute inset-0 bg-[#128C7E] translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out rounded-full" />
+          <MessageCircle className="relative z-10 w-4 h-4" />
+          <span className="relative z-10">Resgatar via WhatsApp</span>
+        </motion.a>
 
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5, type: "spring", stiffness: 240, damping: 28 }}
-        className="flex flex-col gap-3"
-      >
+        <motion.button
+          onClick={onDiscordClick}
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            delay: 0.4,
+            type: "spring",
+            stiffness: 240,
+            damping: 28,
+          }}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.97 }}
+          className="group relative flex-1 flex items-center justify-center gap-3 px-6 py-4 rounded-full font-black text-sm tracking-wide uppercase overflow-hidden text-white shadow-[0_8px_24px_rgba(88,101,242,0.25)]"
+          style={{ backgroundColor: "#5865F2" }}
+        >
+          <div className="absolute inset-0 bg-[#4752C4] translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out rounded-full" />
+          <svg
+            className="relative z-10 w-4 h-4 fill-white"
+            viewBox="0 0 127.14 96.36"
+          >
+            <path d="M107.7,8.07A105.15,105.15,0,0,0,77.26,0a77.19,77.19,0,0,0-3.3,6.83A96.67,96.67,0,0,0,53.22,6.83,77.19,77.19,0,0,0,49.88,0,105.15,105.15,0,0,0,19.44,8.07C3.66,31.58-1.86,54.65,1,77.53A105.73,105.73,0,0,0,32,96.36a74.37,74.37,0,0,0,6.66-10.85A68.53,68.53,0,0,1,28,79.9c.9-.66,1.8-1.34,2.66-2a75.58,75.58,0,0,0,65.8,0c.86.69,1.76,1.37,2.66,2a68.32,68.32,0,0,1-10.68,5.61,77.27,77.27,0,0,0,6.66,10.85,105.62,105.62,0,0,0,31-18.83C129.87,49.74,124.15,26.93,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53S36.18,40.36,42.45,40.36,53.92,46,53.72,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.24,60,73.24,53S78.41,40.36,84.69,40.36,96.16,46,96,53,91,65.69,84.69,65.69Z" />
+          </svg>
+          <span className="relative z-10">Resgatar via Discord</span>
+        </motion.button>
+      </div>
+
+      <div className="flex flex-col gap-3">
         <div className="flex items-start gap-3 p-4 rounded-[16px] bg-[#1A1A1A]/[0.03] border border-[#1A1A1A]/08">
           <Zap className="w-4 h-4 text-skorpion-red shrink-0 mt-0.5" />
           <p className="text-[#1A1A1A]/55 text-xs lg:text-sm font-medium leading-relaxed">
-            O processo é 100% automatizado — assim que o código for enviado, o sistema validará e liberará seu acesso automaticamente.
+            Copie o código antes de prosseguir para a plataforma escolhida para
+            garantir a liberação do seu benefício.
           </p>
         </div>
 
@@ -137,7 +189,7 @@ export const StepFour = ({ code, tier, onStartOver }: Props) => {
           <RotateCcw className="w-3.5 h-3.5" />
           Recomeçar
         </motion.button>
-      </motion.div>
+      </div>
     </StepWrapper>
   );
 };

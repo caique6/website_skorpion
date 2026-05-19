@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { ReclaimStep } from "../types";
-import { cn } from "@/lib/utils";
 
 interface Props {
   current: ReclaimStep;
@@ -26,8 +25,8 @@ export const StepIndicator = ({ current, total }: Props) => {
                   backgroundColor: isCompleted
                     ? "#E6193B"
                     : isActive
-                    ? "#1A1A1A"
-                    : "#D1D5DB",
+                      ? "#1A1A1A"
+                      : "#D1D5DB",
                 }}
                 transition={{ type: "spring", stiffness: 300, damping: 28 }}
                 className="h-2 rounded-full"

@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef } from "react";
-import { animate, motion, useInView, useMotionValue, useTransform } from "framer-motion";
-import { MembersData } from "../types";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, useInView } from "framer-motion";
+import { MembersData, Plan } from "../types";
 import { useMembers } from "../hooks/useMembers";
 import { PlanCardSkorpionario } from "./PlanCardSkorpionario";
 import { PlanCardSkorpiao } from "./PlanCardSkorpiao";
@@ -13,56 +13,58 @@ interface Props {
   data: MembersData;
 }
 
-const TAB_COLOR: Record<string, { active: string; activeBg: string; activeBorder: string }> = {
+const TAB_COLOR: Record<
+  string,
+  { active: string; activeBg: string; activeBorder: string }
+> = {
   skorpionario: {
     active: "#F2CE16",
-    activeBg: "rgba(242,206,22,0.08)",
-    activeBorder: "rgba(242,206,22,0.25)",
+    activeBg: "rgba(242,206,22,0.15)",
+    activeBorder: "rgba(242,206,22,0.4)",
   },
   skorpiao: {
-    active: "#C0C0C0",
-    activeBg: "rgba(192,192,192,0.06)",
-    activeBorder: "rgba(192,192,192,0.22)",
+    active: "#FFFFFF",
+    activeBg: "rgba(10,10,10,0.8)",
+    activeBorder: "rgba(10,10,10,1)",
   },
   skorpionzinho: {
-    active: "rgba(255,255,255,0.65)",
-    activeBg: "rgba(255,255,255,0.04)",
-    activeBorder: "rgba(255,255,255,0.12)",
+    active: "#FFFFFF",
+    activeBg: "rgba(230,25,59,0.9)",
+    activeBorder: "rgba(255,255,255,0.4)",
   },
 };
 
-const SPRING = { type: "spring", stiffness: 340, damping: 32, mass: 0.85 } as const;
-
-function resolveCard(tier: string, plan: Parameters<typeof PlanCardSkorpionario>[0]["plan"]) {
+function resolveCard(tier: string, plan: Plan) {
   if (tier === "skorpionario") return <PlanCardSkorpionario plan={plan} />;
   if (tier === "skorpiao") return <PlanCardSkorpiao plan={plan} />;
   return <PlanCardSkorpionzinho plan={plan} />;
 }
 
-function slideOffset(rawOffset: number, total: number): number {
-  if (rawOffset > Math.floor(total / 2)) return rawOffset - total;
-  if (rawOffset < -Math.floor(total / 2)) return rawOffset + total;
-  return rawOffset;
-}
-
 export const MembersSection = ({ data }: Props) => {
   const plans = data.plans;
-  const { activeIndex, goTo, goNext, goPrev, containerRef, cardHeight } = useMembers(plans.length);
+  const { activeIndex, goTo, goNext, goPrev, containerRef, cardHeight } =
+    useMembers(plans.length);
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.15 });
+  const [isMobile, setIsMobile] = useState(false);
 
-  const dragX = useMotionValue(0);
-  const dragOpacity = useTransform(dragX, [-180, 0, 180], [0, 1, 0]);
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
-  const handleDragEnd = (_: unknown, info: { offset: { x: number }; velocity: { x: number } }) => {
-    const swipe = Math.abs(info.offset.x) > 50 || Math.abs(info.velocity.x) > 400;
-
+  const handleDragEnd = (
+    _: unknown,
+    info: { offset: { x: number }; velocity: { x: number } },
+  ) => {
+    const swipe =
+      Math.abs(info.offset.x) > 40 || Math.abs(info.velocity.x) > 300;
     if (swipe) {
-      if (info.offset.x < 0 || info.velocity.x < -400) goNext();
+      if (info.offset.x < 0 || info.velocity.x < -300) goNext();
       else goPrev();
     }
-
-    animate(dragX, 0, SPRING);
   };
 
   return (
@@ -96,9 +98,13 @@ export const MembersSection = ({ data }: Props) => {
                 onClick={() => goTo(index)}
                 className="px-4 py-2 rounded-full font-black text-xs uppercase tracking-widest border transition-all duration-300"
                 style={{
-                  color: isActive ? tabStyle.active : "rgba(255,255,255,0.25)",
-                  backgroundColor: isActive ? tabStyle.activeBg : "transparent",
-                  borderColor: isActive ? tabStyle.activeBorder : "rgba(255,255,255,0.08)",
+                  color: isActive ? tabStyle.active : "rgba(255,255,255,0.3)",
+                  backgroundColor: isActive
+                    ? tabStyle.activeBg
+                    : "rgba(255,255,255,0.02)",
+                  borderColor: isActive
+                    ? tabStyle.activeBorder
+                    : "rgba(255,255,255,0.08)",
                 }}
               >
                 {plan.name}
@@ -107,51 +113,30 @@ export const MembersSection = ({ data }: Props) => {
           })}
         </div>
 
-        <div
+        <motion.div
           ref={containerRef}
-          className="relative transition-[min-height] duration-300 ease-in-out"
+          className="relative w-full overflow-visible"
           style={{ minHeight: cardHeight ? `${cardHeight}px` : undefined }}
+          drag={isMobile ? "x" : false}
+          dragConstraints={{ left: 0, right: 0 }}
+          dragElastic={0}
+          onDragEnd={isMobile ? handleDragEnd : undefined}
         >
-          {plans.map((plan, index) => {
-            const raw = index - activeIndex;
-            const offset = slideOffset(raw, plans.length);
-            const isActive = offset === 0;
-            const xPercent = offset * 130;
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeIndex}
+              initial={{ opacity: 0, scale: 0.94, y: 12 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.94, y: -12 }}
+              transition={{ type: "spring", stiffness: 320, damping: 28 }}
+              className="w-full"
+            >
+              {resolveCard(plans[activeIndex].tier, plans[activeIndex])}
+            </motion.div>
+          </AnimatePresence>
+        </motion.div>
 
-            return (
-              <motion.div
-                key={plan.id}
-                initial={false}
-                animate={{
-                  x: isActive ? "0%" : `${xPercent}%`,
-                  opacity: isActive ? 1 : 0,
-                }}
-                transition={SPRING}
-                drag={isActive ? "x" : false}
-                dragConstraints={{ left: 0, right: 0 }}
-                dragElastic={0.12}
-                onDrag={isActive ? (_, info) => dragX.set(info.offset.x) : undefined}
-                onDragEnd={isActive ? handleDragEnd : undefined}
-                style={{
-                  position: isActive ? "relative" : "absolute",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  visibility: isActive ? "visible" : "hidden",
-                  cursor: isActive ? "grab" : "default",
-                  userSelect: "none",
-                  pointerEvents: isActive ? "auto" : "none",
-                }}
-              >
-                <motion.div style={{ opacity: isActive ? dragOpacity : 1 }}>
-                  {resolveCard(plan.tier, plan)}
-                </motion.div>
-              </motion.div>
-            );
-          })}
-        </div>
-
-        <div className="flex items-center justify-center gap-2">
+        <div className="flex items-center justify-center gap-2 mt-2">
           {plans.map((plan, index) => {
             const tabStyle = TAB_COLOR[plan.tier] ?? TAB_COLOR["skorpionzinho"];
             return (
@@ -163,7 +148,9 @@ export const MembersSection = ({ data }: Props) => {
                   width: activeIndex === index ? 28 : 8,
                   height: 8,
                   backgroundColor:
-                    activeIndex === index ? tabStyle.active : "rgba(255,255,255,0.15)",
+                    activeIndex === index
+                      ? tabStyle.active
+                      : "rgba(255,255,255,0.15)",
                 }}
               />
             );
