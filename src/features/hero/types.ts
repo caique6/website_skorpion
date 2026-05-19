@@ -8,6 +8,7 @@ export interface YoutubeChannel {
 export interface HeroAction {
   id: string;
   label: string;
+  hoverLabel?: string;
   url: string;
   variant: "primary" | "secondary";
   channels?: YoutubeChannel[];

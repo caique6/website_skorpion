@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Play, Eye, Clock } from "lucide-react";
+import Image from "next/image";
 import { ChannelVideo } from "../types";
 
 interface Props {
@@ -34,27 +35,32 @@ export const ChannelVideoCard = ({ video, index }: Props) => {
         WebkitBackdropFilter: "blur(12px)",
       }}
     >
-      <div className="relative w-full aspect-video overflow-hidden"
+      <div
+        className="relative w-full aspect-video overflow-hidden"
         style={{
-          background: "linear-gradient(135deg, rgba(230,25,59,0.25) 0%, rgba(10,10,10,0.9) 100%)",
+          background:
+            "linear-gradient(135deg, rgba(230,25,59,0.25) 0%, rgba(10,10,10,0.9) 100%)",
         }}
       >
         {video.thumbnailUrl && (
-          <img
+          <Image
             src={video.thumbnailUrl}
             alt={video.title}
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         )}
 
         <div
-          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"
           style={{
-            background: "linear-gradient(135deg, rgba(230,25,59,0.4) 0%, rgba(10,10,10,0.7) 100%)",
+            background:
+              "linear-gradient(135deg, rgba(230,25,59,0.4) 0%, rgba(10,10,10,0.7) 100%)",
           }}
         />
 
-        <div className="absolute inset-0 flex items-center justify-center">
+        <div className="absolute inset-0 flex items-center justify-center z-20">
           <motion.div
             initial={{ scale: 0.9, opacity: 0.7 }}
             whileHover={{ scale: 1.1, opacity: 1 }}
@@ -64,7 +70,7 @@ export const ChannelVideoCard = ({ video, index }: Props) => {
           </motion.div>
         </div>
 
-        <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-sm z-10">
+        <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-sm z-30">
           <span className="text-[10px] font-black text-skorpion-white tracking-wide">
             {video.duration}
           </span>

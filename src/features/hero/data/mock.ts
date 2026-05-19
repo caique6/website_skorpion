@@ -2,7 +2,8 @@ import { HeroData } from "../types";
 
 export const HERO_MOCK: HeroData = {
   title: "BATE-PAPO, GAMEPLAY E DIVERSÃO INSANA",
-  subtitle: "Esse é o espaço da nossa comunidade. Aqui você acompanha o canal, conhece o clube de membros e faz parte de verdade.",
+  subtitle:
+    "Esse é o espaço da nossa comunidade. Aqui você acompanha o canal, conhece o clube de membros e faz parte de verdade.",
   heroImage: "/images/hero-logo.png",
   actions: [
     {
@@ -28,6 +29,7 @@ export const HERO_MOCK: HeroData = {
     {
       id: "action-members",
       label: "Sim, já sou.",
+      hoverLabel: "Resgate seus benefícios aqui",
       url: "/resgatar",
       variant: "secondary",
     },
