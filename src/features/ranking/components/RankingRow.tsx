@@ -11,16 +11,16 @@ interface Props {
   index: number;
 }
 
-function AvatarDisplay({ avatar, name }: { avatar: string; name: string }) {
+function AvatarDisplay({ avatar }: { avatar: string }) {
   const isUrl = avatar.startsWith("http");
 
   if (isUrl) {
     return (
       <Image
         src={avatar}
-        alt={name}
-        width={36}
-        height={36}
+        alt="Membro"
+        width={44}
+        height={44}
         className="rounded-full object-cover w-full h-full"
       />
     );
@@ -53,19 +53,16 @@ export const RankingRow = ({ member, position, index }: Props) => {
       </span>
 
       <div
-        className="w-9 h-9 rounded-full flex items-center justify-center overflow-hidden shrink-0 border"
+        className="w-11 h-11 rounded-full flex items-center justify-center overflow-hidden shrink-0 border"
         style={{
           background: "rgba(0,0,0,0.3)",
           borderColor: tier.border,
         }}
       >
-        <AvatarDisplay avatar={member.avatar} name={member.name} />
+        <AvatarDisplay avatar={member.avatar} />
       </div>
 
       <div className="flex-1 flex items-center gap-3 min-w-0">
-        <span className="font-black text-sm text-white uppercase tracking-tight truncate">
-          {member.name}
-        </span>
         <span
           className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full border shrink-0 hidden sm:block"
           style={{ color: tier.color, backgroundColor: tier.bg, borderColor: tier.border }}

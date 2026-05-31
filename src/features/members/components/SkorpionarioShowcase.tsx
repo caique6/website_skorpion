@@ -17,27 +17,20 @@ function Avatar({ member }: { member: SkorpionarioMember }) {
     <motion.div
       whileHover={{ scale: 1.1, y: -4 }}
       transition={{ type: "spring", stiffness: 400, damping: 22 }}
-      className="flex flex-col items-center gap-1.5"
+      className="w-16 h-16 rounded-full overflow-hidden border-2 flex items-center justify-center shrink-0"
+      style={{ borderColor: "rgba(242,206,22,0.35)", background: "rgba(0,0,0,0.4)" }}
     >
-      <div
-        className="w-12 h-12 rounded-full overflow-hidden border-2 flex items-center justify-center shrink-0"
-        style={{ borderColor: "rgba(242,206,22,0.35)", background: "rgba(0,0,0,0.4)" }}
-      >
-        {isUrl ? (
-          <Image
-            src={member.avatar}
-            alt={member.name}
-            width={48}
-            height={48}
-            className="object-cover w-full h-full"
-          />
-        ) : (
-          <span className="text-xl">{member.avatar}</span>
-        )}
-      </div>
-      <span className="text-[10px] font-black text-white/50 uppercase tracking-wide text-center max-w-[64px] truncate">
-        {member.name}
-      </span>
+      {isUrl ? (
+        <Image
+          src={member.avatar}
+          alt="Membro"
+          width={64}
+          height={64}
+          className="object-cover w-full h-full"
+        />
+      ) : (
+        <span className="text-2xl">{member.avatar}</span>
+      )}
     </motion.div>
   );
 }

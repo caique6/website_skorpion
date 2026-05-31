@@ -38,24 +38,20 @@ function MemberChip({ member, accentColor, accentBg, accentBorder }: ChipProps) 
   return (
     <motion.div
       whileHover={{ scale: 1.08, transition: { type: "spring", stiffness: 400, damping: 22 } }}
-      className="flex items-center gap-2.5 px-5 py-2.5 rounded-full shrink-0 border cursor-default mx-1"
-      style={{ backgroundColor: accentBg, borderColor: accentBorder, boxShadow: `0 0 12px ${accentBorder}` }}
+      className="flex items-center p-1.5 rounded-full shrink-0 border cursor-default mx-1.5"
+      style={{ backgroundColor: accentBg, borderColor: accentBorder, boxShadow: `0 0 14px ${accentBorder}` }}
     >
       {isUrl ? (
         <Image
           src={member.avatar}
-          alt={member.name}
-          width={20}
-          height={20}
-          className="rounded-full object-cover w-5 h-5 flex-shrink-0"
+          alt="Membro"
+          width={40}
+          height={40}
+          className="rounded-full object-cover w-10 h-10 flex-shrink-0"
         />
       ) : (
-        <span className="text-sm leading-none flex-shrink-0">{member.avatar}</span>
+        <span className="text-2xl leading-none flex-shrink-0">{member.avatar}</span>
       )}
-      <span className="font-black text-[11px] tracking-widest uppercase whitespace-nowrap" style={{ color: accentColor }}>
-        {member.name}
-      </span>
-      <span className="font-black text-[10px] opacity-40" style={{ color: accentColor }}>✦</span>
     </motion.div>
   );
 }

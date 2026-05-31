@@ -23,14 +23,14 @@ const ORDER_MAP: Record<number, number> = {
   3: 3,
 };
 
-function AvatarDisplay({ avatar, name, size }: { avatar: string; name: string; size: number }) {
+function AvatarDisplay({ avatar, size }: { avatar: string; size: number }) {
   const isUrl = avatar.startsWith("http");
 
   if (isUrl) {
     return (
       <Image
         src={avatar}
-        alt={name}
+        alt="Membro"
         width={size}
         height={size}
         className="rounded-full object-cover w-full h-full"
@@ -68,14 +68,14 @@ export const PodiumCard = ({ member, position, index }: Props) => {
         )}
 
         <div
-          className="relative w-16 h-16 lg:w-20 lg:h-20 rounded-full flex items-center justify-center border-2 overflow-hidden"
+          className="relative w-20 h-20 lg:w-24 lg:h-24 rounded-full flex items-center justify-center border-2 overflow-hidden"
           style={{
             borderColor: medal.color,
             boxShadow: `0 0 24px ${medal.glow}, 0 0 48px ${medal.glow}`,
             background: "rgba(0,0,0,0.4)",
           }}
         >
-          <AvatarDisplay avatar={member.avatar} name={member.name} size={80} />
+          <AvatarDisplay avatar={member.avatar} size={96} />
           <div
             className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center text-xs border border-black/50 z-10"
             style={{ backgroundColor: "#0A0A0A" }}
@@ -85,9 +85,6 @@ export const PodiumCard = ({ member, position, index }: Props) => {
         </div>
 
         <div className="flex flex-col items-center gap-1">
-          <span className="font-black text-sm lg:text-base text-white uppercase tracking-tight text-center">
-            {member.name}
-          </span>
           <span
             className="text-[10px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full border"
             style={{ color: tier.color, backgroundColor: tier.bg, borderColor: tier.border }}
