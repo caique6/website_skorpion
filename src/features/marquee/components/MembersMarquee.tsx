@@ -2,9 +2,9 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect, useMemo, CSSProperties } from "react";
-import Image from "next/image";
 import { MarqueeMember } from "../types";
 import { cn } from "@/lib/utils";
+import { proxyAvatarUrl, isImageSrc } from "@/lib/avatar";
 
 interface Props {
   members: MarqueeMember[];
@@ -34,16 +34,16 @@ interface ChipProps {
 const SPEED_PX_PER_SEC = 55;
 
 function MemberChip({ member, accentColor, accentBg, accentBorder }: ChipProps) {
-  const isUrl = member.avatar.startsWith("http");
+  const src = proxyAvatarUrl(member.avatar, member.id)
   return (
     <motion.div
       whileHover={{ scale: 1.08, transition: { type: "spring", stiffness: 400, damping: 22 } }}
       className="flex items-center p-1.5 rounded-full shrink-0 border cursor-default mx-1.5"
       style={{ backgroundColor: accentBg, borderColor: accentBorder, boxShadow: `0 0 14px ${accentBorder}` }}
     >
-      {isUrl ? (
-        <Image
-          src={member.avatar}
+      {isImageSrc(src) ? (
+        <img
+          src={src}
           alt="Membro"
           width={40}
           height={40}

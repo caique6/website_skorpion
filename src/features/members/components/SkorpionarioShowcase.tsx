@@ -2,16 +2,16 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import Image from "next/image";
 import { Crown, ExternalLink } from "lucide-react";
 import { SkorpionarioMember } from "../types";
+import { proxyAvatarUrl, isImageSrc } from "@/lib/avatar";
 
 interface Props {
   members: SkorpionarioMember[];
 }
 
 function Avatar({ member }: { member: SkorpionarioMember }) {
-  const isUrl = member.avatar.startsWith("http");
+  const src = proxyAvatarUrl(member.avatar, member.id)
 
   return (
     <motion.div
@@ -20,14 +20,8 @@ function Avatar({ member }: { member: SkorpionarioMember }) {
       className="w-16 h-16 rounded-full overflow-hidden border-2 flex items-center justify-center shrink-0"
       style={{ borderColor: "rgba(242,206,22,0.35)", background: "rgba(0,0,0,0.4)" }}
     >
-      {isUrl ? (
-        <Image
-          src={member.avatar}
-          alt="Membro"
-          width={64}
-          height={64}
-          className="object-cover w-full h-full"
-        />
+      {isImageSrc(src) ? (
+        <img src={src} alt="Membro" width={64} height={64} className="object-cover w-full h-full" />
       ) : (
         <span className="text-2xl">{member.avatar}</span>
       )}

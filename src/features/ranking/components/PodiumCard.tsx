@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { motion } from "framer-motion";
 import { RankingMember } from "../types";
 import { TIER_CONFIG, MEDAL_CONFIG, formatTime } from "../utils/ranking.utils";
+import { proxyAvatarUrl, isImageSrc } from "@/lib/avatar";
 
 interface Props {
   member: RankingMember;
@@ -24,11 +24,9 @@ const ORDER_MAP: Record<number, number> = {
 };
 
 function AvatarDisplay({ avatar, size }: { avatar: string; size: number }) {
-  const isUrl = avatar.startsWith("http");
-
-  if (isUrl) {
+  if (isImageSrc(avatar)) {
     return (
-      <Image
+      <img
         src={avatar}
         alt="Membro"
         width={size}
@@ -75,7 +73,7 @@ export const PodiumCard = ({ member, position, index }: Props) => {
             background: "rgba(0,0,0,0.4)",
           }}
         >
-          <AvatarDisplay avatar={member.avatar} size={96} />
+          <AvatarDisplay avatar={proxyAvatarUrl(member.avatar, member.id)} size={96} />
           <div
             className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center text-xs border border-black/50 z-10"
             style={{ backgroundColor: "#0A0A0A" }}

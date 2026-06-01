@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { motion } from "framer-motion";
 import { RankingMember } from "../types";
 import { TIER_CONFIG, formatTime } from "../utils/ranking.utils";
+import { proxyAvatarUrl, isImageSrc } from "@/lib/avatar";
 
 interface Props {
   member: RankingMember;
@@ -12,11 +12,9 @@ interface Props {
 }
 
 function AvatarDisplay({ avatar }: { avatar: string }) {
-  const isUrl = avatar.startsWith("http");
-
-  if (isUrl) {
+  if (isImageSrc(avatar)) {
     return (
-      <Image
+      <img
         src={avatar}
         alt="Membro"
         width={44}
@@ -59,7 +57,7 @@ export const RankingRow = ({ member, position, index }: Props) => {
           borderColor: tier.border,
         }}
       >
-        <AvatarDisplay avatar={member.avatar} />
+        <AvatarDisplay avatar={proxyAvatarUrl(member.avatar, member.id)} />
       </div>
 
       <div className="flex-1 flex items-center gap-3 min-w-0">
