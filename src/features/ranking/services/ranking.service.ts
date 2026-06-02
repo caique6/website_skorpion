@@ -1,4 +1,4 @@
-import { supabaseServer, getAvatarPublicUrl } from "@/lib/supabase";
+import { supabaseServer } from "@/lib/supabase";
 import { normalizeTier } from "@/lib/tier-utils";
 import { RankingData, RankingMember } from "../types";
 
@@ -31,7 +31,7 @@ export const getRankingData = async (): Promise<RankingData> => {
       return {
         id: m.id,
         name: m.name,
-        avatar: getAvatarPublicUrl(m.avatar_url),
+        avatar: m.avatar_url ? `/api/avatar/${m.id}` : '🦂',
         tier,
         ...computeMembership(m.membership_started_at),
       };

@@ -2,7 +2,7 @@ import { FooterData } from "../types";
 
 export const FOOTER_MOCK: FooterData = {
   tagline: "O canal de GTA RP mais insano do Brasil.",
-  copyright: "© 2025 Skorpion Gamer. Todos os direitos reservados.",
+  copyright: "© 2026 Skorpion Gamer. Todos os direitos reservados.",
   clubName: "Amigos do Skorpion",
   socials: [
     {
@@ -34,6 +34,7 @@ export const FOOTER_MOCK: FooterData = {
     { id: "c-01", label: "Resgatar Benefícios", href: "/resgatar", external: false },
     { id: "c-02", label: "Ranking de Membros", href: "/ranking", external: false },
     { id: "c-03", label: "Política de Privacidade", href: "/privacidade", external: false },
+    { id: "c-04", label: "Termos de Uso", href: "/termos", external: false },
   ],
   channelLinks: [
     { id: "ch-01", label: "YouTube", href: "https://www.youtube.com/@SkorpionOFICIAL", external: true },

@@ -2,8 +2,8 @@
 
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Shield } from "lucide-react";
-import { PRIVACY_SECTIONS } from "../data/sections";
+import { ArrowLeft, FileText } from "lucide-react";
+import { TERMS_SECTIONS } from "../data/sections";
 
 const container = {
   hidden: { opacity: 0 },
@@ -15,7 +15,7 @@ const item = {
   visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 260, damping: 28 } },
 };
 
-export const PrivacyView = () => {
+export const TermsView = () => {
   const router = useRouter();
 
   return (
@@ -38,8 +38,8 @@ export const PrivacyView = () => {
           <span className="font-black text-sm uppercase tracking-widest text-[#1A1A1A]/30">Skorpion</span>
         </div>
         <div className="flex items-center gap-2 text-[#1A1A1A]/25">
-          <Shield className="w-4 h-4" />
-          <span className="text-[11px] font-black uppercase tracking-[0.25em]">Privacidade</span>
+          <FileText className="w-4 h-4" />
+          <span className="text-[11px] font-black uppercase tracking-[0.25em]">Termos de Uso</span>
         </div>
       </motion.header>
 
@@ -51,14 +51,14 @@ export const PrivacyView = () => {
           className="flex flex-col gap-3 mb-12 lg:mb-16"
         >
           <div className="flex items-center gap-2 text-skorpion-red">
-            <Shield className="w-5 h-5" />
-            <span className="text-xs font-black uppercase tracking-[0.25em]">Política de Privacidade</span>
+            <FileText className="w-5 h-5" />
+            <span className="text-xs font-black uppercase tracking-[0.25em]">Termos de Uso</span>
           </div>
           <h1 className="text-4xl lg:text-6xl font-black text-[#1A1A1A] uppercase tracking-tight leading-[1.05]">
-            SEUS DADOS,<br />NOSSA<br />RESPONSABILIDADE
+            REGRAS<br />CLARAS PARA<br />TODOS
           </h1>
           <p className="text-[#1A1A1A]/55 text-sm lg:text-base font-medium leading-relaxed max-w-lg mt-2">
-            Transparência total sobre como o Clube Amigos do Skorpion coleta, usa e protege as informações que você nos confia.
+            Condições de uso da plataforma de resgate de benefícios do Clube Amigos do Skorpion Gamer.
           </p>
         </motion.div>
 
@@ -68,7 +68,7 @@ export const PrivacyView = () => {
           animate="visible"
           className="flex flex-col gap-10 lg:gap-12"
         >
-          {PRIVACY_SECTIONS.map((section, index) => (
+          {TERMS_SECTIONS.map((section, index) => (
             <motion.div key={section.id} variants={item} className="flex flex-col gap-4">
               <div className="flex items-center gap-4">
                 <span className="font-black text-[11px] text-[#1A1A1A]/20 tracking-widest shrink-0">

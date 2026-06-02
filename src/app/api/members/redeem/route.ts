@@ -1,37 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase";
 import { generateCode } from "@/features/reclaim/utils/generateCode";
+import { checkRateLimit, HOUR_MS, DAY_MS } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
 const CHANNEL_ID_PATTERN = /^UC[a-zA-Z0-9_-]{22}$/;
-const ipAttempts = new Map<string, { count: number; resetAt: number }>();
-const channelAttempts = new Map<string, { count: number; resetAt: number }>();
-
 const MAX_ATTEMPTS = 5;
-const WINDOW_MS = 60 * 60 * 1000;
-
-function checkRateLimit(key: string, store: Map<string, { count: number; resetAt: number }>): boolean {
-  const now = Date.now();
-  const entry = store.get(key);
-
-  if (!entry || now > entry.resetAt) {
-    store.set(key, { count: 1, resetAt: now + WINDOW_MS });
-    return true;
-  }
-
-  if (entry.count >= MAX_ATTEMPTS) {
-    return false;
-  }
-
-  entry.count += 1;
-  return true;
-}
+const MAX_CODE_VIEWS = 3;
 
 export async function POST(request: NextRequest) {
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
 
-  if (!checkRateLimit(ip, ipAttempts)) {
+  if (!(await checkRateLimit(`redeem:ip:${ip}`, MAX_ATTEMPTS, HOUR_MS))) {
     return NextResponse.json(
       { error: "too_many_requests", message: "Muitas tentativas. Tente novamente em 1 hora." },
       { status: 429 }
@@ -41,10 +22,7 @@ export async function POST(request: NextRequest) {
   const body = await request.json().catch(() => null);
 
   if (!body || typeof body.channelId !== "string") {
-    return NextResponse.json(
-      { error: "invalid_body", message: "Requisição inválida." },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "invalid_body", message: "Requisição inválida." }, { status: 400 });
   }
 
   const channelId = body.channelId.trim();
@@ -56,7 +34,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  if (!checkRateLimit(channelId, channelAttempts)) {
+  if (!(await checkRateLimit(`redeem:channel:${channelId}`, MAX_ATTEMPTS, HOUR_MS))) {
     return NextResponse.json(
       { error: "too_many_requests", message: "Muitas tentativas para este canal. Tente novamente em 1 hora." },
       { status: 429 }
@@ -65,7 +43,7 @@ export async function POST(request: NextRequest) {
 
   const { data: member, error: fetchError } = await supabaseServer
     .from("members")
-    .select("id, tier, redemption_code, is_active")
+    .select("id, tier, phone, redemption_code, is_active")
     .eq("channel_id", channelId)
     .single();
 
@@ -80,6 +58,27 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       { error: "member_inactive", message: "Sua assinatura não está ativa. Renove seu membership no YouTube para resgatar os benefícios." },
       { status: 403 }
+    );
+  }
+
+  if (member.tier === "skorpionzinho") {
+    return NextResponse.json(
+      { error: "tier_not_eligible", message: "O plano Skorpionzinho não inclui acesso a grupos de WhatsApp. Faça upgrade para Skorpião ou Skorpionário para ter esse benefício." },
+      { status: 403 }
+    );
+  }
+
+  if (member.phone) {
+    return NextResponse.json(
+      { error: "already_redeemed", message: "Seu acesso ao WhatsApp já foi resgatado anteriormente." },
+      { status: 409 }
+    );
+  }
+
+  if (!(await checkRateLimit(`code_view:${channelId}`, MAX_CODE_VIEWS, DAY_MS))) {
+    return NextResponse.json(
+      { error: "too_many_requests", message: "Limite de visualizações atingido. Entre em contato com o suporte." },
+      { status: 429 }
     );
   }
 

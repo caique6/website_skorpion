@@ -1,4 +1,4 @@
-import { supabaseServer, getAvatarPublicUrl } from "@/lib/supabase";
+import { supabaseServer } from "@/lib/supabase";
 import { normalizeTier } from "@/lib/tier-utils";
 import { MarqueeData, MarqueeMember } from "../types";
 
@@ -13,7 +13,7 @@ export const getMarqueeData = async (): Promise<MarqueeData> => {
   const toMember = (m: { id: string; name: string; avatar_url: string | null }): MarqueeMember => ({
     id: m.id,
     name: m.name,
-    avatar: getAvatarPublicUrl(m.avatar_url),
+    avatar: m.avatar_url ? `/api/avatar/${m.id}` : '🦂',
   });
 
   return {

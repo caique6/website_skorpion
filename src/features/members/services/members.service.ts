@@ -1,4 +1,4 @@
-import { supabaseServer, getAvatarPublicUrl } from "@/lib/supabase";
+import { supabaseServer } from "@/lib/supabase";
 import { normalizeTier } from "@/lib/tier-utils";
 import { MembersData, SkorpionarioMember } from "../types";
 import { PLANS } from "../data/mock";
@@ -16,7 +16,7 @@ export const getMembersData = async (): Promise<MembersData> => {
         .map((m) => ({
           id: m.id,
           name: m.name,
-          avatar: getAvatarPublicUrl(m.avatar_url),
+          avatar: m.avatar_url ? `/api/avatar/${m.id}` : '🦂',
         }));
 
   return { plans: PLANS, skorpionarios };
