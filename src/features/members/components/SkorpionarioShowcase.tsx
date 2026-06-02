@@ -2,6 +2,7 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import Image from "next/image";
 import { Crown, ExternalLink } from "lucide-react";
 import { SkorpionarioMember } from "../types";
 import { proxyAvatarUrl, isImageSrc } from "@/lib/avatar";
@@ -21,7 +22,7 @@ function Avatar({ member }: { member: SkorpionarioMember }) {
       style={{ borderColor: "rgba(242,206,22,0.35)", background: "rgba(0,0,0,0.4)" }}
     >
       {isImageSrc(src) ? (
-        <img src={src} alt="Membro" width={64} height={64} className="object-cover w-full h-full" />
+        <Image src={src} alt="Membro" width={64} height={64} className="object-cover w-full h-full" />
       ) : (
         <span className="text-2xl">{member.avatar}</span>
       )}

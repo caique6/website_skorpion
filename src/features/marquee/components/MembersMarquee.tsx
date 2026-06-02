@@ -2,6 +2,7 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect, useMemo, CSSProperties } from "react";
+import Image from "next/image";
 import { MarqueeMember } from "../types";
 import { cn } from "@/lib/utils";
 import { proxyAvatarUrl, isImageSrc } from "@/lib/avatar";
@@ -42,7 +43,7 @@ function MemberChip({ member, accentColor, accentBg, accentBorder }: ChipProps) 
       style={{ backgroundColor: accentBg, borderColor: accentBorder, boxShadow: `0 0 14px ${accentBorder}` }}
     >
       {isImageSrc(src) ? (
-        <img
+        <Image
           src={src}
           alt="Membro"
           width={40}

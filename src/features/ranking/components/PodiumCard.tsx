@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { RankingMember } from "../types";
 import { TIER_CONFIG, MEDAL_CONFIG, formatTime } from "../utils/ranking.utils";
@@ -26,7 +27,7 @@ const ORDER_MAP: Record<number, number> = {
 function AvatarDisplay({ avatar, size }: { avatar: string; size: number }) {
   if (isImageSrc(avatar)) {
     return (
-      <img
+      <Image
         src={avatar}
         alt="Membro"
         width={size}

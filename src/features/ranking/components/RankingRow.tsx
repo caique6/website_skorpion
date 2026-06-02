@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { RankingMember } from "../types";
 import { TIER_CONFIG, formatTime } from "../utils/ranking.utils";
@@ -14,7 +15,7 @@ interface Props {
 function AvatarDisplay({ avatar }: { avatar: string }) {
   if (isImageSrc(avatar)) {
     return (
-      <img
+      <Image
         src={avatar}
         alt="Membro"
         width={44}
