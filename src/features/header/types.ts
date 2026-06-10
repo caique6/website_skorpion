@@ -1,17 +1,15 @@
-export interface DropdownItem {
-  id: string;
-  label: string;
-  description: string;
-  url: string;
-}
-
 export interface NavItem {
   id: string;
   label: string;
-  anchor?: string;
-  dropdown?: DropdownItem[];
+  href: string;
+}
+
+export interface HeaderCta {
+  label: string;
+  href: string;
 }
 
 export interface HeaderData {
   nav: NavItem[];
+  cta: HeaderCta;
 }

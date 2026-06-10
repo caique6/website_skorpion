@@ -18,6 +18,91 @@
   to   { transform: translateX(0%); }
 }
 
+@keyframes heroShine {
+  from { background-position: 220% center; }
+  to   { background-position: -220% center; }
+}
+
+.hero-shine {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(120deg, transparent 35%, rgba(255, 255, 255, 0.9) 50%, transparent 65%);
+  background-size: 220% 100%;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: heroShine 3.6s ease-in-out infinite;
+}
+
+@keyframes waveSway {
+  0%, 100% { transform: translateX(0); }
+  50%      { transform: translateX(-5%); }
+}
+
+.wave-divider {
+  animation: waveSway 7s ease-in-out infinite;
+}
+
+@keyframes cardShine {
+  0%       { transform: translateX(-160%) skewX(-18deg); }
+  60%, 100% { transform: translateX(260%) skewX(-18deg); }
+}
+
+.card-shine {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.card-shine::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 45%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  transform: translateX(-160%) skewX(-18deg);
+  animation: cardShine 4s ease-in-out infinite;
+}
+
+.wave-track {
+  animation-name: marquee-left;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+.wave-row:hover .wave-track {
+  animation-play-state: paused;
+}
+
+.wave-chip {
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.wave-chip:hover {
+  transform: scale(1.18);
+  z-index: 10;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-shine,
+  .wave-divider,
+  .card-shine::before,
+  .wave-track {
+    animation: none;
+  }
+
+  .wave-chip {
+    transition: none;
+  }
+}
+
 @layer base {
   body {
     background-color: #E6193B !important;

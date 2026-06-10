@@ -1,11 +1,11 @@
+export type SocialIconType = "youtube" | "instagram" | "tiktok" | "discord";
+
 export interface SocialLink {
   id: string;
   label: string;
   url: string;
   icon: SocialIconType;
 }
-
-export type SocialIconType = "youtube" | "instagram" | "tiktok";
 
 export interface FooterLink {
   id: string;
@@ -14,12 +14,24 @@ export interface FooterLink {
   external: boolean;
 }
 
+export interface FooterColumnData {
+  id: string;
+  title: string;
+  links: FooterLink[];
+}
+
+export interface DiscordInfo {
+  title: string;
+  subtitle: string;
+  label: string;
+  url: string;
+}
+
 export interface FooterData {
-  socials: SocialLink[];
-  navLinks: FooterLink[];
-  clubLinks: FooterLink[];
-  channelLinks: FooterLink[];
   tagline: string;
+  socials: SocialLink[];
+  columns: FooterColumnData[];
+  discord: DiscordInfo;
   copyright: string;
   clubName: string;
 }

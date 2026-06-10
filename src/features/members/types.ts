@@ -10,6 +10,7 @@ export interface Plan {
   id: string;
   tier: PlanTier;
   name: string;
+  currency: string;
   price: string;
   billingCycle: string;
   benefits: Benefit[];
@@ -26,4 +27,11 @@ export interface SkorpionarioMember {
 export interface MembersData {
   plans: Plan[];
   skorpionarios: SkorpionarioMember[];
+}
+
+export interface PlansSectionContent {
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  plans: Plan[];
 }

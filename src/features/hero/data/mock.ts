@@ -1,37 +1,51 @@
 import { HeroData } from "../types";
 
 export const HERO_MOCK: HeroData = {
-  title: "BATE-PAPO, GAMEPLAY E DIVERSÃO INSANA",
-  subtitle:
-    "Esse é o espaço da nossa comunidade. Aqui você acompanha o canal, conhece o clube de membros e faz parte de verdade.",
-  heroImage: "/images/hero-logo.png",
-  actions: [
+  intro: [
     {
-      id: "action-youtube",
-      label: "Não, mas quero ser!",
-      url: "#",
-      variant: "primary",
+      id: "intro-welcome",
+      text: "Olá, seja bem vindo ao Hub do Skorpion!",
+      durationMs: 2600,
+    },
+    {
+      id: "intro-context",
+      text: "Aqui você consegue ter contato com tudo do canal.",
+      subtext:
+        "Da comunidade ao resgate de benefícios é por aqui que você começa.",
+      durationMs: 3400,
+    },
+  ],
+  headline: [
+    { id: "headline-lead", text: "Resgate aqui seus", emphasis: false },
+    {
+      id: "headline-emphasis",
+      text: "benefícios do clube de membros.",
+      emphasis: true,
+    },
+  ],
+  subtitle:
+    "Acompanhe toda a nossa comunidade por aqui e tenha acesso a muito mais!",
+  actions: {
+    subscribed: {
+      label: "Já é inscrito?",
       channels: [
-        {
-          id: "channel-gamer",
-          label: "Skorpion Gamer",
-          url: "https://www.youtube.com/@SkorpionOFICIAL",
-          color: "#E6193B",
-        },
         {
           id: "channel-blox",
           label: "Skorpion Blox",
           url: "https://www.youtube.com/@SkorpionRoblox",
-          color: "#F2CE16",
+          tone: "yellow",
+        },
+        {
+          id: "channel-gamer",
+          label: "Skorpion Gamer",
+          url: "https://www.youtube.com/@SkorpionOFICIAL",
+          tone: "red",
         },
       ],
     },
-    {
-      id: "action-members",
-      label: "Sim, já sou.",
-      hoverLabel: "Resgate seus benefícios aqui",
-      url: "/resgatar",
-      variant: "secondary",
+    membership: {
+      label: "Quero ser membro!",
+      url: "https://www.youtube.com/@SkorpionOFICIAL/membership",
     },
-  ],
+  },
 };

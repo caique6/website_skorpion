@@ -1,91 +1,70 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { Menu } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-import { HeaderData, NavItem } from "../types";
-import { DropdownMenu } from "./DropdownMenu";
+import { useIntro } from "@/features/intro/context/IntroProvider";
+import { HeaderData } from "../types";
 import { MobileMenu } from "./MobileMenu";
 
 interface Props {
   data: HeaderData;
 }
 
-function DesktopNavItem({ item }: { item: NavItem }) {
-  const [isOpen, setIsOpen] = useState(false);
+const pillVariants = {
+  hidden: { opacity: 0, y: -24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring", stiffness: 260, damping: 26 },
+  },
+};
 
-  if (item.dropdown) {
-    return (
-      <div
-        className="relative"
-        onMouseEnter={() => setIsOpen(true)}
-        onMouseLeave={() => setIsOpen(false)}
-      >
-        <motion.button
-          className="flex items-center gap-1.5 px-4 py-2 rounded-full font-black text-xs uppercase tracking-widest text-white/70 hover:text-white transition-colors duration-200"
-          whileTap={{ scale: 0.97 }}
-        >
-          {item.label}
-          <motion.span
-            animate={{ rotate: isOpen ? 180 : 0 }}
-            transition={{ duration: 0.2 }}
-            className="text-white/40 text-[10px]"
-          >
-            ▾
-          </motion.span>
-        </motion.button>
-
-        <AnimatePresence>
-          {isOpen && <DropdownMenu items={item.dropdown} />}
-        </AnimatePresence>
-      </div>
-    );
-  }
-
-  return (
-    <Link
-      href={item.anchor ?? "#"}
-      className="px-4 py-2 rounded-full font-black text-xs uppercase tracking-widest text-white/70 hover:text-white transition-colors duration-200"
-    >
-      {item.label}
-    </Link>
-  );
-}
+const navLinkClass =
+  "px-4 py-2 rounded-full text-xs font-black uppercase tracking-widest text-skorpion-black/70 hover:text-skorpion-red transition-colors duration-200";
 
 export const Header = ({ data }: Props) => {
+  const { isComplete } = useIntro();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
     <>
-      <header className="absolute top-0 left-0 right-0 z-30 w-full px-6 md:px-12 lg:px-16 py-6 flex items-center justify-center">
-        <nav className="hidden lg:flex items-center gap-1">
-          {data.nav.map((item) => (
-            <DesktopNavItem key={item.id} item={item} />
-          ))}
-        </nav>
-
-        <motion.button
-          onClick={() => setMobileOpen(true)}
-          whileHover={{ scale: 1.08 }}
-          whileTap={{ scale: 0.92 }}
-          className="lg:hidden w-10 h-10 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-white"
+      <div className="absolute top-0 left-0 right-0 z-30 flex justify-center px-4 py-5">
+        <motion.header
+          variants={pillVariants}
+          initial="hidden"
+          animate={isComplete ? "visible" : "hidden"}
+          className={`flex items-center gap-2 sm:gap-4 rounded-full border border-skorpion-black/10 bg-skorpion-white/90 px-3 py-2 shadow-[0_8px_30px_rgba(26,26,26,0.08)] backdrop-blur-md ${isComplete ? "" : "pointer-events-none"}`}
         >
-          <Menu className="w-4 h-4" strokeWidth={2.5} />
-        </motion.button>
-      </header>
+          <nav className="hidden lg:flex items-center gap-1 pl-2">
+            {data.nav.map((item) => (
+              <Link key={item.id} href={item.href} className={navLinkClass}>
+                {item.label}
+              </Link>
+            ))}
+          </nav>
 
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-40 lg:hidden"
-            style={{ backgroundColor: "rgba(0,0,0,0.6)", backdropFilter: "blur(4px)" }}
-          />
-        )}
-      </AnimatePresence>
+          <Link href={data.cta.href} className="hidden lg:block shrink-0">
+            <motion.span
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
+              className="block rounded-full bg-skorpion-black px-5 py-2.5 text-xs font-black uppercase tracking-widest text-skorpion-white"
+            >
+              {data.cta.label}
+            </motion.span>
+          </Link>
+
+          <motion.button
+            onClick={() => setMobileOpen(true)}
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.92 }}
+            className="lg:hidden flex h-10 w-10 items-center justify-center rounded-full bg-skorpion-black/5 text-skorpion-black"
+          >
+            <Menu className="h-4 w-4" strokeWidth={2.5} />
+          </motion.button>
+        </motion.header>
+      </div>
 
       <MobileMenu
         data={data}

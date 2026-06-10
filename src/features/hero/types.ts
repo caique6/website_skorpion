@@ -1,22 +1,43 @@
-export interface YoutubeChannel {
+export interface IntroMessage {
   id: string;
-  label: string;
-  url: string;
-  color: string;
+  text: string;
+  subtext?: string;
+  durationMs: number;
 }
 
-export interface HeroAction {
+export interface HeadlineSegment {
+  id: string;
+  text: string;
+  emphasis: boolean;
+}
+
+export type ChannelTone = "red" | "yellow";
+
+export interface ChannelOption {
   id: string;
   label: string;
-  hoverLabel?: string;
   url: string;
-  variant: "primary" | "secondary";
-  channels?: YoutubeChannel[];
+  tone: ChannelTone;
+}
+
+export interface SubscribedAction {
+  label: string;
+  channels: ChannelOption[];
+}
+
+export interface MembershipAction {
+  label: string;
+  url: string;
+}
+
+export interface HeroActionsData {
+  subscribed: SubscribedAction;
+  membership: MembershipAction;
 }
 
 export interface HeroData {
-  title: string;
+  intro: IntroMessage[];
+  headline: HeadlineSegment[];
   subtitle: string;
-  heroImage: string;
-  actions: HeroAction[];
+  actions: HeroActionsData;
 }

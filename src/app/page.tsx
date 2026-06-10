@@ -1,67 +1,52 @@
 import { getHeroData } from "@/features/hero/services/hero.service";
 import { Hero } from "@/features/hero/components/Hero";
-import { getMembersData } from "@/features/members/services/members.service";
-import { MembersSection } from "@/features/members/components/MembersSection";
-import { getMarqueeData } from "@/features/marquee/services/marquee.service";
-import { MembersMarquee } from "@/features/marquee/components/MembersMarquee";
-import { getChannelData } from "@/features/channel/services/channel.service";
-import { ChannelSection } from "@/features/channel/components/ChannelSection";
-import { getStoreData } from "@/features/store/services/store.service";
-import { StoreSection } from "@/features/store/components/StoreSection";
-import { getFooterData } from "@/features/footer/services/footer.service";
-import { Footer } from "@/features/footer/components/Footer";
 import { getHeaderData } from "@/features/header/services/header.service";
 import { Header } from "@/features/header/components/Header";
+import { getMarqueeData } from "@/features/marquee/services/marquee.service";
+import { WaveMarquee } from "@/features/marquee/components/WaveMarquee";
+import { getPlansContent } from "@/features/members/services/plans.service";
+import { PlansSection } from "@/features/members/components/PlansSection";
+import { getShowcaseData } from "@/features/showcase/services/showcase.service";
+import { ChannelStoreSection } from "@/features/showcase/components/ChannelStoreSection";
+import { getFooterData } from "@/features/footer/services/footer.service";
+import { Footer } from "@/features/footer/components/Footer";
+import { IntroProvider } from "@/features/intro/context/IntroProvider";
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const heroData = await getHeroData();
-  const membersData = await getMembersData();
-  const marqueeData = await getMarqueeData();
-  const channelData = await getChannelData();
-  const storeData = await getStoreData();
-  const footerData = await getFooterData();
   const headerData = await getHeaderData();
+  const marqueeData = await getMarqueeData();
+  const plansContent = await getPlansContent();
+  const showcaseData = await getShowcaseData();
+  const footerData = await getFooterData();
 
   return (
     <main className="flex min-h-screen flex-col items-center w-full">
-      <div id="top" className="relative w-full">
-        <Header data={headerData} />
-        <Hero data={heroData} />
-      </div>
-      {marqueeData.skorpionarios.length > 0 && (
-        <MembersMarquee
-          members={marqueeData.skorpionarios}
-          label="Skorpionários"
-          accentColor="#F2CE16"
-          accentBg="rgba(242,206,22,0.05)"
-          accentBorder="rgba(242,206,22,0.20)"
-        />
-      )}
-      <MembersSection data={membersData} />
-      {marqueeData.skorpiaos.length > 0 && (
-        <MembersMarquee
-          members={marqueeData.skorpiaos}
-          label="Skorpiões"
-          accentColor="#FFFFFF"
-          accentBg="rgba(255,255,255,0.04)"
-          accentBorder="rgba(255,255,255,0.12)"
-        />
-      )}
-      <StoreSection data={storeData} />
-      {marqueeData.skorpionzinhos.length > 0 && (
-        <MembersMarquee
-          members={marqueeData.skorpionzinhos}
-          label="Skorpionzinhos"
-          accentColor="#9CA3AF"
-          accentBg="rgba(156,163,175,0.05)"
-          accentBorder="rgba(156,163,175,0.18)"
-        />
-      )}
+      <IntroProvider>
+        <div id="top" className="relative w-full">
+          <Header data={headerData} />
+          <Hero data={heroData} />
+        </div>
+      </IntroProvider>
+      <WaveMarquee members={marqueeData.skorpionarios} label="Skorpionários" />
+      <PlansSection content={plansContent} />
+      <WaveMarquee
+        members={marqueeData.skorpiaos}
+        label="Skorpiões"
+        tone="white"
+        showWave={false}
+      />
       <div id="channel" className="w-full">
-        <ChannelSection data={channelData} />
+        <ChannelStoreSection data={showcaseData} />
       </div>
+      <WaveMarquee
+        members={marqueeData.skorpionzinhos}
+        label="Skorpionzinhos"
+        tone="gray"
+        showWave={false}
+      />
       <Footer data={footerData} />
     </main>
   );

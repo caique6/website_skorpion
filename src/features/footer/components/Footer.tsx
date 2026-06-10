@@ -2,9 +2,11 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import { WaveDivider } from "@/features/marquee/components/WaveDivider";
 import { FooterData } from "../types";
 import { SocialIcon } from "./SocialIcon";
-import { FooterLinkItem } from "./FooterLinkItem";
+import { FooterColumn } from "./FooterColumn";
+import { DiscordCallout } from "./DiscordCallout";
 
 interface Props {
   data: FooterData;
@@ -14,7 +16,7 @@ const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.08, delayChildren: 0.2 },
+    transition: { staggerChildren: 0.08, delayChildren: 0.1 },
   },
 };
 
@@ -32,43 +34,30 @@ export const Footer = ({ data }: Props) => {
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
   return (
-    <footer
-      ref={ref}
-      className="relative w-full overflow-hidden"
-      style={{ backgroundColor: "#0A0A0A" }}
-    >
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: "radial-gradient(ellipse at 50% 0%, rgba(230,25,59,0.08) 0%, transparent 60%)",
-        }}
-      />
-
-      <div
-        className="w-full h-px"
-        style={{
-          background: "linear-gradient(to right, transparent, rgba(255,255,255,0.08), transparent)",
-        }}
-      />
+    <footer ref={ref} className="relative w-full overflow-hidden bg-skorpion-black">
+      <WaveDivider tone="red" />
 
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
-        className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-16 py-16 lg:py-20"
+        className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-12 pt-32 sm:pt-44 md:px-12"
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+        <motion.div variants={itemVariants}>
+          <DiscordCallout discord={data.discord} />
+        </motion.div>
 
-          <motion.div variants={itemVariants} className="flex flex-col gap-5">
-            <div className="flex flex-col gap-2">
-              <span className="text-2xl font-black text-white uppercase tracking-tight">
-                SKORPION
-              </span>
-              <p className="text-white/35 text-sm font-medium leading-relaxed max-w-[200px]">
-                {data.tagline}
-              </p>
-            </div>
-
+        <div className="mt-16 grid grid-cols-2 gap-10 md:grid-cols-4">
+          <motion.div
+            variants={itemVariants}
+            className="col-span-2 flex flex-col gap-5 md:col-span-1"
+          >
+            <span className="text-2xl font-black uppercase tracking-tight text-skorpion-white">
+              SKORPION
+            </span>
+            <p className="max-w-[200px] text-sm font-medium leading-relaxed text-skorpion-white/35">
+              {data.tagline}
+            </p>
             <div className="flex items-center gap-3">
               {data.socials.map((social) => (
                 <motion.a
@@ -76,76 +65,40 @@ export const Footer = ({ data }: Props) => {
                   href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  whileHover={{ scale: 1.12, y: -2, transition: { type: "spring", stiffness: 400, damping: 20 } }}
+                  whileHover={{ scale: 1.12, y: -2 }}
                   whileTap={{ scale: 0.94 }}
-                  className="group w-9 h-9 rounded-full border border-white/10 bg-white/5 hover:bg-skorpion-red hover:border-skorpion-red flex items-center justify-center transition-colors duration-300"
+                  transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                  className="group flex h-9 w-9 items-center justify-center rounded-full border border-skorpion-white/10 bg-skorpion-white/5 transition-colors duration-300 hover:border-skorpion-red hover:bg-skorpion-red"
                 >
                   <SocialIcon
                     type={social.icon}
-                    className="w-4 h-4 text-white/50 group-hover:text-white transition-colors duration-300"
+                    className="h-4 w-4 text-skorpion-white/50 transition-colors duration-300 group-hover:text-skorpion-white"
                   />
                 </motion.a>
               ))}
             </div>
           </motion.div>
 
-          <motion.div variants={itemVariants} className="flex flex-col gap-5">
-            <span className="text-[11px] font-black uppercase tracking-[0.25em] text-white/30">
-              Navegação
-            </span>
-            <ul className="flex flex-col gap-3">
-              {data.navLinks.map((link) => (
-                <li key={link.id}>
-                  <FooterLinkItem link={link} />
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-
-          <motion.div variants={itemVariants} className="flex flex-col gap-5">
-            <span className="text-[11px] font-black uppercase tracking-[0.25em] text-white/30">
-              Clube
-            </span>
-            <ul className="flex flex-col gap-3">
-              {data.clubLinks.map((link) => (
-                <li key={link.id}>
-                  <FooterLinkItem link={link} />
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-
-          <motion.div variants={itemVariants} className="flex flex-col gap-5">
-            <span className="text-[11px] font-black uppercase tracking-[0.25em] text-white/30">
-              Canal
-            </span>
-            <ul className="flex flex-col gap-3">
-              {data.channelLinks.map((link) => (
-                <li key={link.id}>
-                  <FooterLinkItem link={link} />
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-
+          {data.columns.map((column) => (
+            <motion.div key={column.id} variants={itemVariants}>
+              <FooterColumn column={column} />
+            </motion.div>
+          ))}
         </div>
 
         <motion.div
           variants={itemVariants}
-          className="w-full h-px mt-12 lg:mt-16"
-          style={{
-            background: "linear-gradient(to right, transparent, rgba(255,255,255,0.06), transparent)",
-          }}
+          className="mt-12 h-px w-full bg-gradient-to-r from-transparent via-skorpion-white/10 to-transparent"
         />
 
         <motion.div
           variants={itemVariants}
-          className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8"
+          className="mt-8 flex flex-col items-center justify-between gap-4 sm:flex-row"
         >
-          <span className="text-white/20 text-xs font-medium tracking-widest uppercase text-center sm:text-left">
+          <span className="text-center text-xs font-medium uppercase tracking-widest text-skorpion-white/20 sm:text-left">
             {data.copyright}
           </span>
-          <span className="text-white/15 text-xs font-black uppercase tracking-widest">
+          <span className="text-xs font-black uppercase tracking-widest text-skorpion-white/15">
             {data.clubName}
           </span>
         </motion.div>
