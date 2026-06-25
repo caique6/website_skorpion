@@ -7,17 +7,32 @@ import { OverlayAlert, OverlayPayload, OverlaySource } from "../types";
 const ENTER_DELAY_MS = 400;
 const EXIT_DURATION_MS = 420;
 const DEMO_INTERVAL_MS = 9000;
-const OVERLAY_EVENTS_URL = "/api/live-message/overlay";
+const POLL_INTERVAL_MS = 2000;
+
+const overlayUrl = (token: string | null): string =>
+  `/api/live-message/overlay${token ? `?token=${encodeURIComponent(token)}` : ""}`;
 
 export const useOverlayQueue = (source: OverlaySource, token: string | null) => {
   const [alert, setAlert] = useState<OverlayAlert | null>(null);
   const queueRef = useRef<OverlayPayload[]>([]);
   const processingRef = useRef(false);
+  const currentIdRef = useRef<string | null>(null);
+
+  const post = useCallback(
+    (action: string, id?: string) =>
+      fetch(overlayUrl(token), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(id ? { action, id } : { action }),
+      }),
+    [token],
+  );
 
   const processNext = useCallback(() => {
     if (processingRef.current || queueRef.current.length === 0) return;
     const next = queueRef.current.shift()!;
     processingRef.current = true;
+    currentIdRef.current = next.id;
     setAlert({ ...next, state: "entering" });
     setTimeout(
       () => setAlert((prev) => (prev ? { ...prev, state: "visible" } : null)),
@@ -34,37 +49,50 @@ export const useOverlayQueue = (source: OverlaySource, token: string | null) => 
   );
 
   const dismiss = useCallback(() => {
+    const id = currentIdRef.current;
     setAlert((prev) => (prev ? { ...prev, state: "exiting" } : null));
     setTimeout(() => {
       setAlert(null);
       processingRef.current = false;
-      processNext();
+      currentIdRef.current = null;
+      if (id && source === "live") post("sent", id).catch(() => {});
     }, EXIT_DURATION_MS);
-  }, [processNext]);
+  }, [post, source]);
 
   useEffect(() => {
-    if (source === "idle") return;
+    if (source !== "demo") return;
+    let index = 0;
+    const push = () => {
+      enqueue({ ...OVERLAY_DEMO[index % OVERLAY_DEMO.length], id: `demo-${index}` });
+      index += 1;
+    };
+    push();
+    const id = setInterval(push, DEMO_INTERVAL_MS);
+    return () => clearInterval(id);
+  }, [source, enqueue]);
 
-    if (source === "demo") {
-      let index = 0;
-      const push = () => {
-        enqueue({ ...OVERLAY_DEMO[index % OVERLAY_DEMO.length], id: `demo-${index}` });
-        index += 1;
-      };
-      push();
-      const id = setInterval(push, DEMO_INTERVAL_MS);
-      return () => clearInterval(id);
-    }
+  useEffect(() => {
+    if (source !== "live") return;
+    let active = true;
 
-    const url = token
-      ? `${OVERLAY_EVENTS_URL}?token=${encodeURIComponent(token)}`
-      : OVERLAY_EVENTS_URL;
-    const eventSource = new EventSource(url);
-    eventSource.addEventListener("alert", (event) => {
-      enqueue(JSON.parse((event as MessageEvent).data) as OverlayPayload);
-    });
-    return () => eventSource.close();
-  }, [source, token, enqueue]);
+    const claim = async () => {
+      if (!active || processingRef.current || queueRef.current.length > 0) return;
+      try {
+        const response = await post("claim");
+        if (!response.ok) return;
+        const payload: OverlayPayload | null = await response.json();
+        if (active && payload && payload.id) enqueue(payload);
+      } catch {}
+    };
+
+    post("reset").catch(() => {});
+    claim();
+    const id = setInterval(claim, POLL_INTERVAL_MS);
+    return () => {
+      active = false;
+      clearInterval(id);
+    };
+  }, [source, post, enqueue]);
 
   return { alert, dismiss };
 };

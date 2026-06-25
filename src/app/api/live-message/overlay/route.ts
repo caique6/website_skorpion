@@ -1,15 +1,9 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { supabaseServer, getAvatarPublicUrl } from "@/lib/supabase";
 
 export const dynamic = "force-dynamic";
 
-const QUEUE_DELAY_MS = 15_000;
-const POLL_INTERVAL_MS = 1_000;
-const PING_INTERVAL_MS = 25_000;
-
-type Sender = (event: string, data: unknown) => boolean;
-
-interface ClaimedAlert {
+interface ClaimedRow {
   id: string;
   memberName: string;
   avatarUrl: string | null;
@@ -17,82 +11,38 @@ interface ClaimedAlert {
   message: string;
 }
 
-const sleep = (ms: number): Promise<void> =>
-  new Promise((resolve) => setTimeout(resolve, ms));
-
-async function claimNext(): Promise<ClaimedAlert | null> {
-  const { data } = await supabaseServer.rpc("overlay_claim_next");
-  if (!data) return null;
-  const alert = data as ClaimedAlert;
-  return {
-    ...alert,
-    avatarUrl: alert.avatarUrl ? getAvatarPublicUrl(alert.avatarUrl) : null,
-  };
-}
-
-async function runQueue(send: Sender, isClosed: () => boolean): Promise<void> {
-  await supabaseServer.rpc("overlay_reset_processing");
-
-  while (!isClosed()) {
-    const alert = await claimNext();
-
-    if (!alert) {
-      await sleep(POLL_INTERVAL_MS);
-      continue;
-    }
-
-    send("alert", alert);
-    await sleep(QUEUE_DELAY_MS);
-
-    if (isClosed()) break;
-    await supabaseServer.rpc("overlay_mark_sent", { p_id: alert.id });
-  }
-}
-
-export function GET(req: NextRequest) {
-  const expectedToken = process.env.LIVE_OVERLAY_TOKEN;
-  if (expectedToken && req.nextUrl.searchParams.get("token") !== expectedToken) {
-    return new Response("Unauthorized", { status: 401 });
+export async function POST(req: NextRequest) {
+  const expected = process.env.LIVE_OVERLAY_TOKEN;
+  if (expected && req.nextUrl.searchParams.get("token") !== expected) {
+    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 
-  const encoder = new TextEncoder();
-  let closed = false;
-  let pingInterval: ReturnType<typeof setInterval> | null = null;
+  const body = await req.json().catch(() => ({}));
+  const action = typeof body.action === "string" ? body.action : null;
 
-  req.signal.addEventListener("abort", () => {
-    closed = true;
-    if (pingInterval) clearInterval(pingInterval);
-  });
+  if (action === "reset") {
+    await supabaseServer.rpc("overlay_reset_processing");
+    return NextResponse.json({ ok: true });
+  }
 
-  const stream = new ReadableStream({
-    start(controller) {
-      const send: Sender = (event, data) => {
-        if (closed) return false;
-        try {
-          controller.enqueue(
-            encoder.encode(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`),
-          );
-          return true;
-        } catch {
-          closed = true;
-          return false;
-        }
-      };
+  if (action === "claim") {
+    const { data, error } = await supabaseServer.rpc("overlay_claim_next");
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (!data) return NextResponse.json(null);
 
-      send("ping", { ts: Date.now() });
-      pingInterval = setInterval(() => {
-        if (!send("ping", { ts: Date.now() })) clearInterval(pingInterval!);
-      }, PING_INTERVAL_MS);
+    const row = data as ClaimedRow;
+    return NextResponse.json({
+      ...row,
+      avatarUrl: row.avatarUrl ? getAvatarPublicUrl(row.avatarUrl) : null,
+    });
+  }
 
-      void runQueue(send, () => closed);
-    },
-  });
+  if (action === "sent") {
+    const id = typeof body.id === "string" ? body.id : null;
+    if (!id) return NextResponse.json({ error: "invalid" }, { status: 400 });
+    await supabaseServer.rpc("overlay_mark_sent", { p_id: id });
+    return NextResponse.json({ ok: true });
+  }
 
-  return new Response(stream, {
-    headers: {
-      "Content-Type": "text/event-stream",
-      "Cache-Control": "no-cache, no-transform",
-      Connection: "keep-alive",
-    },
-  });
+  return NextResponse.json({ error: "invalid action" }, { status: 400 });
 }
