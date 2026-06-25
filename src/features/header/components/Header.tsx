@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useIntro } from "@/features/intro/context/IntroProvider";
 import { HeaderData } from "../types";
+import { CtaMenu } from "./CtaMenu";
 import { MobileMenu } from "./MobileMenu";
 
 interface Props {
@@ -45,15 +46,9 @@ export const Header = ({ data }: Props) => {
             ))}
           </nav>
 
-          <Link href={data.cta.href} className="hidden lg:block shrink-0">
-            <motion.span
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.96 }}
-              className="block rounded-full bg-skorpion-black px-5 py-2.5 text-xs font-black uppercase tracking-widest text-skorpion-white"
-            >
-              {data.cta.label}
-            </motion.span>
-          </Link>
+          <div className="hidden lg:block">
+            <CtaMenu cta={data.cta} />
+          </div>
 
           <motion.button
             onClick={() => setMobileOpen(true)}

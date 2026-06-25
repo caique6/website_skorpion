@@ -3,6 +3,10 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useIntro } from "@/features/intro/context/IntroProvider";
+import {
+  hasSeenIntroToday,
+  markIntroSeenToday,
+} from "@/features/intro/utils/intro-storage";
 import { HeroData } from "../types";
 import { HeroActions } from "./HeroActions";
 import { ShineText } from "./ShineText";
@@ -23,9 +27,20 @@ const subtitleClass =
 export const Hero = ({ data }: Props) => {
   const { complete } = useIntro();
   const [step, setStep] = useState(0);
+  const [ready, setReady] = useState(false);
   const isFinal = step >= data.intro.length;
 
   useEffect(() => {
+    if (hasSeenIntroToday()) {
+      setStep(data.intro.length);
+    } else {
+      markIntroSeenToday();
+    }
+    setReady(true);
+  }, [data.intro.length]);
+
+  useEffect(() => {
+    if (!ready) return;
     if (isFinal) {
       complete();
       return;
@@ -35,12 +50,12 @@ export const Hero = ({ data }: Props) => {
       data.intro[step].durationMs,
     );
     return () => clearTimeout(timer);
-  }, [step, isFinal, data.intro, complete]);
+  }, [ready, step, isFinal, data.intro, complete]);
 
   return (
     <section className="relative w-full min-h-screen flex items-center justify-center bg-skorpion-white px-6">
       <AnimatePresence mode="wait">
-        {isFinal ? (
+        {ready && isFinal && (
           <motion.div
             key="final"
             variants={fade}
@@ -72,7 +87,9 @@ export const Hero = ({ data }: Props) => {
               <HeroActions actions={data.actions} />
             </div>
           </motion.div>
-        ) : (
+        )}
+
+        {ready && !isFinal && (
           <motion.div
             key={data.intro[step].id}
             variants={fade}
@@ -86,9 +103,7 @@ export const Hero = ({ data }: Props) => {
               {data.intro[step].text}
             </p>
             {data.intro[step].subtext && (
-              <p className={`mt-5 ${subtitleClass}`}>
-                {data.intro[step].subtext}
-              </p>
+              <p className={`mt-5 ${subtitleClass}`}>{data.intro[step].subtext}</p>
             )}
           </motion.div>
         )}

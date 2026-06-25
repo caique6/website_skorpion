@@ -15,6 +15,21 @@ export const HEADER_MOCK: HeaderData = {
   ],
   cta: {
     label: "Resgatar Benefícios",
-    href: "/resgatar",
+    options: [
+      {
+        id: "cta-whatsapp",
+        label: "Grupos de WhatsApp",
+        description: "Entre nos grupos VIP do seu plano de membro.",
+        href: "/resgatar",
+        icon: "whatsapp",
+      },
+      {
+        id: "cta-live",
+        label: "Benefícios da Live",
+        description: "Mande uma mensagem que aparece na transmissão.",
+        href: "/mensagem-ao-vivo",
+        icon: "live",
+      },
+    ],
   },
 };

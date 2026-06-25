@@ -70,6 +70,16 @@
   animation: cardShine 4s ease-in-out infinite;
 }
 
+@keyframes boltPulse {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50%      { opacity: 1; transform: scale(1.14); }
+}
+
+.overlay-bolt {
+  animation: boltPulse 1.4s ease-in-out infinite;
+  filter: drop-shadow(0 0 6px currentColor);
+}
+
 .wave-track {
   animation-name: marquee-left;
   animation-timing-function: linear;
@@ -94,6 +104,7 @@
   .hero-shine,
   .wave-divider,
   .card-shine::before,
+  .overlay-bolt,
   .wave-track {
     animation: none;
   }

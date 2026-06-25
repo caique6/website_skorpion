@@ -94,14 +94,23 @@ export const MobileMenu = ({ data, isOpen, onClose }: Props) => {
               ))}
             </div>
 
-            <div className="px-6 py-6 border-t border-skorpion-black/10">
-              <Link
-                href={data.cta.href}
-                onClick={onClose}
-                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-full bg-skorpion-black font-black text-sm text-skorpion-white uppercase tracking-wider"
-              >
+            <div className="flex flex-col gap-2 border-t border-skorpion-black/10 px-4 py-6">
+              <span className="px-2 pb-1 text-[11px] font-black uppercase tracking-widest text-skorpion-black/40">
                 {data.cta.label}
-              </Link>
+              </span>
+              {data.cta.options.map((option) => (
+                <Link
+                  key={option.id}
+                  href={option.href}
+                  onClick={onClose}
+                  className="group flex items-center justify-between gap-3 rounded-[14px] bg-skorpion-black/[0.04] px-4 py-3.5 transition-colors duration-200 hover:bg-skorpion-red/5"
+                >
+                  <span className="text-sm font-black uppercase tracking-tight text-skorpion-black transition-colors duration-200 group-hover:text-skorpion-red">
+                    {option.label}
+                  </span>
+                  <ChevronRight className="h-4 w-4 text-skorpion-black/20" />
+                </Link>
+              ))}
             </div>
           </motion.div>
         </>

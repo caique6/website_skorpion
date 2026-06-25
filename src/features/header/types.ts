@@ -4,9 +4,19 @@ export interface NavItem {
   href: string;
 }
 
+export type HeaderCtaIcon = "whatsapp" | "live";
+
+export interface HeaderCtaOption {
+  id: string;
+  label: string;
+  description: string;
+  href: string;
+  icon: HeaderCtaIcon;
+}
+
 export interface HeaderCta {
   label: string;
-  href: string;
+  options: HeaderCtaOption[];
 }
 
 export interface HeaderData {
