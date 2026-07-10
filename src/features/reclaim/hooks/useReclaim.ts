@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import { ReclaimState, ReclaimStep, ReclaimError } from "../types";
+import { edgeFunctionUrl, edgeFunctionHeaders } from "@/lib/edge";
 
 const INITIAL_STATE: ReclaimState = {
   step: 1,
@@ -30,10 +31,9 @@ export const useReclaim = () => {
     setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
     try {
-      const baseUrl = window.location.origin;
-      const response = await fetch(`${baseUrl}/api/members/redeem`, {
+      const response = await fetch(edgeFunctionUrl("redeem"), {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: edgeFunctionHeaders(),
         body: JSON.stringify({ channelId }),
       });
 

@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { OVERLAY_DEMO } from "../data/overlay-demo";
 import { OverlayAlert, OverlayPayload, OverlaySource } from "../types";
+import { edgeFunctionUrl, edgeFunctionHeaders } from "@/lib/edge";
 
 const ENTER_DELAY_MS = 400;
 const EXIT_DURATION_MS = 420;
@@ -10,7 +11,7 @@ const DEMO_INTERVAL_MS = 9000;
 const POLL_INTERVAL_MS = 2000;
 
 const overlayUrl = (token: string | null): string =>
-  `/api/live-message/overlay${token ? `?token=${encodeURIComponent(token)}` : ""}`;
+  `${edgeFunctionUrl("overlay")}${token ? `?token=${encodeURIComponent(token)}` : ""}`;
 
 export const useOverlayQueue = (source: OverlaySource, token: string | null) => {
   const [alert, setAlert] = useState<OverlayAlert | null>(null);
@@ -22,7 +23,7 @@ export const useOverlayQueue = (source: OverlaySource, token: string | null) => 
     (action: string, id?: string) =>
       fetch(overlayUrl(token), {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: edgeFunctionHeaders(),
         body: JSON.stringify(id ? { action, id } : { action }),
       }),
     [token],

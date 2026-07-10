@@ -2,6 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { normalizeTier } from "@/lib/tier-utils";
+import { edgeFunctionUrl, edgeFunctionHeaders } from "@/lib/edge";
 import {
   LiveMessageError,
   LiveMessageFormData,
@@ -43,9 +44,9 @@ export const useLiveMessage = () => {
     setState((prev) => ({ ...prev, status: "validating", error: null }));
 
     try {
-      const response = await fetch("/api/live-message/validate", {
+      const response = await fetch(edgeFunctionUrl("live-message/validate"), {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: edgeFunctionHeaders(),
         body: JSON.stringify({ code }),
       });
       const body = await response.json();
@@ -84,9 +85,9 @@ export const useLiveMessage = () => {
     setState((prev) => ({ ...prev, status: "submitting" }));
 
     try {
-      const response = await fetch("/api/live-message/send", {
+      const response = await fetch(edgeFunctionUrl("live-message/send"), {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: edgeFunctionHeaders(),
         body: JSON.stringify(pending),
       });
       const body = await response.json().catch(() => ({}));
