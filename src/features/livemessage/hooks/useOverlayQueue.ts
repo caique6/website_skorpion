@@ -86,7 +86,6 @@ export const useOverlayQueue = (source: OverlaySource, token: string | null) => 
       } catch {}
     };
 
-    post("reset").catch(() => {});
     claim();
     const id = setInterval(claim, POLL_INTERVAL_MS);
     return () => {

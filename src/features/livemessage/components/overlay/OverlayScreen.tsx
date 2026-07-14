@@ -7,7 +7,12 @@ import { useTextToSpeech } from "../../hooks/useTextToSpeech";
 import { OverlaySource } from "../../types";
 import { OverlayAlertCard } from "./OverlayAlertCard";
 
-const VISIBLE_FALLBACK_MS = 7000;
+const MAX_VISIBLE_MS = 30000;
+const MIN_VISIBLE_MS = 5000;
+const READING_MS_PER_CHAR = 65;
+
+const readingDuration = (message: string): number =>
+  Math.min(Math.max(message.length * READING_MS_PER_CHAR, MIN_VISIBLE_MS), MAX_VISIBLE_MS);
 
 const clearBackground = (element: HTMLElement) => {
   element.style.setProperty("background", "transparent", "important");
@@ -19,7 +24,7 @@ export const OverlayScreen = () => {
   const [token, setToken] = useState<string | null>(null);
   const [muted, setMuted] = useState(false);
   const { alert, dismiss } = useOverlayQueue(source, token);
-  const { play } = useTextToSpeech();
+  const { play, stop } = useTextToSpeech();
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -45,10 +50,33 @@ export const OverlayScreen = () => {
 
   useEffect(() => {
     if (!alert || alert.state !== "visible") return;
-    if (!muted) play(`${alert.memberName} disse: ${alert.message}`);
-    const timeout = setTimeout(dismiss, VISIBLE_FALLBACK_MS);
-    return () => clearTimeout(timeout);
-  }, [alert, play, dismiss, muted]);
+
+    let settled = false;
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      stop();
+      dismiss();
+    };
+
+    const cap = setTimeout(finish, MAX_VISIBLE_MS);
+
+    if (muted) {
+      const readable = setTimeout(finish, readingDuration(alert.message));
+      return () => {
+        settled = true;
+        clearTimeout(cap);
+        clearTimeout(readable);
+      };
+    }
+
+    play(`${alert.memberName} disse: ${alert.message}`).then(finish);
+
+    return () => {
+      settled = true;
+      clearTimeout(cap);
+    };
+  }, [alert, play, stop, dismiss, muted]);
 
   return (
     <div className="h-screen w-screen overflow-hidden bg-transparent">
