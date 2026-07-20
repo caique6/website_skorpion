@@ -1,6 +1,8 @@
 import { supabaseServer } from "@/lib/supabase";
 import { normalizeTier } from "@/lib/tier-utils";
-import { RankingData, RankingMember } from "../types";
+import { RankingData, RankingMember, PlanTier } from "../types";
+import { MODAL_COUNT } from "../constants";
+import { toTotalHours } from "../utils/ranking.utils";
 
 function computeMembership(membershipStartedAt: string): Pick<RankingMember, "months" | "days" | "hours"> {
   const started = new Date(membershipStartedAt);
@@ -13,6 +15,20 @@ function computeMembership(membershipStartedAt: string): Pick<RankingMember, "mo
   const hours = remainingAfterMonths - days * 24;
 
   return { months, days, hours };
+}
+
+function takeLongestPerTier(members: RankingMember[]): RankingMember[] {
+  const byTier = new Map<PlanTier, RankingMember[]>();
+
+  for (const member of [...members].sort((a, b) => toTotalHours(b) - toTotalHours(a))) {
+    const tierMembers = byTier.get(member.tier) ?? [];
+    if (tierMembers.length < MODAL_COUNT) {
+      tierMembers.push(member);
+      byTier.set(member.tier, tierMembers);
+    }
+  }
+
+  return Array.from(byTier.values()).flat();
 }
 
 export const getRankingData = async (): Promise<RankingData> => {
@@ -38,5 +54,5 @@ export const getRankingData = async (): Promise<RankingData> => {
     })
     .filter((m): m is RankingMember => m !== null);
 
-  return { members };
+  return { members: takeLongestPerTier(members) };
 };

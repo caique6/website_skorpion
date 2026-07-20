@@ -18,17 +18,6 @@ export interface Plan {
   youtubeUrl: string;
 }
 
-export interface SkorpionarioMember {
-  id: string;
-  name: string;
-  avatar: string;
-}
-
-export interface MembersData {
-  plans: Plan[];
-  skorpionarios: SkorpionarioMember[];
-}
-
 export interface PlansSectionContent {
   eyebrow: string;
   title: string;

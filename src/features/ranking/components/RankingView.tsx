@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft, Trophy } from "lucide-react";
 import { RankingData, PlanTier } from "../types";
 import { sortByTime, TIER_CONFIG } from "../utils/ranking.utils";
+import { PODIUM_COUNT, VISIBLE_COUNT, MODAL_COUNT } from "../constants";
 import { PodiumCard } from "./PodiumCard";
 import { RankingRow } from "./RankingRow";
 import { RankingModal } from "./RankingModal";
@@ -23,8 +24,6 @@ const TABS: { id: ActiveTab; label: string }[] = [
   { id: "skorpionzinho", label: "Skorpionzinho" },
 ];
 
-const VISIBLE_COUNT = 10;
-
 export const RankingView = ({ data }: Props) => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<ActiveTab>("all");
@@ -36,9 +35,9 @@ export const RankingView = ({ data }: Props) => {
     ? sorted
     : sorted.filter((m) => m.tier === activeTab);
 
-  const podium = filtered.slice(0, Math.min(3, filtered.length));
+  const podium = filtered.slice(0, Math.min(PODIUM_COUNT, filtered.length));
   const listMembers = filtered.slice(podium.length, podium.length + VISIBLE_COUNT);
-  const modalMembers = filtered.slice(0, 25);
+  const modalMembers = filtered.slice(0, MODAL_COUNT);
 
   const accentColor = activeTab !== "all"
     ? TIER_CONFIG[activeTab].color
