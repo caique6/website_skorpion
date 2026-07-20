@@ -3,6 +3,9 @@ import { supabaseServer } from '@/lib/supabase'
 
 const STORAGE_BASE      = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/avatars`
 const MAX_CACHE_ENTRIES = 500
+const BROWSER_CACHE_SECONDS = 60 * 60 * 24 * 7
+const EDGE_CACHE_SECONDS    = 60 * 60 * 24 * 365
+const CACHE_CONTROL = `public, max-age=${BROWSER_CACHE_SECONDS}, s-maxage=${EDGE_CACHE_SECONDS}, immutable`
 
 const imageCache    = new Map<string, { buffer: ArrayBuffer; contentType: string }>()
 const fallbackCache = new Map<string, string | null>()
@@ -54,7 +57,7 @@ export async function GET(
   const cached = imageCache.get(params.id)
   if (cached) {
     return new NextResponse(cached.buffer, {
-      headers: { 'Content-Type': cached.contentType, 'Cache-Control': 'public, max-age=604800, immutable' },
+      headers: { 'Content-Type': cached.contentType, 'Cache-Control': CACHE_CONTROL },
     })
   }
 
@@ -73,6 +76,6 @@ export async function GET(
   imageCache.set(params.id, result)
 
   return new NextResponse(result.buffer, {
-    headers: { 'Content-Type': result.contentType, 'Cache-Control': 'public, max-age=604800, immutable' },
+    headers: { 'Content-Type': result.contentType, 'Cache-Control': CACHE_CONTROL },
   })
 }

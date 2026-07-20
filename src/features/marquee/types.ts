@@ -1,6 +1,5 @@
 export interface MarqueeMember {
   id: string;
-  name: string;
   avatar: string;
 }
 

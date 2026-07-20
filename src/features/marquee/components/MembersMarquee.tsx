@@ -5,7 +5,6 @@ import { useRef, useState, useEffect, useMemo, CSSProperties } from "react";
 import Image from "next/image";
 import { MarqueeMember } from "../types";
 import { cn } from "@/lib/utils";
-import { proxyAvatarUrl, isImageSrc } from "@/lib/avatar";
 
 interface Props {
   members: MarqueeMember[];
@@ -35,24 +34,20 @@ interface ChipProps {
 const SPEED_PX_PER_SEC = 55;
 
 function MemberChip({ member, accentColor, accentBg, accentBorder }: ChipProps) {
-  const src = proxyAvatarUrl(member.avatar, member.id)
   return (
     <motion.div
       whileHover={{ scale: 1.08, transition: { type: "spring", stiffness: 400, damping: 22 } }}
       className="flex items-center p-1.5 rounded-full shrink-0 border cursor-default mx-1.5"
       style={{ backgroundColor: accentBg, borderColor: accentBorder, boxShadow: `0 0 14px ${accentBorder}` }}
     >
-      {isImageSrc(src) ? (
-        <Image
-          src={src}
-          alt="Membro"
-          width={40}
-          height={40}
-          className="rounded-full object-cover w-10 h-10 flex-shrink-0"
-        />
-      ) : (
-        <span className="text-2xl leading-none flex-shrink-0">{member.avatar}</span>
-      )}
+      <Image
+        src={member.avatar}
+        alt="Membro"
+        width={40}
+        height={40}
+        unoptimized
+        className="rounded-full object-cover w-10 h-10 flex-shrink-0"
+      />
     </motion.div>
   );
 }

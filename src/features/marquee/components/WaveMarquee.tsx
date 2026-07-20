@@ -2,7 +2,6 @@
 
 import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
-import { isImageSrc, proxyAvatarUrl } from "@/lib/avatar";
 import { MarqueeMember } from "../types";
 import { WaveDivider } from "./WaveDivider";
 
@@ -39,27 +38,18 @@ const toneClass: Record<
   },
 };
 
-const MemberChip = ({ member }: { member: MarqueeMember }) => {
-  const src = proxyAvatarUrl(member.avatar, member.id);
-
-  return (
-    <div className="wave-chip relative mx-2 shrink-0">
-      {isImageSrc(src) ? (
-        <Image
-          src={src}
-          alt={member.name}
-          width={64}
-          height={64}
-          className="h-14 w-14 rounded-full object-cover sm:h-16 sm:w-16"
-        />
-      ) : (
-        <span className="flex h-14 w-14 items-center justify-center rounded-full bg-skorpion-white/10 text-2xl sm:h-16 sm:w-16">
-          {member.avatar}
-        </span>
-      )}
-    </div>
-  );
-};
+const MemberChip = ({ member }: { member: MarqueeMember }) => (
+  <div className="wave-chip relative mx-2 shrink-0">
+    <Image
+      src={member.avatar}
+      alt="Membro"
+      width={64}
+      height={64}
+      unoptimized
+      className="h-14 w-14 rounded-full object-cover sm:h-16 sm:w-16"
+    />
+  </div>
+);
 
 export const WaveMarquee = ({
   members,

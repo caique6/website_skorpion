@@ -18,8 +18,9 @@ function computeMembership(membershipStartedAt: string): Pick<RankingMember, "mo
 export const getRankingData = async (): Promise<RankingData> => {
   const { data, error } = await supabaseServer
     .from("members")
-    .select("id, name, avatar_url, tier, membership_started_at")
-    .eq("is_active", true);
+    .select("id, avatar_url, tier, membership_started_at")
+    .eq("is_active", true)
+    .not("avatar_url", "is", null);
 
   if (error || !data) return { members: [] };
 
@@ -30,8 +31,7 @@ export const getRankingData = async (): Promise<RankingData> => {
 
       return {
         id: m.id,
-        name: m.name,
-        avatar: m.avatar_url ? `/api/avatar/${m.id}` : '🦂',
+        avatar: `/api/avatar/${m.id}`,
         tier,
         ...computeMembership(m.membership_started_at),
       };

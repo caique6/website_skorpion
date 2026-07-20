@@ -32,6 +32,7 @@ export const ProductTile = ({ product, className }: Props) => {
             alt={product.name}
             fill
             sizes="(max-width: 1024px) 100vw, 33vw"
+            unoptimized
             className="object-contain p-5 transition-transform duration-500 group-hover:scale-105"
           />
         ) : (

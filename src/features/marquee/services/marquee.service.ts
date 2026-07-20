@@ -5,15 +5,15 @@ import { MarqueeData, MarqueeMember } from "../types";
 export const getMarqueeData = async (): Promise<MarqueeData> => {
   const { data, error } = await supabaseServer
     .from("members")
-    .select("id, name, avatar_url, tier")
-    .eq("is_active", true);
+    .select("id, avatar_url, tier")
+    .eq("is_active", true)
+    .not("avatar_url", "is", null);
 
   if (error || !data) return { skorpionarios: [], skorpiaos: [], skorpionzinhos: [] };
 
-  const toMember = (m: { id: string; name: string; avatar_url: string | null }): MarqueeMember => ({
+  const toMember = (m: { id: string }): MarqueeMember => ({
     id: m.id,
-    name: m.name,
-    avatar: m.avatar_url ? `/api/avatar/${m.id}` : '🦂',
+    avatar: `/api/avatar/${m.id}`,
   });
 
   return {

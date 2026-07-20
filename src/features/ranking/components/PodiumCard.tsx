@@ -4,7 +4,6 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { RankingMember } from "../types";
 import { TIER_CONFIG, MEDAL_CONFIG, formatTime } from "../utils/ranking.utils";
-import { proxyAvatarUrl, isImageSrc } from "@/lib/avatar";
 
 interface Props {
   member: RankingMember;
@@ -24,21 +23,6 @@ const ORDER_MAP: Record<number, number> = {
   3: 3,
 };
 
-function AvatarDisplay({ avatar, size }: { avatar: string; size: number }) {
-  if (isImageSrc(avatar)) {
-    return (
-      <Image
-        src={avatar}
-        alt="Membro"
-        width={size}
-        height={size}
-        className="rounded-full object-cover w-full h-full"
-      />
-    );
-  }
-
-  return <span className="text-3xl lg:text-4xl">{avatar}</span>;
-}
 
 export const PodiumCard = ({ member, position, index }: Props) => {
   const tier = TIER_CONFIG[member.tier];
@@ -74,7 +58,14 @@ export const PodiumCard = ({ member, position, index }: Props) => {
             background: "rgba(0,0,0,0.4)",
           }}
         >
-          <AvatarDisplay avatar={proxyAvatarUrl(member.avatar, member.id)} size={96} />
+          <Image
+            src={member.avatar}
+            alt="Membro"
+            width={96}
+            height={96}
+            unoptimized
+            className="rounded-full object-cover w-full h-full"
+          />
           <div
             className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center text-xs border border-black/50 z-10"
             style={{ backgroundColor: "#0A0A0A" }}

@@ -32,6 +32,7 @@ export const VideoTile = ({ video, className }: Props) => {
             alt={video.title}
             fill
             sizes="(max-width: 1024px) 100vw, 33vw"
+            unoptimized
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         )}
