@@ -10,8 +10,8 @@ import { OverlaySource } from "../../types";
 import { OverlayAlertCard } from "./OverlayAlertCard";
 
 const MAX_VISIBLE_MS = 30000;
-const MIN_VISIBLE_MS = 5000;
-const READING_MS_PER_CHAR = 65;
+const MIN_VISIBLE_MS = 6500;
+const READING_MS_PER_CHAR = 75;
 
 const readingDuration = (message: string): number =>
   Math.min(Math.max(message.length * READING_MS_PER_CHAR, MIN_VISIBLE_MS), MAX_VISIBLE_MS);
