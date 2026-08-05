@@ -80,6 +80,28 @@
   filter: drop-shadow(0 0 6px currentColor);
 }
 
+@keyframes lightningFlicker {
+  0%, 7%, 100% { opacity: 0; }
+  8%          { opacity: 0.9; }
+  9%          { opacity: 0.15; }
+  10%         { opacity: 1; }
+  13%         { opacity: 0; }
+  47%, 57%    { opacity: 0; }
+  49%         { opacity: 1; }
+  50%         { opacity: 0.3; }
+  52%         { opacity: 0.85; }
+}
+
+.overlay-lightning {
+  animation: lightningFlicker 3.6s linear infinite;
+  will-change: opacity;
+}
+
+.overlay-lightning-alt {
+  animation-duration: 4.4s;
+  animation-delay: 1.3s;
+}
+
 .wave-track {
   animation-name: marquee-left;
   animation-timing-function: linear;
@@ -105,6 +127,7 @@
   .wave-divider,
   .card-shine::before,
   .overlay-bolt,
+  .overlay-lightning,
   .wave-track {
     animation: none;
   }
