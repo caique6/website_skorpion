@@ -20,7 +20,7 @@ const cardVariants: Variants = {
     x: 0,
     scale: 1,
     filter: "blur(0px)",
-    transition: { duration: 0.75, ease: EASE_OUT, delayChildren: 0.25, staggerChildren: 0.18 },
+    transition: { duration: 0.85, ease: EASE_OUT, delayChildren: 0.35, staggerChildren: 0.26 },
   },
   exit: {
     opacity: 0,
@@ -50,7 +50,7 @@ const headerVariants: Variants = {
 
 const messageVariants: Variants = {
   hidden: { x: 48, opacity: 0, filter: "blur(10px)" },
-  visible: { x: 0, opacity: 1, filter: "blur(0px)", transition: { duration: 0.7, ease: EASE_OUT } },
+  visible: { x: 0, opacity: 1, filter: "blur(0px)", transition: { duration: 0.95, ease: EASE_OUT } },
   exit: { x: 28, opacity: 0, filter: "blur(8px)", transition: { duration: 0.4, ease: EASE_OUT } },
 };
 

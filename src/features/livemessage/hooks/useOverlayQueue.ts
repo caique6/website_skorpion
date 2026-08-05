@@ -5,9 +5,9 @@ import { OVERLAY_DEMO } from "../data/overlay-demo";
 import { OverlayAlert, OverlayPayload, OverlaySource } from "../types";
 import { edgeFunctionUrl, edgeFunctionHeaders } from "@/lib/edge";
 
-const ENTER_DELAY_MS = 900;
+const ENTER_DELAY_MS = 1100;
 const EXIT_DURATION_MS = 700;
-const DEMO_INTERVAL_MS = 12000;
+const DEMO_INTERVAL_MS = 16000;
 const POLL_INTERVAL_MS = 2000;
 
 const overlayUrl = (token: string | null): string =>

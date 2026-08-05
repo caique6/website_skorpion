@@ -10,8 +10,8 @@ import { OverlaySource } from "../../types";
 import { OverlayAlertCard } from "./OverlayAlertCard";
 
 const MAX_VISIBLE_MS = 30000;
-const MIN_VISIBLE_MS = 6500;
-const READING_MS_PER_CHAR = 75;
+const MIN_VISIBLE_MS = 12000;
+const READING_MS_PER_CHAR = 110;
 
 const readingDuration = (message: string): number =>
   Math.min(Math.max(message.length * READING_MS_PER_CHAR, MIN_VISIBLE_MS), MAX_VISIBLE_MS);
@@ -55,6 +55,10 @@ export const OverlayScreen = () => {
     if (!alert || alert.state !== "visible") return;
 
     let settled = false;
+    let holdTimer: ReturnType<typeof setTimeout> | undefined;
+    const startedAt = Date.now();
+    const minVisibleMs = readingDuration(alert.message);
+
     const finish = () => {
       if (settled) return;
       settled = true;
@@ -63,14 +67,19 @@ export const OverlayScreen = () => {
       dismiss();
     };
 
+    const finishRespectingMin = () => {
+      if (settled) return;
+      holdTimer = setTimeout(finish, Math.max(0, minVisibleMs - (Date.now() - startedAt)));
+    };
+
     const cap = setTimeout(finish, MAX_VISIBLE_MS);
 
     if (muted) {
-      const readable = setTimeout(finish, readingDuration(alert.message));
+      holdTimer = setTimeout(finish, minVisibleMs);
       return () => {
         settled = true;
         clearTimeout(cap);
-        clearTimeout(readable);
+        if (holdTimer) clearTimeout(holdTimer);
       };
     }
 
@@ -82,15 +91,17 @@ export const OverlayScreen = () => {
     const speak = async () => {
       const spoken = source === "live" && (await playRemote(speech, alert.voiceId ?? null));
       if (settled) return;
-      if (spoken) return finish();
+      if (spoken) return finishRespectingMin();
       await playSpeech(speech);
-      finish();
+      if (settled) return;
+      finishRespectingMin();
     };
     speak();
 
     return () => {
       settled = true;
       clearTimeout(cap);
+      if (holdTimer) clearTimeout(holdTimer);
       stopRemote();
       stopSpeech();
     };
