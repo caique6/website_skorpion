@@ -44,7 +44,7 @@ export const DonationFlow = () => {
             />
           )}
           {state.status === "awaiting_payment" && state.pix && (
-            <DonationPix key="pix" content={content} pix={state.pix} />
+            <DonationPix key="pix" content={content} pix={state.pix} onReset={reset} />
           )}
           {done && (
             <DonationSuccess key="done" content={content} status={state.status} onReset={reset} />

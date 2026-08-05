@@ -26,6 +26,11 @@ export const DONATION_MOCK: DonationContent = {
   copyLabel: "Copiar código",
   copiedLabel: "Copiado!",
   waitingLabel: "Aguardando pagamento...",
+  expiresLabel: "Expira em",
+  expiredTitle: "QR Code expirou",
+  expiredSubtitle:
+    "O tempo para pagar esse PIX acabou. Gere um novo código para concluir sua doação.",
+  newQrLabel: "Gerar novo PIX",
   success: {
     publishedLines: ["PAGAMENTO", "RECEBIDO!"],
     publishedSubtitle:

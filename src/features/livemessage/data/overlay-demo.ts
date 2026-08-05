@@ -22,4 +22,14 @@ export const OVERLAY_DEMO: OverlayPayload[] = [
     tier: "skorpionzinho",
     message: "Manda um salve pra mim aí, campeão!",
   },
+  {
+    id: "demo-donation",
+    kind: "donation",
+    memberName: "GustavoPix",
+    avatarUrl: null,
+    tier: null,
+    amountCents: 2500,
+    message: "Toma esse pix aí, manda um salve pra galera!",
+    voiceId: "pf_dora",
+  },
 ];

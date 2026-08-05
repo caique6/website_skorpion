@@ -159,6 +159,7 @@ export interface DonationPixData {
   donationId: string;
   qrCode: string;
   qrCodeBase64: string;
+  expiresAt: string;
 }
 
 export interface DonationState {
@@ -202,6 +203,10 @@ export interface DonationContent {
   copyLabel: string;
   copiedLabel: string;
   waitingLabel: string;
+  expiresLabel: string;
+  expiredTitle: string;
+  expiredSubtitle: string;
+  newQrLabel: string;
   success: DonationSuccessContent;
   errors: Record<DonationError, string>;
 }

@@ -69,6 +69,7 @@ export const useDonation = () => {
           donationId: body.donationId,
           qrCode: body.qrCode,
           qrCodeBase64: body.qrCodeBase64,
+          expiresAt: body.expiresAt,
         },
       });
     } catch {
