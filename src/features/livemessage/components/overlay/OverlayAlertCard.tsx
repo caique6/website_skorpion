@@ -63,7 +63,7 @@ export const OverlayAlertCard = ({ alert }: Props) => {
       variants={cardVariants}
       initial="hidden"
       animate={leaving ? "exit" : "visible"}
-      className="relative flex max-w-lg items-start gap-4 overflow-hidden rounded-2xl px-5 py-4"
+      className="relative flex w-fit max-w-2xl items-start gap-4 overflow-hidden rounded-2xl px-5 py-4"
       style={{
         backgroundColor: "rgba(20,16,28,0.86)",
         border: `1.5px solid ${tier.color}`,
@@ -83,35 +83,6 @@ export const OverlayAlertCard = ({ alert }: Props) => {
         style={{ color: tier.color, animationDelay: "0.5s" }}
         fill="currentColor"
       />
-
-      <svg
-        className="overlay-lightning pointer-events-none absolute inset-x-3 top-1.5 h-2.5"
-        viewBox="0 0 300 24"
-        preserveAspectRatio="none"
-        fill="none"
-        style={{ filter: `drop-shadow(0 0 5px ${tier.color})` }}
-      >
-        <polyline
-          points="0,14 20,5 34,18 52,7 68,20 88,6 104,16 126,4 146,19 168,8 188,17 210,5 232,18 252,7 274,16 300,10"
-          stroke={tier.color}
-          strokeWidth="1.6"
-          strokeLinejoin="round"
-        />
-      </svg>
-      <svg
-        className="overlay-lightning overlay-lightning-alt pointer-events-none absolute inset-x-3 bottom-1.5 h-2.5"
-        viewBox="0 0 300 24"
-        preserveAspectRatio="none"
-        fill="none"
-        style={{ filter: `drop-shadow(0 0 5px ${tier.color})` }}
-      >
-        <polyline
-          points="0,10 22,19 40,6 60,17 82,5 102,18 128,7 150,20 172,6 196,16 218,5 240,18 262,8 286,17 300,9"
-          stroke={tier.color}
-          strokeWidth="1.4"
-          strokeLinejoin="round"
-        />
-      </svg>
 
       <motion.div
         variants={avatarVariants}
@@ -133,26 +104,27 @@ export const OverlayAlertCard = ({ alert }: Props) => {
       </motion.div>
 
       <div className="relative flex min-w-0 flex-col gap-1">
-        <motion.div variants={headerVariants} className="flex flex-wrap items-center gap-x-2 gap-y-1 pr-7">
-          <div className="flex items-center gap-2">
-            <span className="text-[15px] font-black uppercase tracking-tight text-white">
-              {alert.memberName}
-            </span>
-            <span
-              className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-black uppercase tracking-widest"
-              style={{ backgroundColor: tier.color, color: "#1A1A1A" }}
-            >
-              <Zap className="h-2.5 w-2.5" fill="currentColor" />
-              {isDonation && alert.amountCents != null ? formatBRL(alert.amountCents) : tier.label}
-            </span>
-          </div>
+        <motion.div
+          variants={headerVariants}
+          className="flex items-center gap-2 whitespace-nowrap pr-6"
+        >
+          <span className="text-[15px] font-black uppercase tracking-tight text-white">
+            {alert.memberName}
+          </span>
+          <span
+            className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-black uppercase tracking-widest"
+            style={{ backgroundColor: tier.color, color: "#1A1A1A" }}
+          >
+            <Zap className="h-2.5 w-2.5" fill="currentColor" />
+            {isDonation && alert.amountCents != null ? formatBRL(alert.amountCents) : tier.label}
+          </span>
           <span className="text-[12px] font-medium text-white/45">
             {isDonation ? "mandou um pix" : "mandou um recado"}
           </span>
         </motion.div>
         <motion.p
           variants={messageVariants}
-          className="break-words text-[15px] font-medium leading-snug text-white/90"
+          className="line-clamp-2 break-words text-[15px] font-medium leading-snug text-white/90"
         >
           &ldquo;{alert.message}&rdquo;
         </motion.p>
