@@ -9,7 +9,7 @@ interface Props {
 
 export const LiveMessageInfoCard = ({ content }: Props) => {
   return (
-    <aside className="flex flex-col gap-6 rounded-3xl border border-skorpion-black/10 bg-skorpion-black/[0.02] p-7">
+    <aside className="flex flex-col gap-4 rounded-3xl border border-skorpion-black/10 bg-skorpion-black/[0.02] p-5">
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2 text-skorpion-red">
           <Sparkles className="h-4 w-4" />
@@ -22,7 +22,7 @@ export const LiveMessageInfoCard = ({ content }: Props) => {
         </h2>
       </div>
 
-      <ol className="flex flex-col gap-3">
+      <ol className="flex flex-col gap-2">
         {content.steps.map((step, index) => (
           <li key={index} className="flex items-start gap-3">
             <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-skorpion-red/10 text-[11px] font-black text-skorpion-red">
@@ -35,7 +35,7 @@ export const LiveMessageInfoCard = ({ content }: Props) => {
         ))}
       </ol>
 
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-2.5">
         <div className="flex items-center gap-2 text-skorpion-black/40">
           <Clock className="h-3.5 w-3.5" />
           <span className="text-[11px] font-black uppercase tracking-widest">
@@ -48,7 +48,7 @@ export const LiveMessageInfoCard = ({ content }: Props) => {
             return (
               <div
                 key={cooldown.tier}
-                className="flex items-center gap-3 rounded-xl border border-skorpion-black/[0.06] bg-skorpion-white px-3 py-2.5"
+                className="flex items-center gap-3 rounded-xl border border-skorpion-black/[0.06] bg-skorpion-white px-3 py-1.5"
               >
                 <span
                   className={cn(
@@ -68,7 +68,7 @@ export const LiveMessageInfoCard = ({ content }: Props) => {
         </div>
       </div>
 
-      <div className="flex items-start gap-3 rounded-2xl border border-skorpion-red/20 bg-skorpion-red/5 p-4">
+      <div className="flex items-start gap-3 rounded-2xl border border-skorpion-red/20 bg-skorpion-red/5 p-2.5">
         <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-skorpion-red" />
         <div className="flex flex-col gap-1">
           <span className="text-[11px] font-black uppercase tracking-widest text-skorpion-red">

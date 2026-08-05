@@ -103,12 +103,17 @@ export interface LiveMessageContent {
   errors: Record<LiveMessageError, string>;
 }
 
+export type OverlayKind = "message" | "donation";
+
 export interface OverlayPayload {
   id: string;
+  kind?: OverlayKind;
   memberName: string;
   avatarUrl: string | null;
-  tier: PlanTier;
+  tier: PlanTier | null;
   message: string;
+  amountCents?: number | null;
+  voiceId?: string | null;
 }
 
 export type OverlayAlertState = "entering" | "visible" | "exiting";
@@ -118,3 +123,85 @@ export interface OverlayAlert extends OverlayPayload {
 }
 
 export type OverlaySource = "idle" | "live" | "demo";
+
+export type LiveMode = "message" | "donation";
+
+export interface VoiceOption {
+  voiceId: string;
+  label: string;
+  requiresApproval: boolean;
+}
+
+export type DonationError =
+  | "name_required"
+  | "message_required"
+  | "amount_below_min"
+  | "too_many_requests"
+  | "network"
+  | "unknown";
+
+export type DonationStatus =
+  | "idle"
+  | "creating"
+  | "awaiting_payment"
+  | "published"
+  | "approved"
+  | "rejected"
+  | "error";
+
+export interface DonationFormData {
+  name: string;
+  message: string;
+  amountCents: number;
+}
+
+export interface DonationPixData {
+  donationId: string;
+  qrCode: string;
+  qrCodeBase64: string;
+}
+
+export interface DonationState {
+  status: DonationStatus;
+  error: DonationError | null;
+  pix: DonationPixData | null;
+  minCents: number | null;
+}
+
+export interface DonationSuccessContent {
+  publishedLines: string[];
+  publishedSubtitle: string;
+  approvalLines: string[];
+  approvalSubtitle: string;
+  rejectedLines: string[];
+  rejectedSubtitle: string;
+  resetLabel: string;
+}
+
+export interface DonationContent {
+  eyebrow: string;
+  headlineLines: string[];
+  subtitle: string;
+  nameLabel: string;
+  namePlaceholder: string;
+  nameMaxLength: number;
+  messageLabel: string;
+  messagePlaceholder: string;
+  messageMaxLength: number;
+  voiceLabel: string;
+  voiceHint: string;
+  termsPrefix: string;
+  termsLinkLabel: string;
+  amountLabel: string;
+  amountPlaceholder: string;
+  presetsCents: number[];
+  submitLabel: string;
+  submitLoadingLabel: string;
+  pixTitle: string;
+  pixSubtitle: string;
+  copyLabel: string;
+  copiedLabel: string;
+  waitingLabel: string;
+  success: DonationSuccessContent;
+  errors: Record<DonationError, string>;
+}

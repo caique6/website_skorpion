@@ -52,6 +52,12 @@ export const OVERLAY_TIER: Record<PlanTier, OverlayTier> = {
   },
 };
 
+export const OVERLAY_DONATION: OverlayTier = {
+  label: "Doação",
+  color: "#22C55E",
+  glow: "rgba(34,197,94,0.45)",
+};
+
 export interface TierLabel {
   label: string;
   className: string;

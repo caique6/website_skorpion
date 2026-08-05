@@ -13,7 +13,7 @@ export const LiveStage = ({ children }: Props) => {
       animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
       exit={{ opacity: 0, y: -24, filter: "blur(6px)" }}
       transition={{ type: "spring", stiffness: 280, damping: 28 }}
-      className="flex w-full flex-col gap-8"
+      className="flex w-full flex-col gap-4"
     >
       {children}
     </motion.div>

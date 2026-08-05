@@ -36,6 +36,12 @@ export const TERMS_SECTIONS: TermsSection[] = [
       "O acesso aos grupos de WhatsApp é concedido exclusivamente via bot de atendimento oficial do clube, mediante apresentação do código de resgate válido. Ao resgatar o acesso:\n\n• Seu número de telefone é vinculado ao seu perfil de membro\n• Um único número de telefone pode estar vinculado a um único membership\n• A tentativa de vincular um número já cadastrado a outro membership é detectada automaticamente e reportada à administração\n• A administração reserva-se o direito de remover membros dos grupos por violação destes termos",
   },
   {
+    id: "t-donation",
+    title: "Doações via PIX (mensagem na live)",
+    content:
+      "A funcionalidade \"Doar via PIX\" permite enviar uma doação voluntária acompanhada de um nome e uma mensagem que são exibidos e narrados ao vivo na transmissão do Skorpion Gamer. Ao utilizá-la, você concorda que:\n\n• A doação é voluntária e não constitui compra de produto ou serviço, nem garante qualquer contrapartida além da exibição da mensagem\n• O valor mínimo é de R$ 5,00 e o pagamento é processado via PIX pelo Mercado Pago; não coletamos nem armazenamos seus dados bancários\n• As doações são, por natureza, não reembolsáveis, salvo cobrança comprovadamente indevida ou duplicada\n• O nome e a mensagem enviados são de sua inteira responsabilidade e serão exibidos publicamente durante a transmissão\n• Mensagens com ofensas, discurso de ódio, conteúdo ilegal ou que violem as regras de convivência podem ser recusadas ou moderadas antes de aparecer, sem direito a reembolso\n• A voz de narração escolhida é meramente ilustrativa e gerada por síntese de voz",
+  },
+  {
     id: "t-06",
     title: "Conduta e uso aceitável",
     content:

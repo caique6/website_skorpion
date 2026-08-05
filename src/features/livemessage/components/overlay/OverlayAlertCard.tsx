@@ -3,7 +3,9 @@
 import { motion } from "framer-motion";
 import { Zap } from "lucide-react";
 import Image from "next/image";
-import { OVERLAY_TIER } from "../../utils/tier-accent";
+import { OVERLAY_DONATION, OVERLAY_TIER } from "../../utils/tier-accent";
+import { formatBRL } from "../../utils/format-brl";
+import { RESGATY_CREDIT } from "../../utils/resgaty";
 import { OverlayAlert } from "../../types";
 
 interface Props {
@@ -11,7 +13,8 @@ interface Props {
 }
 
 export const OverlayAlertCard = ({ alert }: Props) => {
-  const tier = OVERLAY_TIER[alert.tier];
+  const isDonation = alert.kind === "donation";
+  const tier = isDonation ? OVERLAY_DONATION : OVERLAY_TIER[alert.tier ?? "skorpionzinho"];
   const leaving = alert.state === "exiting";
 
   return (
@@ -72,13 +75,20 @@ export const OverlayAlertCard = ({ alert }: Props) => {
             style={{ backgroundColor: tier.color, color: "#1A1A1A" }}
           >
             <Zap className="h-2.5 w-2.5" fill="currentColor" />
-            {tier.label}
+            {isDonation && alert.amountCents != null ? formatBRL(alert.amountCents) : tier.label}
           </span>
-          <span className="text-[12px] font-medium text-white/45">mandou um recado</span>
+          <span className="text-[12px] font-medium text-white/45">
+            {isDonation ? "mandou um pix" : "mandou um recado"}
+          </span>
         </div>
         <p className="break-words text-[15px] font-medium leading-snug text-white/90">
           &ldquo;{alert.message}&rdquo;
         </p>
+        {isDonation && (
+          <span className="mt-1 text-[9px] font-black uppercase tracking-widest text-white/30">
+            {RESGATY_CREDIT}
+          </span>
+        )}
       </div>
     </motion.div>
   );

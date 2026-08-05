@@ -16,7 +16,7 @@ interface Props {
 }
 
 const FIELD_BASE =
-  "w-full rounded-2xl border-2 border-[#1A1A1A]/10 bg-[#1A1A1A]/[0.02] px-5 py-4 text-sm text-[#1A1A1A] placeholder:text-[#1A1A1A]/20 transition-colors duration-200 focus:border-[#1A1A1A]/30 focus:outline-none";
+  "w-full rounded-2xl border-2 border-[#1A1A1A]/10 bg-[#1A1A1A]/[0.02] px-5 py-2.5 text-sm text-[#1A1A1A] placeholder:text-[#1A1A1A]/20 transition-colors duration-200 focus:border-[#1A1A1A]/30 focus:outline-none";
 
 const LABEL_BASE =
   "flex items-center gap-2 text-xs font-black uppercase tracking-widest text-[#1A1A1A]/40";
@@ -35,8 +35,8 @@ export const LiveMessageForm = ({ content, onSubmit, isValidating, errorMessage 
         subtitle={content.subtitle}
       />
 
-      <div className="flex flex-col gap-5">
-        <div className="flex flex-col gap-2.5">
+      <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2">
           <label className={LABEL_BASE}>
             <KeyRound className="h-3.5 w-3.5" />
             {content.codeLabel}
@@ -49,7 +49,7 @@ export const LiveMessageForm = ({ content, onSubmit, isValidating, errorMessage 
           />
         </div>
 
-        <div className="flex flex-col gap-2.5">
+        <div className="flex flex-col gap-2">
           <label className={LABEL_BASE}>
             <User className="h-3.5 w-3.5" />
             {content.nameLabel}
@@ -63,7 +63,7 @@ export const LiveMessageForm = ({ content, onSubmit, isValidating, errorMessage 
           />
         </div>
 
-        <div className="flex flex-col gap-2.5">
+        <div className="flex flex-col gap-2">
           <label className={LABEL_BASE}>
             <MessageSquare className="h-3.5 w-3.5" />
             {content.messageLabel}
@@ -72,7 +72,7 @@ export const LiveMessageForm = ({ content, onSubmit, isValidating, errorMessage 
             value={message}
             onChange={(event) => setMessage(event.target.value)}
             placeholder={content.messagePlaceholder}
-            rows={3}
+            rows={2}
             maxLength={content.messageMaxLength}
             className={`${FIELD_BASE} resize-none font-medium leading-relaxed`}
           />

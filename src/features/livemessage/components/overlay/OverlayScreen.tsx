@@ -4,6 +4,8 @@ import { AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useOverlayQueue } from "../../hooks/useOverlayQueue";
 import { useTextToSpeech } from "../../hooks/useTextToSpeech";
+import { useDonationAudio } from "../../hooks/useDonationAudio";
+import { formatBRL } from "../../utils/format-brl";
 import { OverlaySource } from "../../types";
 import { OverlayAlertCard } from "./OverlayAlertCard";
 
@@ -24,7 +26,8 @@ export const OverlayScreen = () => {
   const [token, setToken] = useState<string | null>(null);
   const [muted, setMuted] = useState(false);
   const { alert, dismiss } = useOverlayQueue(source, token);
-  const { play, stop } = useTextToSpeech();
+  const { play: playSpeech, stop: stopSpeech } = useTextToSpeech();
+  const { play: playRemote, stop: stopRemote } = useDonationAudio(token);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -55,7 +58,8 @@ export const OverlayScreen = () => {
     const finish = () => {
       if (settled) return;
       settled = true;
-      stop();
+      stopRemote();
+      stopSpeech();
       dismiss();
     };
 
@@ -70,13 +74,27 @@ export const OverlayScreen = () => {
       };
     }
 
-    play(`${alert.memberName} disse: ${alert.message}`).then(finish);
+    const speech =
+      alert.kind === "donation" && alert.amountCents != null
+        ? `${alert.memberName} doou ${formatBRL(alert.amountCents)} e disse: ${alert.message}`
+        : `${alert.memberName} disse: ${alert.message}`;
+
+    const speak = async () => {
+      const spoken = source === "live" && (await playRemote(speech, alert.voiceId ?? null));
+      if (settled) return;
+      if (spoken) return finish();
+      await playSpeech(speech);
+      finish();
+    };
+    speak();
 
     return () => {
       settled = true;
       clearTimeout(cap);
+      stopRemote();
+      stopSpeech();
     };
-  }, [alert, play, stop, dismiss, muted]);
+  }, [alert, playRemote, playSpeech, stopRemote, stopSpeech, dismiss, muted, source]);
 
   return (
     <div className="h-screen w-screen overflow-hidden bg-transparent">

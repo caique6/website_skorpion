@@ -30,6 +30,12 @@ export const PRIVACY_SECTIONS: PolicySection[] = [
       "Os dados coletados têm finalidade exclusiva de:\n\n• Verificar se você é um membro ativo do Clube Amigos do Skorpion no YouTube\n• Gerar e vincular seu código único de resgate de benefícios\n• Identificar seu nível de membership e direcionar ao grupo correto de WhatsApp\n• Registrar benefícios recebidos como sorteios, gravações e aparições em vídeos\n• Prevenir uso indevido de códigos por terceiros não autorizados\n\nSeus dados nunca serão utilizados para fins publicitários, vendidos a terceiros ou compartilhados fora do contexto do clube.",
   },
   {
+    id: "s-donation",
+    title: "Doações via PIX",
+    content:
+      "Ao realizar uma doação pela funcionalidade \"Doar via PIX\", coletamos e tratamos:\n\n• O nome (ou apelido) e a mensagem que você digita para exibição na transmissão\n• A voz de narração selecionada\n• Informações mínimas da transação necessárias para confirmar o pagamento (identificador do pedido e valor)\n\nO pagamento é processado pelo Mercado Pago, que atua como operador do pagamento e é responsável pelos dados financeiros (chave PIX e dados bancários), conforme a política de privacidade própria do Mercado Pago. Não temos acesso nem armazenamos seus dados bancários.\n\nO nome e a mensagem da doação são exibidos publicamente na transmissão ao vivo. O áudio narrado é gerado sob demanda no momento da exibição e não é armazenado depois.",
+  },
+  {
     id: "s-05",
     title: "Como seus dados são armazenados",
     content:
