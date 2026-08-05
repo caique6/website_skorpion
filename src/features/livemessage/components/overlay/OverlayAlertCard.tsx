@@ -5,7 +5,6 @@ import { Zap } from "lucide-react";
 import Image from "next/image";
 import { OVERLAY_DONATION, OVERLAY_TIER } from "../../utils/tier-accent";
 import { formatBRL } from "../../utils/format-brl";
-import { RESGATY_CREDIT } from "../../utils/resgaty";
 import { OverlayAlert } from "../../types";
 import { EASE_OUT } from "@/lib/animation";
 
@@ -52,12 +51,6 @@ const messageVariants: Variants = {
   hidden: { x: 48, opacity: 0, filter: "blur(10px)" },
   visible: { x: 0, opacity: 1, filter: "blur(0px)", transition: { duration: 0.95, ease: EASE_OUT } },
   exit: { x: 28, opacity: 0, filter: "blur(8px)", transition: { duration: 0.4, ease: EASE_OUT } },
-};
-
-const creditVariants: Variants = {
-  hidden: { y: 12, opacity: 0 },
-  visible: { y: 0, opacity: 1, transition: { duration: 0.55, ease: EASE_OUT } },
-  exit: { opacity: 0, transition: { duration: 0.3 } },
 };
 
 export const OverlayAlertCard = ({ alert }: Props) => {
@@ -111,17 +104,19 @@ export const OverlayAlertCard = ({ alert }: Props) => {
       </motion.div>
 
       <div className="relative flex min-w-0 flex-col gap-1">
-        <motion.div variants={headerVariants} className="flex flex-wrap items-center gap-2">
-          <span className="text-[15px] font-black uppercase tracking-tight text-white">
-            {alert.memberName}
-          </span>
-          <span
-            className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-black uppercase tracking-widest"
-            style={{ backgroundColor: tier.color, color: "#1A1A1A" }}
-          >
-            <Zap className="h-2.5 w-2.5" fill="currentColor" />
-            {isDonation && alert.amountCents != null ? formatBRL(alert.amountCents) : tier.label}
-          </span>
+        <motion.div variants={headerVariants} className="flex flex-wrap items-center gap-x-2 gap-y-1">
+          <div className="flex items-center gap-2">
+            <span className="text-[15px] font-black uppercase tracking-tight text-white">
+              {alert.memberName}
+            </span>
+            <span
+              className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-black uppercase tracking-widest"
+              style={{ backgroundColor: tier.color, color: "#1A1A1A" }}
+            >
+              <Zap className="h-2.5 w-2.5" fill="currentColor" />
+              {isDonation && alert.amountCents != null ? formatBRL(alert.amountCents) : tier.label}
+            </span>
+          </div>
           <span className="text-[12px] font-medium text-white/45">
             {isDonation ? "mandou um pix" : "mandou um recado"}
           </span>
@@ -132,14 +127,6 @@ export const OverlayAlertCard = ({ alert }: Props) => {
         >
           &ldquo;{alert.message}&rdquo;
         </motion.p>
-        {isDonation && (
-          <motion.span
-            variants={creditVariants}
-            className="mt-1 text-[9px] font-black uppercase tracking-widest text-white/30"
-          >
-            {RESGATY_CREDIT}
-          </motion.span>
-        )}
       </div>
     </motion.div>
   );
