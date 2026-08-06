@@ -17,7 +17,7 @@ export const DONATION_MOCK: DonationContent = {
   termsLinkLabel: "Termos de Uso",
   amountLabel: "Valor da doação",
   amountPlaceholder: "0,00",
-  presetsCents: [500, 1000, 2500, 5000],
+  presetsCents: [200, 500, 1000, 2500, 5000],
   submitLabel: "Gerar PIX",
   submitLoadingLabel: "Gerando...",
   pixTitle: "Escaneie pra pagar",

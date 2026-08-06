@@ -33,7 +33,7 @@ export const PRIVACY_SECTIONS: PolicySection[] = [
     id: "s-donation",
     title: "Doações via PIX",
     content:
-      "Ao realizar uma doação pela funcionalidade \"Doar via PIX\", coletamos e tratamos:\n\n• O nome (ou apelido) e a mensagem que você digita para exibição na transmissão\n• A voz de narração selecionada\n• Informações mínimas da transação necessárias para confirmar o pagamento (identificador do pedido e valor)\n\nO pagamento é processado pelo Mercado Pago, que atua como operador do pagamento e é responsável pelos dados financeiros (chave PIX e dados bancários), conforme a política de privacidade própria do Mercado Pago. Não temos acesso nem armazenamos seus dados bancários.\n\nO nome e a mensagem da doação são exibidos publicamente na transmissão ao vivo. O áudio narrado é gerado sob demanda no momento da exibição e não é armazenado depois.",
+      "Ao realizar uma doação pela funcionalidade \"Doar via PIX\", coletamos e tratamos:\n\n• O nome (ou apelido) e a mensagem que você digita para exibição na transmissão\n• A voz de narração selecionada\n• Informações mínimas da transação necessárias para confirmar o pagamento (identificador do pedido e valor)\n\nO pagamento é processado por um provedor de pagamento externo, que atua como operador do pagamento e é responsável pelos dados financeiros (chave PIX e dados bancários), conforme a política de privacidade do próprio provedor. Não temos acesso nem armazenamos seus dados bancários.\n\nO nome e a mensagem da doação são exibidos publicamente na transmissão ao vivo. O áudio narrado é gerado sob demanda no momento da exibição e não é armazenado depois.",
   },
   {
     id: "s-05",

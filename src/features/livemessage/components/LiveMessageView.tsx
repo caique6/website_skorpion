@@ -8,7 +8,6 @@ import { LiveModeTabs } from "./LiveModeTabs";
 import { MessageFlow } from "./MessageFlow";
 import { DonationFlow } from "./DonationFlow";
 import { LiveFooter } from "./LiveFooter";
-import { MercadoPagoScript } from "./MercadoPagoScript";
 import { LiveMode } from "../types";
 
 const ICON_BUTTON =
@@ -20,7 +19,6 @@ export const LiveMessageView = () => {
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-white">
-      <MercadoPagoScript />
       <motion.header
         initial={{ opacity: 0, y: -16 }}
         animate={{ opacity: 1, y: 0 }}

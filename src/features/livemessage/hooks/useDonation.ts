@@ -5,7 +5,7 @@ import { edgeFunctionUrl, edgeFunctionHeaders } from "@/lib/edge";
 import { DonationError, DonationFormData, DonationState, DonationStatus } from "../types";
 
 const POLL_INTERVAL_MS = 3000;
-const MIN_FLOOR_CENTS = 500;
+const MIN_FLOOR_CENTS = 200;
 
 const INITIAL_STATE: DonationState = {
   status: "idle",
@@ -43,13 +43,10 @@ export const useDonation = () => {
     setState({ status: "creating", error: null, pix: null, minCents: null });
 
     try {
-      const deviceId =
-        typeof window !== "undefined" ? window.MP_DEVICE_SESSION_ID ?? null : null;
-
       const response = await fetch(edgeFunctionUrl("livepix/create"), {
         method: "POST",
         headers: edgeFunctionHeaders(),
-        body: JSON.stringify({ name, message, amountCents: data.amountCents, voiceId, deviceId }),
+        body: JSON.stringify({ name, message, amountCents: data.amountCents, voiceId }),
       });
       const body = await response.json().catch(() => ({}));
 
