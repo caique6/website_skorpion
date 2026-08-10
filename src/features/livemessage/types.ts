@@ -136,6 +136,8 @@ export type DonationError =
   | "name_required"
   | "message_required"
   | "amount_below_min"
+  | "amount_above_max"
+  | "too_many_open"
   | "too_many_requests"
   | "network"
   | "unknown";

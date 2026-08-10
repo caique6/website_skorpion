@@ -47,6 +47,8 @@ export const DONATION_MOCK: DonationContent = {
     name_required: "Escolha como você quer aparecer na live.",
     message_required: "Escreva sua mensagem antes de continuar.",
     amount_below_min: "O valor está abaixo do mínimo permitido.",
+    amount_above_max: "O valor máximo por doação é R$ 5.000,00.",
+    too_many_open: "Você já tem um PIX em aberto. Pague ou aguarde ele expirar antes de gerar outro.",
     too_many_requests: "Muitas tentativas. Aguarde um pouco e tente de novo.",
     network: "Falha de conexão. Tente novamente.",
     unknown: "Algo deu errado. Tente novamente.",

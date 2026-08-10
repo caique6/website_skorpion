@@ -1,11 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { edgeFunctionUrl, edgeFunctionHeaders } from "@/lib/edge";
 import { DonationError, DonationFormData, DonationState, DonationStatus } from "../types";
 
 const POLL_INTERVAL_MS = 3000;
 const MIN_FLOOR_CENTS = 200;
+const MAX_CEIL_CENTS = 500000;
 
 const INITIAL_STATE: DonationState = {
   status: "idle",
@@ -29,6 +30,7 @@ const resolveStatus = (remote: string): DonationStatus | null => {
 
 export const useDonation = () => {
   const [state, setState] = useState<DonationState>(INITIAL_STATE);
+  const inFlight = useRef(false);
 
   const create = useCallback(async (data: DonationFormData, voiceId: string | null) => {
     const name = data.name.trim();
@@ -39,7 +41,10 @@ export const useDonation = () => {
     if (!Number.isInteger(data.amountCents) || data.amountCents < MIN_FLOOR_CENTS) {
       return setState(errorState("amount_below_min", MIN_FLOOR_CENTS));
     }
+    if (data.amountCents > MAX_CEIL_CENTS) return setState(errorState("amount_above_max"));
 
+    if (inFlight.current) return;
+    inFlight.current = true;
     setState({ status: "creating", error: null, pix: null, minCents: null });
 
     try {
@@ -50,12 +55,15 @@ export const useDonation = () => {
       });
       const body = await response.json().catch(() => ({}));
 
-      if (response.status === 429) return setState(errorState("too_many_requests"));
       if (!response.ok) {
-        if (body.error === "amount_below_min") {
+        const remote = body.error as DonationError | undefined;
+        if (remote === "amount_below_min") {
           return setState(errorState("amount_below_min", body.minCents ?? null));
         }
-        return setState(errorState((body.error as DonationError) ?? "unknown"));
+        if (remote === "amount_above_max") return setState(errorState("amount_above_max"));
+        if (remote === "too_many_open") return setState(errorState("too_many_open"));
+        if (response.status === 429) return setState(errorState("too_many_requests"));
+        return setState(errorState(remote ?? "unknown"));
       }
 
       setState({
@@ -71,6 +79,8 @@ export const useDonation = () => {
       });
     } catch {
       setState(errorState("network"));
+    } finally {
+      inFlight.current = false;
     }
   }, []);
 
