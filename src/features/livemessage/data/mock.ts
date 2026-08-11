@@ -13,6 +13,8 @@ export const LIVE_MESSAGE_MOCK: LiveMessageContent = {
   messageLabel: "Sua mensagem",
   messagePlaceholder: "Escreva o que vai aparecer na live...",
   messageMaxLength: 200,
+  voiceLabel: "Voz da narração",
+  voiceHint: "Escolha a voz que vai narrar sua mensagem ao vivo na transmissão.",
   submitLabel: "Ver prévia",
   submitLoadingLabel: "Verificando...",
   info: {

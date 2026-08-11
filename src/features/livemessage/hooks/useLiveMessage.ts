@@ -29,8 +29,9 @@ const errorState = (error: LiveMessageError): LiveMessageState => ({
 export const useLiveMessage = () => {
   const [state, setState] = useState<LiveMessageState>(INITIAL_STATE);
   const [pending, setPending] = useState<LiveMessageFormData | null>(null);
+  const [voiceId, setVoiceId] = useState<string | null>(null);
 
-  const submit = useCallback(async (data: LiveMessageFormData) => {
+  const submit = useCallback(async (data: LiveMessageFormData, nextVoiceId: string | null) => {
     const code = data.code.trim().toUpperCase();
     const name = data.name.trim();
     const message = data.message.trim();
@@ -41,6 +42,7 @@ export const useLiveMessage = () => {
     if (!message) return setState(errorState("message_required"));
 
     setPending({ code, name, message });
+    setVoiceId(nextVoiceId);
     setState((prev) => ({ ...prev, status: "validating", error: null }));
 
     try {
@@ -88,7 +90,7 @@ export const useLiveMessage = () => {
       const response = await fetch(edgeFunctionUrl("live-message/send"), {
         method: "POST",
         headers: edgeFunctionHeaders(),
-        body: JSON.stringify(pending),
+        body: JSON.stringify({ ...pending, voiceId }),
       });
       const body = await response.json().catch(() => ({}));
 
@@ -110,10 +112,11 @@ export const useLiveMessage = () => {
     } catch {
       setState(errorState("network"));
     }
-  }, [pending]);
+  }, [pending, voiceId]);
 
   const reset = useCallback(() => {
     setPending(null);
+    setVoiceId(null);
     setState(INITIAL_STATE);
   }, []);
 

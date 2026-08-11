@@ -1,19 +1,31 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { useLiveMessage } from "../hooks/useLiveMessage";
+import { useVoices } from "../hooks/useVoices";
 import { getLiveMessageContent } from "../services/livemessage.service";
 import { LiveMessageForm } from "./LiveMessageForm";
 import { LiveMessagePreview } from "./LiveMessagePreview";
 import { LiveMessageCooldown } from "./LiveMessageCooldown";
 import { LiveMessageSuccess } from "./LiveMessageSuccess";
 import { LiveMessageInfoCard } from "./LiveMessageInfoCard";
+import { DonationVoiceCard } from "./DonationVoiceCard";
+import { LiveMessageFormData } from "../types";
 import { EASE_OUT } from "@/lib/animation";
 
 const content = getLiveMessageContent();
 
 export const MessageFlow = () => {
   const { state, submit, confirm, reset } = useLiveMessage();
+  const voices = useVoices();
+  const [voiceId, setVoiceId] = useState("");
+
+  useEffect(() => {
+    if (!voiceId && voices.length > 0) setVoiceId(voices[0].voiceId);
+  }, [voices, voiceId]);
+
+  const onSubmit = (data: LiveMessageFormData) => submit(data, voiceId || null);
   const onForm =
     state.status === "idle" || state.status === "validating" || state.status === "error";
   const errorMessage = state.error ? content.errors[state.error] : null;
@@ -26,7 +38,7 @@ export const MessageFlow = () => {
             <LiveMessageForm
               key="form"
               content={content}
-              onSubmit={submit}
+              onSubmit={onSubmit}
               isValidating={state.status === "validating"}
               errorMessage={errorMessage}
             />
@@ -58,7 +70,7 @@ export const MessageFlow = () => {
       <AnimatePresence>
         {onForm && (
           <motion.div
-            key="info"
+            key="aside"
             initial={{ opacity: 0, x: 24, filter: "blur(6px)" }}
             animate={{
               opacity: 1,
@@ -67,8 +79,15 @@ export const MessageFlow = () => {
               transition: { duration: 0.5, ease: EASE_OUT },
             }}
             exit={{ opacity: 0, x: 24, filter: "blur(6px)", transition: { duration: 0.3, ease: EASE_OUT } }}
-            className="w-full lg:w-[360px] lg:flex-shrink-0"
+            className="flex w-full flex-col gap-5 lg:w-[360px] lg:flex-shrink-0"
           >
+            <DonationVoiceCard
+              availableVoiceIds={voices.map((voice) => voice.voiceId)}
+              voiceId={voiceId}
+              label={content.voiceLabel}
+              hint={content.voiceHint}
+              onSelect={setVoiceId}
+            />
             <LiveMessageInfoCard content={content.info} />
           </motion.div>
         )}

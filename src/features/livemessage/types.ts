@@ -94,6 +94,8 @@ export interface LiveMessageContent {
   messageLabel: string;
   messagePlaceholder: string;
   messageMaxLength: number;
+  voiceLabel: string;
+  voiceHint: string;
   submitLabel: string;
   submitLoadingLabel: string;
   info: InfoContent;
