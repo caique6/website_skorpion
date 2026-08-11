@@ -75,6 +75,7 @@ export interface InfoCooldown {
 export interface InfoContent {
   eyebrow: string;
   title: string;
+  stepsTitle: string;
   steps: string[];
   cooldownTitle: string;
   cooldowns: InfoCooldown[];

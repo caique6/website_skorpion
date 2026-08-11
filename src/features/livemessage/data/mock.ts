@@ -20,6 +20,7 @@ export const LIVE_MESSAGE_MOCK: LiveMessageContent = {
   info: {
     eyebrow: "Como funciona",
     title: "Manda bem na live",
+    stepsTitle: "Passo a passo",
     steps: [
       "Cole seu código de resgate e escolha como quer aparecer.",
       "Escreva sua mensagem e confira a prévia antes de enviar.",

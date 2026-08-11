@@ -31,38 +31,65 @@ export const MessageFlow = () => {
   const errorMessage = state.error ? content.errors[state.error] : null;
 
   return (
-    <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-center lg:gap-16">
-      <div className="w-full lg:max-w-xl">
-        <AnimatePresence mode="wait">
+    <div className="flex w-full flex-col gap-6 pt-8 md:gap-8 md:pt-12">
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-8">
+        <div className="w-full lg:flex-1">
+          <AnimatePresence mode="wait">
+            {onForm && (
+              <LiveMessageForm
+                key="form"
+                content={content}
+                onSubmit={onSubmit}
+                isValidating={state.status === "validating"}
+                errorMessage={errorMessage}
+              />
+            )}
+            {(state.status === "previewing" || state.status === "submitting") && state.preview && (
+              <LiveMessagePreview
+                key="preview"
+                content={content}
+                preview={state.preview}
+                onConfirm={confirm}
+                onBack={reset}
+                isSubmitting={state.status === "submitting"}
+              />
+            )}
+            {state.status === "blocked" && state.cooldownMs !== null && (
+              <LiveMessageCooldown
+                key="cooldown"
+                content={content}
+                cooldownMs={state.cooldownMs}
+                onReset={reset}
+              />
+            )}
+            {state.status === "success" && (
+              <LiveMessageSuccess key="success" content={content} onReset={reset} />
+            )}
+          </AnimatePresence>
+        </div>
+
+        <AnimatePresence>
           {onForm && (
-            <LiveMessageForm
-              key="form"
-              content={content}
-              onSubmit={onSubmit}
-              isValidating={state.status === "validating"}
-              errorMessage={errorMessage}
-            />
-          )}
-          {(state.status === "previewing" || state.status === "submitting") && state.preview && (
-            <LiveMessagePreview
-              key="preview"
-              content={content}
-              preview={state.preview}
-              onConfirm={confirm}
-              onBack={reset}
-              isSubmitting={state.status === "submitting"}
-            />
-          )}
-          {state.status === "blocked" && state.cooldownMs !== null && (
-            <LiveMessageCooldown
-              key="cooldown"
-              content={content}
-              cooldownMs={state.cooldownMs}
-              onReset={reset}
-            />
-          )}
-          {state.status === "success" && (
-            <LiveMessageSuccess key="success" content={content} onReset={reset} />
+            <motion.div
+              key="voice"
+              initial={{ opacity: 0, x: 24, filter: "blur(6px)" }}
+              animate={{
+                opacity: 1,
+                x: 0,
+                filter: "blur(0px)",
+                transition: { duration: 0.5, ease: EASE_OUT },
+              }}
+              exit={{ opacity: 0, x: 24, filter: "blur(6px)", transition: { duration: 0.3, ease: EASE_OUT } }}
+              className="w-full lg:w-[340px] lg:flex-shrink-0"
+            >
+              <DonationVoiceCard
+                availableVoiceIds={voices.map((voice) => voice.voiceId)}
+                voiceId={voiceId}
+                label={content.voiceLabel}
+                hint={content.voiceHint}
+                onSelect={setVoiceId}
+              />
+            </motion.div>
           )}
         </AnimatePresence>
       </div>
@@ -70,24 +97,17 @@ export const MessageFlow = () => {
       <AnimatePresence>
         {onForm && (
           <motion.div
-            key="aside"
-            initial={{ opacity: 0, x: 24, filter: "blur(6px)" }}
+            key="info"
+            initial={{ opacity: 0, y: 20, filter: "blur(6px)" }}
             animate={{
               opacity: 1,
-              x: 0,
+              y: 0,
               filter: "blur(0px)",
-              transition: { duration: 0.5, ease: EASE_OUT },
+              transition: { duration: 0.5, delay: 0.08, ease: EASE_OUT },
             }}
-            exit={{ opacity: 0, x: 24, filter: "blur(6px)", transition: { duration: 0.3, ease: EASE_OUT } }}
-            className="flex w-full flex-col gap-5 lg:w-[360px] lg:flex-shrink-0"
+            exit={{ opacity: 0, y: 20, filter: "blur(6px)", transition: { duration: 0.3, ease: EASE_OUT } }}
+            className="w-full"
           >
-            <DonationVoiceCard
-              availableVoiceIds={voices.map((voice) => voice.voiceId)}
-              voiceId={voiceId}
-              label={content.voiceLabel}
-              hint={content.voiceHint}
-              onSelect={setVoiceId}
-            />
             <LiveMessageInfoCard content={content.info} />
           </motion.div>
         )}
