@@ -16,7 +16,7 @@ interface Props {
 }
 
 const ERROR_MESSAGES: Record<ReclaimError, string> = {
-  member_not_found: "Canal não encontrado. Verifique se você é membro do canal e se o Channel ID está correto.",
+  member_not_found: "Ooops, não achamos o seu canal. Provavelmente ele ainda não foi atualizado no sistema, volte em breve. O sistema pode demorar até um dia útil para liberar o seu acesso!",
   member_inactive: "Sua assinatura não está ativa. Renove seu membership no YouTube para resgatar os benefícios.",
   tier_not_eligible: "O plano Skorpionzinho não inclui acesso a grupos de WhatsApp. Faça upgrade para Skorpião ou Skorpionário para ter esse benefício.",
   already_redeemed: "Seu acesso ao WhatsApp já foi resgatado anteriormente. Se tiver algum problema para acessar o grupo, entre em contato com o suporte.",
